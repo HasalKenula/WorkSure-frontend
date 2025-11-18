@@ -7,7 +7,7 @@ function Login() {
 
     const { login } = useAuth();
 
-   const navigate = useNavigate()
+    const navigate = useNavigate()
 
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -67,12 +67,12 @@ function Login() {
                 <div className="text-center mt-4">
                     <p>
                         Already have an account?
-                        {/* <span
+                        <span
                             onClick={() => navigate("/auth/register")}
                             className="text-blue-600 cursor-pointer ml-1"
                         >
                             Register
-                        </span> */}
+                        </span>
                     </p>
                 </div>
             </div>

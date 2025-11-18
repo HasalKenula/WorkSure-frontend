@@ -21,37 +21,41 @@ import Category from './pages/Category'
 import { AuthProvider } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/auth/Login'
+import Register from './pages/auth/Register'
+import Product from './pages/Product'
 
 
 function App() {
   const [count, setCount] = useState(0)
 
   return (
-     <AuthProvider>
-    <BrowserRouter>
-      <Routes>
-          <Route element={<ProtectedRoute />}>
-        <Route path='/*' element={<HomePage />} />
-        <Route path='/about' element={<AboutUs />} />
-        <Route path='/contact' element={<ContactPage />} />
-        <Route path='/payment' element={<Payment />} />
-        <Route path='/feedback' element={<UserFeedback />} />
-        <Route path='/login' element={<UserLogin/>} />
-        <Route path='/registration' element={<UserRegistration />} />
-        <Route path='/userProfile' element={<UserProfile />} />
-        <Route path='/workerDashboard' element={<WorkerDashBoard />} />
-        <Route path='/hire' element={<WorkerHire />} />
-        <Route path='/workerLogin' element={<WorkerLogin />} />
-        <Route path='/workerProfile' element={<WorkerProfileView />} />
-        <Route path='/workerRegistration' element={<WorkerRegistration />} />
-        <Route path='/workerDetails' element={<WorkerSearch />} />
-         <Route path='/category' element={<Category />} />
-         </Route>
-        <Route path="/auth/login" element={<Login />} />
-        
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          {/* <Route element={<ProtectedRoute />}> */}
+            <Route path='/*' element={<HomePage />} />
+            <Route path='/about' element={<AboutUs />} />
+            <Route path='/contact' element={<ContactPage />} />
+            <Route path='/payment' element={<Payment />} />
+            <Route path='/feedback' element={<UserFeedback />} />
+            <Route path='/login' element={<UserLogin />} />
+            <Route path='/registration' element={<UserRegistration />} />
+            <Route path='/userProfile' element={<UserProfile />} />
+            <Route path='/workerDashboard' element={<WorkerDashBoard />} />
+            <Route path='/hire' element={<WorkerHire />} />
+            <Route path='/workerLogin' element={<WorkerLogin />} />
+            <Route path='/workerProfile' element={<WorkerProfileView />} />
+            <Route path='/workerRegistration' element={<WorkerRegistration />} />
+            <Route path='/workerDetails' element={<WorkerSearch />} />
+            <Route path='/category' element={<Category />} />
+            <Route path="/product" element={<Product />} />
+          {/* </Route> */}
+          <Route path="/auth/login" element={<Login />} />
+          <Route path="/auth/register" element={<Register/>}/>
 
-      </Routes>
-    </BrowserRouter>
+
+        </Routes>
+      </BrowserRouter>
     </AuthProvider>
   )
 }
