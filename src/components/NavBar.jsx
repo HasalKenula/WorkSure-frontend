@@ -6,16 +6,22 @@ export default function Navbar() {
   return (
     <nav className="bg-white shadow-md fixed w-full top-0 left-0 z-50">
       <div className="flex items-center justify-between px-6 py-4">
-        
-        {/* Logo */}
-        <h1 className="text-2xl font-bold text-blue-600">MyShop</h1>
+
+
+        <h1 className="text-2xl font-bold text-primary">Work<span className="text-black">Sure</span></h1>
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex gap-8 text-gray-700 font-medium">
-          <li className="hover:text-blue-600 cursor-pointer">Home</li>
-          <li className="hover:text-blue-600 cursor-pointer">about</li>
+          <li className="hover:text-primary cursor-pointer">Home</li>
+          <li className="hover:text-primary cursor-pointer">Find Workers</li>
+          <li className="hover:text-primary cursor-pointer">Contact</li>
+          <li className="hover:text-primary cursor-pointer">About</li>
+        </ul>
+
+        <ul className="hidden md:flex gap-8 text-gray-700 font-medium">
+          <button type="button" className="hover:text-white cursor-pointer border-0 p-2  px-3 rounded-lg bg-primary">Login</button>
+          <button type="button" className="hover:text-primary cursor-pointer border-2 p-2 rounded-lg">Logout</button>
           
-          <li className="hover:text-blue-600 cursor-pointer">Contact</li>
         </ul>
 
         {/* Mobile Menu Icon */}
@@ -27,10 +33,10 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {open && (
         <ul className="md:hidden bg-white px-6 pb-4 space-y-4 shadow">
-          <li className="hover:text-blue-600 cursor-pointer">Home</li>
-          <li className="hover:text-blue-600 cursor-pointer">about</li>
-        
-          <li className="hover:text-blue-600 cursor-pointer">Contact</li>
+          <li className="hover:text-primary cursor-pointer">Home</li>
+          <li className="hover:text-primary cursor-pointer">Find Workers</li>
+          <li className="hover:text-primary cursor-pointer">Contact</li>
+          <li className="hover:text-primary cursor-pointer">About</li>
         </ul>
       )}
     </nav>
