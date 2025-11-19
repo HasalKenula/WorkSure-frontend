@@ -6,7 +6,7 @@ export default function HomePage() {
     return (
         <div >
             <Navbar />
-            <section className="w-full h-[1100px] md:h-screen flex items-center justify-center  my-auto pt-24 bg-red-300">
+            <section className="w-full h-[1100px] md:h-screen flex items-center justify-center  my-auto pt-24">
                 <div className="container mx-auto flex flex-col md:flex-row items-center p-6 gap-10 ">
 
 
@@ -38,68 +38,68 @@ export default function HomePage() {
                 </div>
             </section>
 
-            <section className="w-full h-[1700px] md:h-[900px]  flex items-center justify-center bg-blue-300">
+            <section className="w-full h-[1700px] md:h-[900px]  flex items-center justify-center">
                 <div className=" mx-auto flex flex-col md:flex-col items-center p-6 gap-10 ">
                     <h1 className="w-full text-center text-5xl font-bold">Browse All Services</h1>
                     <h3 className="w-full text-center text-xl"> Explore professional workers across multiple service categories</h3>
                     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-10 w-full max-w-6xl">
                         <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                            <div className="bg-primary/20  flx item-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
-                            <h1 className="font-bold text-xl">Electrician</h1>
-                            <h3>450 professionals</h3>
-                        </div>
-                         <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                            <div className="bg-primary/20  flx item-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
-                            <h1 className="font-bold text-xl">Electrician</h1>
-                            <h3>450 professionals</h3>
-                        </div>
-                         <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                            <div className="bg-primary/20  flx item-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                            <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
                             <h1 className="font-bold text-xl">Electrician</h1>
                             <h3>450 professionals</h3>
                         </div>
                         <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                            <div className="bg-primary/20  flx item-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
-                            <h1 className="font-bold text-xl">Electrician</h1>
-                            <h3>450 professionals</h3>
-                        </div>
-                         <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                            <div className="bg-primary/20  flx item-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                            <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
                             <h1 className="font-bold text-xl">Electrician</h1>
                             <h3>450 professionals</h3>
                         </div>
                         <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                            <div className="bg-primary/20  flx item-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
-                            <h1 className="font-bold text-xl">Electrician</h1>
-                            <h3>450 professionals</h3>
-                        </div>
-                         <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                            <div className="bg-primary/20  flx item-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                            <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
                             <h1 className="font-bold text-xl">Electrician</h1>
                             <h3>450 professionals</h3>
                         </div>
                         <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                            <div className="bg-primary/20  flx item-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
-                            <h1 className="font-bold text-xl">Electrician</h1>
-                            <h3>450 professionals</h3>
-                        </div>
-                         <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                            <div className="bg-primary/20  flx item-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
-                            <h1 className="font-bold text-xl">Electrician</h1>
-                            <h3>450 professionals</h3>
-                        </div>
-                         <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                            <div className="bg-primary/20  flx item-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                            <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
                             <h1 className="font-bold text-xl">Electrician</h1>
                             <h3>450 professionals</h3>
                         </div>
                         <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                            <div className="bg-primary/20  flx item-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                            <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
                             <h1 className="font-bold text-xl">Electrician</h1>
                             <h3>450 professionals</h3>
                         </div>
-                         <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                            <div className="bg-primary/20  flx item-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                        <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
+                            <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                            <h1 className="font-bold text-xl">Electrician</h1>
+                            <h3>450 professionals</h3>
+                        </div>
+                        <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
+                            <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                            <h1 className="font-bold text-xl">Electrician</h1>
+                            <h3>450 professionals</h3>
+                        </div>
+                        <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
+                            <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                            <h1 className="font-bold text-xl">Electrician</h1>
+                            <h3>450 professionals</h3>
+                        </div>
+                        <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
+                            <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                            <h1 className="font-bold text-xl">Electrician</h1>
+                            <h3>450 professionals</h3>
+                        </div>
+                        <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
+                            <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                            <h1 className="font-bold text-xl">Electrician</h1>
+                            <h3>450 professionals</h3>
+                        </div>
+                        <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
+                            <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                            <h1 className="font-bold text-xl">Electrician</h1>
+                            <h3>450 professionals</h3>
+                        </div>
+                        <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
+                            <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
                             <h1 className="font-bold text-xl">Electrician</h1>
                             <h3>450 professionals</h3>
                         </div>
@@ -107,6 +107,67 @@ export default function HomePage() {
                     <button type="button" className="hover:text-black hover:bg-white border-0 cursor-pointer text-2xl font-bold  bg-black text-white  py-2 px-4 rounded-lg">View All</button>
 
 
+                </div>
+            </section>
+
+            <section>
+                <div className="w-full h-[1300px] md:h-screen  flex justify-center items-center">
+                    <div className="mx-auto flex flex-col items-center justify-center gap-10">
+                        <h1 className="w-full text-center text-5xl font-bold">Why Choose WorkSure?</h1>
+                        <h3 className="w-full text-center text-xl"> We ensure quality, trust, and professional service in every transaction</h3>
+                        <div className="grid grid-cols sm:grid-cols-2 md:grid-cols-4 w-full gap-6  max-w-6xl items-center justify-center">
+                            <div className="flex flex-col items-center justify-center gap-4 aspect-square  w-52 sm:w-52 md:w-48 lg:w-52 xl:w-56 p-4 border-2 border-black/30 rounded-xl hover:shadow-lg transition-shadow duration-300">
+                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                                <h1 className="font-bold text-xl">Verified Workers</h1>
+                                <h3 className="text-center">All professionals thoroughly vetted and background-checked.</h3>
+                            </div>
+                            <div className="flex flex-col items-center justify-center gap-4 aspect-square  w-52 sm:w-52 md:w-48 lg:w-52 xl:w-56 p-4 border-2 border-black/30 rounded-xl hover:shadow-lg transition-shadow duration-300">
+                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                                <h1 className="font-bold text-xl">Secure Payments</h1>
+                                <h3 className="text-center">Safe transactions protecting clients and workers.</h3>
+                            </div>
+                            <div className="flex flex-col items-center justify-center gap-4 aspect-square  w-52 sm:w-52 md:w-48 lg:w-52 xl:w-56 p-4 border-2 border-black/30 rounded-xl hover:shadow-lg transition-shadow duration-300">
+                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                                <h1 className="font-bold text-xl">Fast Response</h1>
+                                <h3 className="text-center">Quick booking and scheduling for your convenience.</h3>
+                            </div>
+                            <div className="flex flex-col items-center justify-center gap-4 w-52 sm:w-52 md:w-48 lg:w-52 xl:w-56 p-4 border-2 aspect-square  border-black/30 rounded-xl hover:shadow-lg transition-shadow duration-300">
+                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                                <h1 className="font-bold text-xl text-center">Transparent <br/>Reviews</h1>
+                                <h3 className="text-center">Real ratings and feedback from actual clients.</h3>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            
+            <section>
+                <div className="w-full h-[1300px] md:h-screen  flex justify-center items-center">
+                    <div className="mx-auto flex flex-col items-center justify-center gap-10">
+                        <h1 className="w-full text-center text-5xl font-bold">How WorkSure Works</h1>
+                        <h3 className="w-full text-center text-xl">Get professional work done in 3 simple steps</h3>
+                        <div className="grid grid-cols sm:grid-cols-3 md:grid-cols-3 w-full gap-24  max-w-6xl items-center justify-center">
+                            <div className="flex flex-col items-center justify-center gap-4 aspect-square  w-52 sm:w-52 md:w-48 lg:w-52 xl:w-56 p-4 border-2 border-black/30 rounded-xl hover:shadow-lg transition-shadow duration-300">
+                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                                <h1 className="font-bold text-xl">Search & Browse</h1>
+                                <h3 className="text-center">Find workers by skill, location, and ratings. View detailed profiles and experience.</h3>
+                            </div>
+                            <div className="flex flex-col items-center justify-center gap-4 aspect-square  w-52 sm:w-52 md:w-48 lg:w-52 xl:w-56 p-4 border-2 border-black/30 rounded-xl hover:shadow-lg transition-shadow duration-300">
+                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                                <h1 className="font-bold text-xl">Book Service</h1>
+                                <h3 className="text-center">Choose your preferred professional and book the service directly through our platform.</h3>
+                            </div>
+                            <div className="flex flex-col items-center justify-center gap-4 aspect-square  w-52 sm:w-52 md:w-48 lg:w-52 xl:w-56 p-4 border-2 border-black/30 rounded-xl hover:shadow-lg transition-shadow duration-300">
+                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4">logo</div>
+                                <h1 className="font-bold text-xl">Secure Payment</h1>
+                                <h3 className="text-center">Pay securely through WorkSure. Release payment only after work completion.</h3>
+                            </div>
+                           
+
+                        </div>
+                    </div>
                 </div>
             </section>
 
