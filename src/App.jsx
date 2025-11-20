@@ -23,6 +23,9 @@ import ProtectedRoute from './components/ProtectedRoute'
 import Login from './pages/auth/Login'
 import Register from './pages/auth/Register'
 import Product from './pages/Product'
+import AdminDashBoard from './pages/AdminDashBoard'
+import WorkerRegistrationDetails from './pages/WorkerRegistrationDetails'
+import WorkerProfileUpdate from './pages/WorkerProfileUpdate'
 
 
 function App() {
@@ -49,6 +52,9 @@ function App() {
             <Route path='/workerDetails' element={<WorkerSearch />} />
             <Route path='/category' element={<Category />} />
             <Route path="/product" element={<Product />} />
+            <Route path="/adminDashBoard" element={<AdminDashBoard />} />
+            <Route path="/workerRegistrationDetails" element={<WorkerRegistrationDetails />} />
+            <Route path="/workerProfileUpdate" element={<WorkerProfileUpdate />} />
           {/* </Route> */}
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/register" element={<Register/>}/>
