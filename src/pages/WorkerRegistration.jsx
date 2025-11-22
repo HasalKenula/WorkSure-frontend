@@ -1,8 +1,5 @@
 import React from "react";
 import Navbar from "../components/NavBar";
-import ReactTimePicker from 'react-time-picker';
-import 'react-time-picker/dist/TimePicker.css';
-import 'react-clock/dist/Clock.css';
 
 export default function WorkerRegistration() {
     // Certifications state (starts with one empty row)
@@ -81,6 +78,8 @@ export default function WorkerRegistration() {
     //
     const [startTime, setStartTime] = React.useState(null);
     const [endTime, setEndTime] = React.useState(null);
+
+    
 
   return (
     <div>
