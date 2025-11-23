@@ -36,13 +36,55 @@ export default function WorkerProfileView() {
         },
         
     ];
+
+
+
+    const profile=[
+        {
+            
+            name:"Eva Adams",
+            position:"Plumber",
+            rating:5,
+            location:" Colombo",
+            workingArea:[
+                
+                               " Colombo",
+                               " Dehiwela",
+                                "MountLavinia",
+                               "Nugegoda",
+            ],
+            workingDays:[
+                                    "Monday  -  Saturday",
+                                       "8.00AM - 6.00PM" 
+            ],
+            skills:[
+                "Pipe installation and repair",
+                "Leak detaction and fixing",
+                "Water heater maintenance",
+                "Bathroom and kitchen plumbing",
+                "Drain cleanin and blokage removal",
+                "PVC, PEX, and copper pipe fitting",
+                "Water filtration system installation",
+                "Basic electrical knowledge for plumbing equipment (safe-level tasks)"
+            ],
+            
+            certification:[
+                "NVQ Level 4 in Plumbing Technology",
+                "Certified Water System Installer - National Vocational Training Institute",
+                "Occuptional Safety & Health (OSH) Certificate",
+                "Certificate in Domestic Water Supply Systems – NAITA"
+               
+            ],
+           
+        }
+    ]
     
 
     return (
         
         <>
-        
-        <div className="mt-20 flex justify-center items-center min-h-screen font-outfit relative overflow-hidden  ">{/*full page*/}
+        {profile.map((prof)=>(
+             <div className="mt-20 flex justify-center items-center min-h-screen font-outfit relative overflow-hidden  ">{/*full page*/}
             
             <Navbar />
 
@@ -67,24 +109,24 @@ export default function WorkerProfileView() {
                        
                             <div className="flex flex-col space-y-0.5 ">
                                  <p className="text-4xl font-bold">
-                                     Eva Adams
+                                     {prof.name}
                                  </p>
                                  <p className=" font-bold text-primary text-xl">
-                                     Plumber
+                                    {prof.position}
                                  </p>
                             </div>
                             <div className="flex flex-row items-center space-x-1.5">
                                 <IoLocationSharp className="text-2xl " />
                                 <p className="text-lg font-medium ">
-                                     Colombo
+                                    {prof.location}
                                 </p>
                              </div>
+
+                            
                             <div className="flex flex-row space-x-1 items-center">
-                                <FaStar className="text-yellow-500 text-xl" />
-                                <FaStar className="text-yellow-500 text-xl" />
-                                <FaStar className="text-yellow-500 text-xl" />
-                                <FaStar className="text-yellow-500 text-xl" />
-                                 <FaStar className="text-yellow-500 text-xl" />
+                                {[...Array(prof.rating)].map((_,i)=>(
+                                    <FaStar className="text-yellow-500 text-xl" />
+                                ))} 
                                 <p className="px-1.5 text-lg flex items-center">
                                     <span className="font-bold">5.0</span> 
                                     <span className="text-gray-600 ml-1"> (75 Reviews)</span>
@@ -109,13 +151,16 @@ export default function WorkerProfileView() {
                                     <p className="text-xl font-bold font-inter text-primary text-stroke  ">WORKING AREA</p>
                                     <div className="flex-1 h-px bg-gray-400"></div> 
                                 </div>
+                               
+                               
 
                             <ul className="list-disc pl-5 space-y-1 text-gray-800 text-lg font-sans">
 
-                                <li>Colombo</li>
-                                <li>Dehiwela</li>
-                                <li>Mount Lavinia</li>
-                                <li>Nugegoda</li>
+                                {
+                                    prof.workingArea.map((area,index)=>(
+                                        <li key={index}>{area}</li>
+                                    ))
+                                }
                             </ul>
 
                             </div>
@@ -132,9 +177,9 @@ export default function WorkerProfileView() {
 
                                     <ul className="list-disc pl-5 space-y-1 text-gray-800 text-lg font-sans">
 
-                                        <li>Monday  -  Saturday</li>
-                                        <li>8.00 AM - 6.00 PM</li>
-                                
+                                        {prof.workingDays.map((day, index) => (
+                                            <li key={index}>{day}</li>
+                                        ))}
                                     </ul>
 
                                 </div>
@@ -151,15 +196,9 @@ export default function WorkerProfileView() {
 
                                     <ul className="list-disc pl-5 space-y-1 text-gray-800 text-lg font-sans">
 
-                                        <li>Pipe installation and repair</li>
-                                        <li>Leak detaction and fixing</li>
-                                        <li>Water heater maintenance</li>
-                                        <li>Bathroom and kitchen plumbing</li>
-                                        <li>Drain cleanin and blokage removal</li>
-                                        <li>PVC, PEX, and copper pipe fitting</li>
-                                        <li>Water filtration system installation</li>
-                                        <li>Basic electrical knowledge for plumbing equipment (safe-level tasks)</li>
-                                
+                                        {prof.skills.map((skills, index) => (
+                                             <li key={index}>{skills}</li>
+                                        ))}
                                     </ul>
 
                                 </div>
@@ -177,10 +216,9 @@ export default function WorkerProfileView() {
 
                                     <ul className="list-disc pl-5 space-y-1 text-gray-800 text-lg font-sans">
 
-                                       <li>NVQ Level 4 in Plumbing Technology</li>
-                                        <li>Certified Water System Installer - National Vocational Training Institute</li>
-                                        <li>Occuptional Safety & Health (OSH) Certificate</li>
-                                        <li>Certificate in Domestic Water Supply Systems – NAITA</li>
+                                      {prof.certification.map((certification, index) => (
+                                             <li key={index}>{certification}</li>
+                                        ))}
                                         
                                     </ul>
 
@@ -243,7 +281,7 @@ export default function WorkerProfileView() {
                                         {
                                             userRate.map((user)=>(
                                                 
-                                             <div className=" key={user.id}  h-[25vh] flex flex-col">
+                                             <div key={user.id} className="   h-[25vh] flex flex-col">
                                             <div className=" h-[8vh] flex flex-row justify-center items-center ">
                                                     <FaUserCircle className=" w-1/15 text-4xl " ></FaUserCircle>
                                                     
@@ -287,6 +325,8 @@ export default function WorkerProfileView() {
 
            
         </div>
+        ))}
+       
          <div className="h-[10vh] ">
                  
             </div>
