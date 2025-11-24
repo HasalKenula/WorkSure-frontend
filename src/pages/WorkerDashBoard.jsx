@@ -54,10 +54,60 @@ export default function WorkerDashBoard() {
             Action: "Pending"
         },
 
-
-
-
     ]
+
+
+    const renderStars = (rating) => {
+        return [...Array(5)].map((_, i) => (
+            <IoStarSharp
+                key={i}
+                className={i < rating ? "text-yellow-500" : "text-slate-200"}
+            />
+        ));
+    };
+
+    const workerReviews = [
+        {
+            id: 1,
+            name: "John Doe",
+            label: new Date().toLocaleDateString(),
+            profileColor: "bg-red-300",
+            rating: 3,
+            ratingText: "3.5",
+            review:
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+        },
+        {
+            id: 2,
+            name: "Michael Silva",
+            label: new Date().toLocaleDateString(),
+            profileColor: "bg-blue-300",
+            rating: 4,
+            ratingText: "4.0",
+            review:
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer non sem vel odio tempor viverra."
+        },
+        {
+            id: 3,
+            name: "Kamal Perera",
+            label: new Date().toLocaleDateString(),
+            profileColor: "bg-green-300",
+            rating: 5,
+            ratingText: "5.0",
+            review:
+                "Praesent aliquet, leo non facilisis malesuada, velit lorem malesuada orci, et facilisis neque odio at sapien."
+        },
+        {
+            id: 4,
+            name: "Amal Perera",
+            label: new Date().toLocaleDateString(),
+            profileColor: "bg-green-300",
+            rating: 2,
+            ratingText: "2.0",
+            review:
+                "Praesent aliquet, leo non facilisis malesuada, velit lorem malesuada orci, et facilisis neque odio at sapien."
+        }
+    ];
 
     return (
         <div>
@@ -96,7 +146,7 @@ export default function WorkerDashBoard() {
                                 <h1 className="text-slate-500">Total Earning</h1>
                             </div>
                             <div className="flex items-center justify-center text-5xl font-bold">
-                                <h1>08</h1>
+                                <h1>Rs. 200,000</h1>
                             </div>
                         </div>
                         <div className="w-[75%] flex-1 flex-col  shadow-xl items-center justify-center gap-6  border  border-slate-200 py-4 px-8">
@@ -194,7 +244,7 @@ export default function WorkerDashBoard() {
 
 
 
-            <div className="w-full   flex  my-auto ">
+            <div className=" w-full   flex  my-auto ">
                 <div className="w-full mx-auto flex flex-col  gap-3 p-6">
                     <div className="px-6">
                         <h1 className="text-2xl font-bold ">On Going Works</h1>
@@ -257,6 +307,44 @@ export default function WorkerDashBoard() {
                             </div>
                         ))}
                     </div>
+
+                </div>
+            </div>
+
+            <div className=" w-full   flex  my-auto ">
+                <div className="w-full mx-auto flex flex-col  gap-3 p-6">
+                    <div className="px-6">
+                        <h1 className="text-2xl font-bold ">User Reviews</h1>
+                    </div>
+
+                    <div className="flex flex-col lg:flex-row  flex-wrap items-center justify-center gap-6 ">
+                        {workerReviews.map((comment) => {
+                            return (
+                                <div className="border border-slate-200 shadow-xl w-full lg:w-[40%] p-8 gap-6">
+                                    <div className="flex justify-between items-center">
+                                        <div className="flex items-center justify-between ">
+                                            <div className="w-[50px] aspect-square rounded-full bg-red-300 ">
+
+                                            </div>
+                                            <h1 className="font-bold text-xl px-4">{comment.name}</h1>
+                                        </div>
+                                        <h1>{comment.label}</h1>
+                                    </div>
+                                    <div className="flex items-center py-4 text-lg">
+                                        {renderStars(comment.rating)}
+                                        <h1 className="text-slate-500 px-2">{comment.ratingText}</h1>
+                                    </div>
+                                    <div>
+                                        <p>{comment.review}
+                                        </p>
+                                    </div>
+                                </div>
+
+                            )
+                        })}
+
+                    </div>
+
 
                 </div>
             </div>
