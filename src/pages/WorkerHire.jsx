@@ -39,7 +39,7 @@ export default function WorkerBookingPage() {
                                 <p className="text-gray-600 font-semibold">Plumber</p>
                                 <p className="text-gray-500">Colombo</p>
                                 <div className="flex items-center text-yellow-500 mt-1">
-                                ⭐⭐⭐⭐⭐ <span className="text-gray-500 ml-1">(75 Reviews)</span>
+                                ⭐⭐⭐⭐⭐ <span className="text-gray-500 ml-1 text-sm">(75 Reviews)</span>
                                 </div>
                             </div>
                         </div>
@@ -119,12 +119,12 @@ export default function WorkerBookingPage() {
                     <div className="flex flex-col md:flex-row gap-4 mt-6">
                         <button
                             onClick={handleSubmit}
-                            className="w-full md:w-1/3 bg-primary text-white py-2 rounded-md  hover:outline-2 hover:outline-offset-1 hover:outline-primary"
+                            className="w-full md:w-1/3 bg-primary text-white py-1 rounded-md  hover:outline-2 hover:outline-offset-1 hover:outline-primary"
                         >
                             Send Job Request
                         </button>
 
-                        <button className="w-full md:w-1/3 border py-2 rounded-md hover:bg-gray-100">
+                        <button className="w-full md:w-1/3  border border-gray-500  hover:border-primary py-1 rounded-md hover:text-primary text-gray-800">
                             Cancel
                         </button>
                     </div>
