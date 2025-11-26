@@ -1,5 +1,6 @@
 import { IoStarSharp } from "react-icons/io5";
 import Navbar from "../components/NavBar";
+import Man from "../assets/man.jpg"
 
 export default function WorkerDashBoard() {
 
@@ -73,7 +74,7 @@ export default function WorkerDashBoard() {
             label: new Date().toLocaleDateString(),
             profileColor: "bg-red-300",
             rating: 3,
-            ratingText: "3.5",
+            ratingText: "3.0",
             review:
                 "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
         },
@@ -159,7 +160,7 @@ export default function WorkerDashBoard() {
                                 <IoStarSharp />
                                 <IoStarSharp />
                                 <IoStarSharp />
-                                <h1 className="text-slate-500">3.5</h1>
+                                <h1 className="text-slate-500">5.0</h1>
                             </div>
                             <div className="flex items-center justify-center text-xl">
                                 <h1>(75 Reviews)</h1>
@@ -323,9 +324,12 @@ export default function WorkerDashBoard() {
                                 <div className="border border-slate-200 shadow-xl w-full lg:w-[40%] p-8 gap-6">
                                     <div className="flex justify-between items-center">
                                         <div className="flex items-center justify-between ">
-                                            <div className="w-[50px] aspect-square rounded-full bg-red-300 ">
+                                            <img
+                                                src={Man}   // or any image url
+                                                alt="profile"
+                                                className="w-[50px] aspect-square rounded-full object-cover"
+                                            />
 
-                                            </div>
                                             <h1 className="font-bold text-xl px-4">{comment.name}</h1>
                                         </div>
                                         <h1>{comment.label}</h1>

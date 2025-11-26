@@ -1,6 +1,7 @@
 import { RiDeleteBin6Line } from "react-icons/ri";
 import Navbar from "../components/NavBar";
 import PlatformAnalyticsChart from "../components/PlatformAnalyticsChart";
+import Man from "../assets/man.jpg"
 
 export default function AdminDashBoard() {
 
@@ -41,28 +42,28 @@ export default function AdminDashBoard() {
 
     const details = [
         {
-            name: "kamal"
+            name: "Kamal Perera"
         },
         {
-            name: "kamal"
+            name: "Kamal Perera"
         },
         {
-            name: "kamal"
+            name: "Kamal Perera"
         },
         {
-            name: "kamal"
+            name: "Kamal Perera"
         },
         {
-            name: "kamal"
+            name: "Kamal Perera"
         },
         {
-            name: "kamal"
+            name: "Kamal Perera"
         },
         {
-            name: "kamal"
+            name: "Kamal Perera"
         },
         {
-            name: "kamal"
+            name: "Kamal Perera"
         },
     ]
 
@@ -213,16 +214,19 @@ export default function AdminDashBoard() {
                     </div>
                     <div className="bg-white w-full lg:flex-3 flex flex-col py-4 shadow-lg border rounded-lg border-slate-200">
                         <div className="px-6">
-                            <h1 className="text-xl font-bold text-center lg:text-left">Plumbers</h1>
+                            <h1 className="text-xl font-bold text-center lg:text-center">Plumbers</h1>
                         </div>
                         <div className="w-full flex flex-col lg:flex-row justify-center items-center lg:flex-wrap gap-4">
                             {details.map((detail) => {
                                 return (
                                     <div className="w-[40%] flex justify-center items-center lg:gap-2 lg:p-2">
-                                        <div className="w-[50px] aspect-square rounded-full bg-yellow-300 ">
+                                        <img
+                                            src={Man}   // or any image url
+                                            alt="profile"
+                                            className="w-[50px] aspect-square rounded-full object-cover"
+                                        />
 
-                                        </div>
-                                        <h1 className="font-bold text-xl px-4">{detail.name}</h1>
+                                        <h1 className="font-bold text-xl">{detail.name}</h1>
                                     </div>
                                 )
                             })}
@@ -325,9 +329,11 @@ export default function AdminDashBoard() {
                                 <div className="border border-slate-200 shadow-xl w-full lg:w-[40%] p-8 gap-6">
                                     <div className="flex justify-between items-center">
                                         <div className="flex items-center justify-between ">
-                                            <div className="w-[50px] aspect-square rounded-full bg-red-300 ">
-
-                                            </div>
+                                            <img
+                                                src={Man}   // or any image url
+                                                alt="profile"
+                                                className="w-[50px] aspect-square rounded-full object-cover"
+                                            />
                                             <h1 className="font-bold text-xl px-4">{comment.name}</h1>
                                         </div>
                                         <div className="flex items-center gap-3">
