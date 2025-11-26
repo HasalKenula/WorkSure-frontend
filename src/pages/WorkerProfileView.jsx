@@ -4,7 +4,18 @@ import MM from "../assets/MM.jpg";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaStar } from "react-icons/fa";
 import { FaUserCircle } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
 export default function WorkerProfileView() {
+    const navigate = useNavigate();
+    const p={
+        name:"Eva Adams",
+    } 
+    const goToFeedback = () => {
+        navigate("/feedback", { state: p});
+     };
+
+  
     const userRate=[
         {
         id: 1,
@@ -89,8 +100,7 @@ export default function WorkerProfileView() {
             <Navbar />
 
             {/*middle box*/}
-            <div className="shadow-2xl w-[85%] h-[200vh] flex flex-col gap-3.5 rounded-2xl mt-6 
-                bg-white/10 backdrop-blur-xl">
+            <div className="shadow-2xl w-[85%] h-[200vh] flex flex-col gap-3.5 rounded-2xl mt-6  bg-white/10 backdrop-blur-xl">
                
                {/*profile*/}
                <div className=" h-[40vh] flex flex-row space-x-25">
@@ -273,7 +283,7 @@ export default function WorkerProfileView() {
                                     <div className="flex items-center space-x-3 text-xl font-medium mr-95.5 ">
                                         <div className="flex-1 h-px bg-gray-400"></div> 
                                         <p className="text-xl font-bold font-inter text-primary text-stroke  ">USER RATING</p>
-                                        <div className="flex-1 h-px bg-gray-400"></div> 
+                                        <div className="flex-1 h-px bg-gray-400 "></div> 
                                     </div>
 
                                     <div className="  flex flex-col   h-full">
@@ -299,7 +309,9 @@ export default function WorkerProfileView() {
 
                                             <div className=" h-[13vh] pl-10  text-lg font-sans text-gray-800">
                                                     <p>{user.message}</p>
+                                                     <div className="mt-2 flex-1 h-px bg-gray-400 "></div> 
                                             </div>
+                                            
 
                                          </div>
 
@@ -313,7 +325,7 @@ export default function WorkerProfileView() {
                               
                         </div>
                         <div className="h-[30vh] pl-80 ">
-                            <button className=" px-1 py-1 text-lg font-semibold bg-primary text-white rounded-2xl shadow-md hover:bg-accent hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/4">Add Feedback</button>
+                            <button   onClick={goToFeedback} className=" px-1 py-1 text-lg font-semibold bg-primary text-white rounded-2xl shadow-md hover:bg-accent hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/4">Add Feedback</button>
                         </div>
 
                     </div>
