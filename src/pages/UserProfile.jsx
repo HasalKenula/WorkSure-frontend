@@ -26,7 +26,7 @@ export default function UserProfile() {
               </div>
 
               <div className="flex justify-center items-center mt-4">
-                <button className="text-lg font-semibold text-black rounded-xl shadow-md hover:bg-gray-300 hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/3 h-1/2 border border-gray-400">
+                <button className="text-lg font-semibold text-black rounded-xl shadow-md hover:bg-gray-300 hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/3 h-95/100 border border-gray-400">
                   Edit Image
                 </button>
               </div>
@@ -104,7 +104,6 @@ export default function UserProfile() {
               Save Changes
             </button>
           </div>
-
         </div>
       </div>
     </>

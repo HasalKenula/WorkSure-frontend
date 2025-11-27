@@ -22,7 +22,7 @@ export default function ContactPage() {
           </p>
         </div>
 
-        {/* Responsive 2-Column Box */}
+        {/*  2-Column Box */}
         <div className="mt-10 flex flex-col lg:flex-row gap-8">
 
           {/* Left Box */}
