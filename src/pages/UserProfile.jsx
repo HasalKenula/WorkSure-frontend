@@ -50,7 +50,7 @@ export default function UserProfile() {
 
                 <div className="flex flex-col lg:flex-row lg:items-center">
                   <label className="font-semibold text-lg lg:w-1/3">Address</label>
-                  <input type="text" placeholder="336, Piliyandala"
+                  <input type="text" placeholder="336, Piliyandala , Colombo"
                     className="w-full lg:w-2/3 p-2 border-b-2 border-gray-400 focus:border-blue-500 focus:outline-none" />
                 </div>
 
