@@ -35,10 +35,10 @@ function Login() {
     }
 
     return (
-        <div className="p-10">
-            <div className="max-w-[600px] p-8 shadow-xl rounded-lg mx-auto">
+        <div className="w-full h-screen p-10 flex items-center justify-center">
+            <div className="w-[600px] p-8 shadow-xl rounded-lg mx-auto border border-slate-200">
                 <div className="text-center mb-5">
-                    <h1 className="text-2xl font-semibold">Login</h1>
+                    <h1 className="text-4xl font-semibold text-primary">Login</h1>
                 </div>
 
                 <form onSubmit={submit}>
@@ -60,7 +60,7 @@ function Login() {
                     {error && <div className="text-sm text-red-500">{error}</div>}
 
                     <div className="mt-8">
-                        <button type="submit" className="bg-gray-800 text-white px-4 py-2 rounded-lg w-full hover:bg-gray-950">Login</button>
+                        <button type="submit" className="bg-primary text-white px-4 py-2 rounded-lg w-full hover:bg-white hover:text-primary border border-primary">Login</button>
                     </div>
                 </form>
 
@@ -69,7 +69,7 @@ function Login() {
                         Already have an account?
                         <span
                             onClick={() => navigate("/auth/register")}
-                            className="text-blue-600 cursor-pointer ml-1"
+                            className="text-primary cursor-pointer ml-1"
                         >
                             Register
                         </span>

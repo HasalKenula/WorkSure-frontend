@@ -60,10 +60,10 @@ function Register() {
     }
 
     return (
-        <div className="p-10">
-            <div className="max-w-[600px] p-8 shadow-xl rounded-lg mx-auto">
+        <div className="w-full  p-10 flex items-center justify-center">
+            <div className="w-[600px] p-8 shadow-xl rounded-lg mx-auto border border-slate-200">
                 <div className="text-center mb-5">
-                    <h1 className="text-2xl font-semibold">Register</h1>
+                    <h1 className="text-4xl font-semibold text-primary">Register</h1>
                 </div>
 
                 <form onSubmit={submit}>
@@ -136,7 +136,7 @@ function Register() {
 
                     <div className="mt-8">
                         <button type="submit"
-                            className="bg-gray-800 text-white px-4 py-2 rounded-lg w-full hover:bg-gray-950">
+                            className="bg-primary text-white px-4 py-2 rounded-lg w-full hover:bg-white hover:text-primary border border-primary">
                             Register
                         </button>
                     </div>
@@ -145,7 +145,7 @@ function Register() {
                 <div className="text-center mt-4">
                     <p>
                         Already have an account?
-                        <span className="text-blue-600 cursor-pointer ml-1"
+                        <span className="cursor-pointer ml-1 text-primary"
                             onClick={() => navigate("/auth/login")}>
                             Login
                         </span>
