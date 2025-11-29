@@ -2,8 +2,56 @@ import Navbar from "../components/NavBar";
 import { MdOutlineCall } from "react-icons/md";
 import { IoLocationOutline } from "react-icons/io5";
 import { MdOutlineLocalPostOffice } from "react-icons/md";
-
+import { useAuth } from "../context/AuthContext";
+import { useState } from "react";
+import axios from "axios";
 export default function ContactPage() {
+    const { isAuthenticated, jwtToken } = useAuth();
+    const [contact, setContact] = useState([]);
+
+    const [name, setName] = useState("");
+    const [contactNumber, setcontactNumber] = useState("");
+    const [subject, setsubject] = useState("");
+    const [message, setmessage] = useState("");
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${jwtToken}`
+        }
+    }
+
+
+    async function createContact() {
+      try {
+          const response = await axios.post("http://localhost:8081/contact",{
+            name:name,
+            contactNumber:contactNumber,
+            subject:subject,
+            message:message
+        } ,config);
+      } catch (error) {
+         console.log(error);
+      }
+       
+
+    }
+
+   function handelName(event){
+    setName(event.target.value);
+   }
+
+   function handelcontactNumber(event){
+    setcontactNumber(event.target.value);
+   }
+
+   function handelsubject(event){
+    setsubject(event.target.value);
+   }
+
+   function handelmessage(event){
+    setmessage(event.target.value);
+   }
+
   return (
     <>
       <Navbar />
@@ -37,6 +85,8 @@ export default function ContactPage() {
                 <label className="font-bold">Your Name</label>
                 <input
                   type="text"
+                  value={name}
+                    onChange={handelName}
                   placeholder="Hasal Kenula"
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 shadow-sm"
                 />
@@ -46,6 +96,8 @@ export default function ContactPage() {
                 <label className="font-bold">Contact Number</label>
                 <input
                   type="text"
+                  value={contactNumber}
+                    onChange={handelcontactNumber}
                   placeholder="071-1234567"
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 shadow-sm"
                 />
@@ -55,6 +107,8 @@ export default function ContactPage() {
                 <label className="font-bold">Subject</label>
                 <input
                   type="text"
+                  value={subject}
+                    onChange={handelsubject}
                   placeholder="Inquiry about"
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 shadow-sm"
                 />
@@ -64,13 +118,15 @@ export default function ContactPage() {
                 <label className="font-bold">Your Message</label>
                 <textarea
                   placeholder="Type your message here"
+                  value={message}
+                  onChange={handelmessage}
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 shadow-sm h-32"
                 />
               </div>
             </form>
 
             <div className="flex justify-center mt-6">
-              <button className="text-lg font-semibold text-black rounded-xl bg-primary shadow-md hover:bg-gray-300 hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/2 py-3 border border-gray-400">
+              <button type="button" onClick={createContact}className="text-lg font-semibold text-black rounded-xl bg-primary shadow-md hover:bg-gray-300 hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/2 py-3 border border-gray-400">
                 Send Message
               </button>
             </div>
