@@ -50,7 +50,36 @@ export default function WorkersPage() {
         </div>
       </div>
 
-      
+      {/* Workers Grid */}
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-6 max-w-[95%] mx-auto">
+        {workers.map((worker, index) => (
+          <div
+            className="bg-white p-5 rounded-xl text-center shadow-md relative"
+            key={index}
+          >
+            <div className="absolute top-2 right-4 text-green-600 font-semibold text-sm">
+              {worker.status}
+            </div>
+
+            <div className="bg-gray-200 w-20 h-20 rounded-full flex justify-center items-center text-4xl mx-auto">
+              👤
+            </div>
+
+            <h3 className="mt-3 text-lg font-bold">{worker.name}</h3>
+            <p className="text-yellow-600 font-semibold my-1">{worker.skill}</p>
+
+            <div className="text-sm my-2">⭐⭐⭐⭐⭐ {worker.rating}</div>
+            <div className="text-sm mb-3">📍 {worker.location}</div>
+
+            <button className="w-full py-2 mb-2 bg-yellow-400 text-white rounded-md hover:bg-blue-700">
+              View Profile
+            </button>
+            <button className="w-full py-2 border border-black rounded-md font-semibold hover:bg-gray-200">
+              Hire Now
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
