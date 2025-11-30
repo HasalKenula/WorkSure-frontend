@@ -24,6 +24,25 @@ export default function AboutUs() {
 
                 <h1 className="about-title2">Our Key Objectives</h1>
 
+                {/*-----item 2-----*/}
+                <div className="item2">
+                    <div className="item2-left">
+                        <h3>Accelerate Productivity</h3>
+                        <p>Streamline workflows and automate routine tasks to boost team efficiency for all users.</p>
+                    </div>
+                    <div className="item2-center">
+                        <h3>Accelerate Productivity</h3>
+                            <p>Streamline workflows and automate routine tasks to boost team efficiency for all users.</p>
+                        </div>
+                    <div className="item2-right">
+                        <h3>Accelerate Productivity</h3>
+                        <p>Streamline workflows and automate routine tasks to boost team efficiency for all users.</p>
+                    </div>
+                </div>
+
+                <h1 className="about-title3">Our Key Objectives</h1>
+                <p className="item3-para1">A streamlined process designed for efficiency and clarity, connecting clients with the perfect<br/> talent and empowering workers with new opportunities.</p>
+
 
 
 
