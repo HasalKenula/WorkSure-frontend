@@ -82,6 +82,24 @@ const Footer = () => {
             </ul>
           </div>
 
+          {/* SERVICES */}
+          <div>
+            <h3 className="font-bold text-xl mb-5">
+              SERVICES
+              <span className="block w-12 h-[3px] bg-yellow-500 mt-5"></span>
+            </h3>
+
+            <ul className="space-y-3 text-gray-300 text-1xl">
+              <li><a className="hover:text-yellow-400" href="#">Food & Restaurant</a></li>
+              <li><a className="hover:text-yellow-400" href="#">Spa & Fitness</a></li>
+              <li><a className="hover:text-yellow-400" href="#">Sports & Gaming</a></li>
+              <li><a className="hover:text-yellow-400" href="#">Event & Party</a></li>
+              <li><a className="hover:text-yellow-400" href="#">GYM & Yoga</a></li>
+            </ul>
+          </div>
+
+        </div>
+
       </div>
     </footer>
   );
