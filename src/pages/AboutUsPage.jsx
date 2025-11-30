@@ -2,12 +2,18 @@ import { AiOutlineSafety } from "react-icons/ai";
 import { AiTwotoneCheckCircle } from "react-icons/ai";
 import { AiFillContacts } from "react-icons/ai";
 import { AiFillShopping } from "react-icons/ai";
+import Navbar from "../components/NavBar";
+import Footer from "../components/Footer";
 
 
 
 export default function AboutUs() {
   return (
-    <div className="text-black bg-[rgb(254,255,241)] min-h-screen w-full p-5">
+  <div>
+
+    <Navbar />
+
+    <div className="text-black bg-[rgb(254,255,241)] min-h-screen w-full p-5 mt-20">
 
       {/* ----- Title & Intro ----- */}
       <h1 className="text-center text-6xl font-bold mt-[30px]">
@@ -189,5 +195,9 @@ export default function AboutUs() {
       </section>
 
     </div>
+
+    <Footer />
+
+  </div>
   );
 }

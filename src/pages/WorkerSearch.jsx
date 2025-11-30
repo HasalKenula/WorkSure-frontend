@@ -1,6 +1,8 @@
 import React from "react";
+import Navbar from "../components/NavBar";
+import Footer from "../components/Footer";
 
-const workers = Array(10).fill({
+const workers = Array(18).fill({
   name: "Eve Adams",
   skill: "Carpenter",
   rating: 5.0,
@@ -10,11 +12,13 @@ const workers = Array(10).fill({
 
 export default function WorkersPage() {
   return (
+   <div>
+    <Navbar />
     <div className="bg-[#fffdef] min-h-screen p-5">
 
       {/* Filters Section */}
-      <div className="flex flex-wrap justify-center items-center gap-4 mb-8 w-[95%]">
-        <h3 className="text-2xl font-bold mr-5">Filters</h3>
+      <div className="flex flex-wrap justify-center items-center gap-4 mb-15 w-[95%]">
+        <h3 className="text-2xl font-bold mr-5"></h3>
 
         <input
           type="text"
@@ -51,7 +55,7 @@ export default function WorkersPage() {
       </div>
 
       {/* Workers Grid */}
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-6 max-w-[95%] mx-auto">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(240px,1fr))] gap-10 max-w-[90%] mx-auto">
         {workers.map((worker, index) => (
           <div
             className="bg-white p-5 rounded-xl text-center shadow-md relative"
@@ -81,5 +85,9 @@ export default function WorkersPage() {
         ))}
       </div>
     </div>
+
+    <Footer />
+
+  </div> 
   );
 }
