@@ -20,6 +20,20 @@ const Footer = () => {
             </p>
           </div>
 
+          {/* CONTACT */}
+          <div>
+            <h3 className="font-bold text-xl mb-4 relative">
+              CONTACT
+              <span className="block w-12 h-[3px] bg-yellow-500 mt-5"></span>
+            </h3>
+
+            <ul className="space-y-3 text-gray-300 text-1xl mb-5">
+              <li>📍 Banco Ceylon pvt Ltd, 966 4-F <br /> Palawaththa, Battaramulla, Sri Lanka</li>
+              <li>📞 +94 77-7444866</li>
+              <li>✉️ bancojobs@gmail.com</li>
+            </ul>
+
+
       </div>
     </footer>
   );
