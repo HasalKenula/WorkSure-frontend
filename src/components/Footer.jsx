@@ -66,6 +66,22 @@ const Footer = () => {
 
 
 
+          {/* COMPANY */}
+          <div>
+            <h3 className="font-bold text-xl mb-5">
+              COMPANY
+              <span className="block w-12 h-[3px] bg-yellow-500 mt-1"></span>
+            </h3>
+
+            <ul className="space-y-3 text-gray-300 text-1xl">
+              <li><a className="hover:text-yellow-400" href="#">About Us</a></li>
+              <li><a className="hover:text-yellow-400" href="#">Contact Us</a></li>
+              <li><a className="hover:text-yellow-400" href="#">Privacy Policy</a></li>
+              <li><a className="hover:text-yellow-400" href="#">Terms & Condition</a></li>
+              <li><a className="hover:text-yellow-400" href="#">Support</a></li>
+            </ul>
+          </div>
+
       </div>
     </footer>
   );
