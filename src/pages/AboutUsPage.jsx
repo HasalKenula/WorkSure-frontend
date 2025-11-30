@@ -10,6 +10,65 @@ export default function AboutUs() {
                     Connecting businesses with top-tier talent, WorkSure is revolutionizing project collaboration <br />
                     and workforce management with innovative solutions.
                 </p>
+
+                {/*-----item 1-----*/}
+                <div className="item1">
+                    <div className="item1-left">
+                        <img src="" alt="Team meeting" />
+                    </div>
+                    <div className="item1-right">
+                        <h2 className="mission-title">Our Mission</h2>
+                        <p className="mission-container">At WorkSure, our mission is to empower businesses and independent professionals by providing a seamless, secure, and intuitive platform for project collaboration. We strive to bridge the gap between talent and opportunity, fostering a dynamic ecosystem where innovation thrives and work is redefined for the modern age. We are committed to transparency, efficiency, and fostering meaningful connections that drive success for everyone.</p>
+                    </div>
+                </div>
+
+                <h1 className="about-title2">Our Key Objectives</h1>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </h1>
         </div>
     )
