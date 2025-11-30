@@ -31,7 +31,7 @@ export default function AboutUs() {
         {/* Mission box */}
         <div className="bg-white p-[30px] rounded-[20px] shadow-lg w-[500px] max-w-full">
           <h2 className="text-center text-4xl font-bold fornt-[Courier New]">Our Mission</h2>
-          <p className="mx-[30px] mb-[45px] mt-[20px] text-[20px] leading-relaxed text-gray-800" text-justify text-center>
+          <p className="mx-[30px] mb-[45px] mt-[20px] text-[20px] leading-relaxed text-gray-800 text-justify " text-justify text-center>
             At WorkSure, our mission is to empower businesses and independent professionals by providing
             a seamless, secure, and intuitive platform for project collaboration. We strive to bridge the
             gap between talent and opportunity, fostering a dynamic ecosystem where innovation thrives and
@@ -82,7 +82,7 @@ export default function AboutUs() {
       </div>
 
       {/* ----- How It Works ----- */}
-      <h1 className="text-center text-5xl font-bold mt-[55px]">
+      <h1 className="text-center text-6xl font-bold mt-[150px]">
         How It Works
       </h1>
 
@@ -92,70 +92,70 @@ export default function AboutUs() {
         connecting clients with the perfect talent and empowering workers.
       </p>
 
-      <div className="flex flex-wrap justify-center gap-10 mt-10">
+      <div className="flex flex-wrap justify-center gap-15 mt-20">
 
         {/* Clients */}
-        <div className="bg-white p-[30px] rounded-[20px] shadow-lg w-[340px] max-w-full">
-          <h2 className="text-2xl font-bold text-center mb-6">For Clients</h2>
+        <div className="bg-white p-[30px] rounded-[20px] shadow-lg w-[750px] max-w-full">
+          <h2 className="text-3xl font-bold text-center mb-8">For Clients</h2>
 
-          <div className="flex gap-4 items-start mb-5">
-            <span className="text-xl">🔍</span>
-            <p className="text-sm leading-relaxed text-gray-800">
-              Discover specialized talent tailored to your project.
+          <div className="flex gap-5 items-start mb-10">
+            <span className="text-3xl">🔍</span>
+            <p className="text-2xl text-justify leading-relaxed text-gray-800">
+              Discover top talent and specialized services tailored precisely to your project needs quickly and efficiently.
             </p>
           </div>
 
-          <div className="flex gap-4 items-start mb-5">
-            <span className="text-xl">📄</span>
-            <p className="text-sm leading-relaxed text-gray-800">
-              Post project requirements and receive proposals.
+          <div className="flex gap-5 items-start mb-10">
+            <span className="text-3xl">📄</span>
+            <p className="text-2xl text-justify leading-relaxed text-gray-800">
+              Effortlessly share your project details and receive tailored proposals from skilled professionals.
             </p>
           </div>
 
-          <div className="flex gap-4 items-start mb-5">
-            <span className="text-xl">💬</span>
-            <p className="text-sm leading-relaxed text-gray-800">
-              Chat with workers & track progress.
+          <div className="flex gap-5 items-start mb-10">
+            <span className="text-3xl">💬</span>
+            <p className="text-2xl text-justify leading-relaxed text-gray-800">
+              Communicate directly with workers through integrated chat and manage project milestones effectively.
             </p>
           </div>
 
-          <div className="flex gap-4 items-start">
-            <span className="text-xl">✔️</span>
-            <p className="text-sm leading-relaxed text-gray-800">
-              Approve deliverables & pay securely.
+          <div className="flex gap-5 items-start">
+            <span className="text-3xl">✔️</span>
+            <p className="text-2xl text-justify leading-relaxed text-gray-800">
+              Approve deliverables confidently and process secure payments upon successful project completion.
             </p>
           </div>
         </div>
 
         {/* Workers */}
-        <div className="bg-white p-[30px] rounded-[20px] shadow-lg w-[340px] max-w-full">
-          <h2 className="text-2xl font-bold text-center mb-6">For Workers</h2>
+        <div className="bg-white p-[30px] rounded-[20px] shadow-lg w-[750px] max-w-full">
+          <h2 className="text-3xl font-bold text-center mb-6">For Workers</h2>
 
-          <div className="flex gap-4 items-start mb-5">
-            <span className="text-xl">👤</span>
-            <p className="text-sm leading-relaxed text-gray-800">
-              Create profile & showcase skills.
+          <div className="flex gap-5 items-start mb-10">
+            <span className="text-3xl">👤</span>
+            <p className="text-2xl leading-relaxed text-gray-800">
+              Create a compelling professional profile highlighting your unique skills and valuable experience to attract clients.
             </p>
           </div>
 
-          <div className="flex gap-4 items-start mb-5">
-            <span className="text-xl">💼</span>
-            <p className="text-sm leading-relaxed text-gray-800">
-              Browse and apply for suitable projects.
+          <div className="flex gap-5 items-start mb-10">
+            <span className="text-3xl">💼</span>
+            <p className="text-2xl leading-relaxed text-gray-800">
+              Browse and apply for relevant projects that perfectly match your expertise and career aspirations.
             </p>
           </div>
 
-          <div className="flex gap-4 items-start mb-5">
-            <span className="text-xl">💻</span>
-            <p className="text-sm leading-relaxed text-gray-800">
-              Collaborate using built-in workspace tools.
+          <div className="flex gap-5 items-start mb-10">
+            <span className="text-3xl">💻</span>
+            <p className="text-2xl leading-relaxed text-gray-800">
+              Collaborate seamlessly with clients using our integrated communication and comprehensive project management tools.
             </p>
           </div>
 
-          <div className="flex gap-4 items-start">
-            <span className="text-xl">📦</span>
-            <p className="text-sm leading-relaxed text-gray-800">
-              Receive timely secure payments.
+          <div className="flex gap-5 items-start">
+            <span className="text-3xl">📦</span>
+            <p className="text-2xl leading-relaxed text-gray-800">
+              Receive timely and secure payments for your completed work, ensuring financial stability and peace of mind.
             </p>
           </div>
         </div>
@@ -163,25 +163,25 @@ export default function AboutUs() {
       </div>
 
       {/* ----- CTA Section ----- */}
-      <section className="bg-[lch(74.93%_82.5_73.14)] p-10 rounded-[15px] text-center text-white max-w-[1000px] mt-10 mx-auto">
-        <h2 className="text-3xl font-bold">Ready to Experience WorkSure?</h2>
-        <p className="mt-5 text-sm leading-relaxed">
+      <section className="bg-[lch(74.93%_82.5_73.14)] p-10 rounded-[15px] text-center text-white max-w-[1200px] mt-30 mx-auto">
+        <h2 className="text-5xl font-bold">Ready to Experience WorkSure?</h2>
+        <p className="mt-5 text-1xl leading-relaxed">
           Join our growing community of successful businesses and talented professionals.
           <br />
           Discover the future of work today!
         </p>
 
-        <div className="flex flex-wrap justify-center gap-6 mt-8">
+        <div className="flex flex-wrap justify-center gap-10 mt-12">
           <a
             href="#"
-            className="bg-white text-black px-6 py-2 rounded-lg text-sm font-medium border-2 border-transparent hover:bg-transparent hover:text-white hover:border-white transition"
+            className="bg-white text-black px-6 py-2 rounded-lg text-2xl font-medium border-2 border-transparent hover:bg-transparent hover:text-white hover:border-white transition"
           >
             Get Started as a Client
           </a>
 
           <a
             href="#"
-            className="bg-white text-black px-6 py-2 rounded-lg text-sm font-medium border-2 border-transparent hover:bg-transparent hover:text-white hover:border-white transition"
+            className="bg-white text-black px-6 py-2 rounded-lg text-2xl font-medium border-2 border-transparent hover:bg-transparent hover:text-white hover:border-white transition"
           >
             Become a Worker
           </a>
