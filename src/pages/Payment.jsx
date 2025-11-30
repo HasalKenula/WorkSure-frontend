@@ -80,7 +80,46 @@ export default function SecurePayment() {
           </label>
         </div>
 
-        
+        {/* Right – Order Summary */}
+        <div className="bg-white p-8 rounded-2xl shadow-lg flex flex-col justify-between">
+          <h2 className="text-2xl font-bold mb-6 text-gray-800">Order Summary</h2>
+
+          <div className="flex flex-col gap-4">
+            <div className="flex justify-between text-gray-700">
+              <span>Service:</span> 
+              <b>Plumbing Installation</b> by Kamal Perera
+            </div>
+            <div className="flex justify-between text-gray-700">
+              <span>Service Fee:</span> $250.00
+            </div>
+            <div className="flex justify-between text-gray-700">
+              <span>Tax (8%):</span> $20.00
+            </div>
+          </div>
+
+          <hr className="my-4 border-gray-300" />
+
+          <div className="flex justify-between font-bold text-lg text-gray-800 mb-4">
+            <span>Total Amount:</span>
+            <b>Rs. 270.00</b>
+          </div>
+
+          <label className="flex items-center gap-2 text-sm text-gray-600 mb-4">
+            <input type="checkbox" className="accent-blue-500" />
+            I have read and agree to the website Terms and Conditions
+          </label>
+
+          <button className="w-full bg-blue-600 hover:bg-yellow-500 text-white py-4 rounded-xl font-semibold transition-colors">
+            Confirm Payment
+          </button>
+
+          <p className="text-xs text-gray-500 mt-4">
+            Your personal data will be used to process your order, support your
+            experience throughout this website, and for other purposes described
+            in our <a href="#" className="underline text-blue-500">Privacy policy</a>.
+          </p>
+        </div>
+
       </div>
     </div>
   );
