@@ -100,6 +100,20 @@ const Footer = () => {
 
         </div>
 
+        {/* BOTTOM NAV */}{/*
+        <div className="border-t border-white/10 mt-10 py-4">
+          <div className="flex justify-center gap-10 text-sm text-gray-300">
+            <a href="#" className="hover:text-yellow-400">Home</a>
+            <a href="#" className="hover:text-yellow-400">Cookies</a>
+            <a href="#" className="hover:text-yellow-400">Help</a>
+            <a href="#" className="hover:text-yellow-400">FAQs</a>
+          </div>
+        </div>*/}
+
+        {/* COPYRIGHT */}
+        <div className="border-t border-white/10 mt-4 pt-4 text-center text-gray-400 text-1xl">
+          © <span className="text-white font-semibold">GOLK</span>, All Right Reserved. Designed By <span className="text-yellow-400">Group</span>
+        </div>
       </div>
     </footer>
   );
