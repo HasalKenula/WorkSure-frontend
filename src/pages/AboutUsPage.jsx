@@ -43,7 +43,58 @@ export default function AboutUs() {
                 <h1 className="about-title3">Our Key Objectives</h1>
                 <p className="item3-para1">A streamlined process designed for efficiency and clarity, connecting clients with the perfect<br/> talent and empowering workers with new opportunities.</p>
 
+                {/*-----item 3-----*/}
+                <div className="item3">
+                    <div className="item3-left">
+                        <h2>For Clients</h2>
 
+                        <div className="item">
+                            <span className="icon">🔍</span>
+                            <p>Discover top talent and specialized services tailored precisely to your project needs quickly and efficiently.</p>
+                        </div>
+
+                        <div className="item">
+                            <span className="icon">📄</span>
+                            <p>Easily post detailed project requirements and receive tailored proposals from qualified professionals.</p>
+                        </div>
+
+                        <div className="item">
+                            <span className="icon">💬</span>
+                            <p>Communicate directly with workers through integrated chat and manage project milestones effectively.</p>
+                        </div>
+
+                        <div className="item">
+                            <span className="icon">✔️</span>
+                            <p>Approve deliverables confidently and process secure payments upon successful project completion.</p>
+                        </div>
+
+                    </div>
+
+                    <div className="item3-right">
+                        <h2>For Workers</h2>
+
+                        <div className="item">
+                            <span className="icon">👤</span>
+                            <p>Create a compelling professional profile highlighting your unique skills and valuable experience to attract clients.</p>
+                        </div>
+
+                        <div className="item">
+                            <span className="icon">💼</span>
+                            <p>Browse and apply for relevant projects that perfectly match your expertise and career aspirations.</p>
+                        </div>
+
+                        <div className="item">
+                            <span className="icon">💻</span>
+                            <p>Collaborate seamlessly with clients using our integrated communication and comprehensive project management tools.</p>
+                        </div>
+
+                        <div className="item">
+                            <span className="icon">📦</span>
+                            <p>Receive timely and secure payments for your completed work, ensuring financial stability and peace of mind.</p>
+                        </div>
+
+                    </div>
+                </div>
 
 
 
