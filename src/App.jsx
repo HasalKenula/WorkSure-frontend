@@ -38,7 +38,7 @@ function App() {
         <Routes>
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/register" element={<Register />} />
-          <Route element={<ProtectedRoute />}>
+          {/* <Route element={<ProtectedRoute />}> */}
             <Route path='/*' element={<HomePage />} />
             <Route path='/about' element={<AboutUs />} />
             <Route path='/contact' element={<ContactPage />} />
@@ -59,7 +59,7 @@ function App() {
             <Route path="/workerRegistrationDetails" element={<WorkerRegistrationDetails />} />
             <Route path="/workerProfileUpdate" element={<WorkerProfileUpdate />} />
             <Route path='/workerView' element={<WorkerView />} />
-          </Route>
+          {/* </Route> */}
 
 
 
