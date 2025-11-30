@@ -97,7 +97,18 @@ export default function AboutUs() {
                 </div>
 
 
+                <section className="cta-section">
+                    <h2>Ready to Experience WorkSure?</h2>
+                    <p className="cta-subtext">
+                        Join our growing community of successful businesses and talented professionals.<br/>
+                        Discover the future of work today!
+                    </p>
 
+                    <div className="cta-buttons">
+                        <a href="#" className="cta-btn white">Get Started as a Client</a>
+                        <a href="#" className="cta-btn white">Become a Worker</a>
+                    </div>
+                </section>
 
 
 
