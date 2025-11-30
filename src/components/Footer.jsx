@@ -34,6 +34,38 @@ const Footer = () => {
             </ul>
 
 
+
+
+            {/* Icons */}
+            <div className="flex gap-4 mt-4">
+              <a className="hover:text-yellow-400 text-gray-300 text-xl" href="#">
+                <a href="#" className="text-gray-400 hover:text-white text-2xl">
+                    <FaFacebook />
+                </a>
+              </a>
+              <a className="hover:text-yellow-400 text-gray-300 text-xl" href="#">
+                <a href="#" className="text-gray-400 hover:text-white text-2xl">
+                    <FaTwitter />
+                </a>
+              </a>
+              <a className="hover:text-yellow-400 text-gray-300 text-xl" href="#">
+                <a href="https://www.youtube.com/channel/yourchannel" target="_blank" rel="noopener noreferrer" 
+                    className="text-red-600 hover:text-red-500 text-2xl">
+                    <FaYoutube />
+                </a>
+              </a>
+              <a className="hover:text-yellow-400 text-gray-300 text-xl" href="#">
+                <a href="https://wa.me/0777444866" target="_blank" rel="noopener noreferrer" 
+                    className="text-green-500 hover:text-green-400 text-2xl">
+                    <FaWhatsapp />
+                </a>
+              </a>
+            </div>
+          </div>
+
+
+
+
       </div>
     </footer>
   );
