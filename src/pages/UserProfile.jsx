@@ -1,280 +1,243 @@
-// import Navbar from "../components/NavBar"
-// import MM from "../assets/man.jpg";
-
-// export default function UserProfile() {
-//   return (
-//     <>
-//       <Navbar />
-
-//       <div className="mt-19 flex justify-center items-center min-h-screen font-outfit px-4">
-//         <div className="shadow-2xl w-[85%] min-h-screen flex flex-col rounded-2xl mt-6 bg-white/10 backdrop-blur-xl p-4">
-
-//           {/* Title */}
-//           <div className="mb-4">
-//             <h1 className="mt-5 ml-5 text-4xl font-bold text-primary">Your Profile</h1>
-//           </div>
-
-//           {/* DETAILS SECTION */}
-//           <div className="mt-5 flex flex-col lg:flex-row">
-            
-//             {/* PHOTO */}
-//             <div className="lg:w-1/4 w-full flex flex-col">
-//               <div className="flex justify-center items-center">
-//                 <div className="w-62 h-62 rounded-full overflow-hidden border-4 border-primary shadow-lg">
-//                   <img src={MM} className="w-full h-full object-cover" />
-//                 </div>
-//               </div>
-
-//               <div className="flex justify-center items-center mt-4">
-//                 <button className="text-lg font-semibold text-black rounded-xl shadow-md hover:bg-gray-300 hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/3 h-95/100 border border-gray-400">
-//                   Edit Image
-//                 </button>
-//               </div>
-//             </div>
-
-//             {/* RIGHT DETAILS */}
-//             <div className="lg:w-3/4 w-full mt-6 lg:mt-0">
-//               <form className="flex flex-col space-y-5">
-
-//                 <div className="flex flex-col lg:flex-row lg:items-center">
-//                   <label className="font-semibold text-lg lg:w-1/3">User Name</label>
-//                   <input type="text" placeholder="Ishini Shehara"
-//                     className="w-full lg:w-2/3 p-2 border-b-2 border-gray-400 focus:border-blue-500 focus:outline-none" />
-//                 </div>
-
-//                 <div className="flex flex-col lg:flex-row lg:items-center">
-//                   <label className="font-semibold text-lg lg:w-1/3">Email</label>
-//                   <input type="text" placeholder="gmail@gmail.com"
-//                     className="w-full lg:w-2/3 p-2 border-b-2 border-gray-400 focus:border-blue-500 focus:outline-none" />
-//                 </div>
-
-//                 <div className="flex flex-col lg:flex-row lg:items-center">
-//                   <label className="font-semibold text-lg lg:w-1/3">Address</label>
-//                   <input type="text" placeholder="336, Piliyandala , Colombo"
-//                     className="w-full lg:w-2/3 p-2 border-b-2 border-gray-400 focus:border-blue-500 focus:outline-none" />
-//                 </div>
-
-//                 <div className="flex flex-col lg:flex-row lg:items-center">
-//                   <label className="font-semibold text-lg lg:w-1/3">Contact No</label>
-//                   <input type="text" placeholder="0712345678"
-//                     className="w-full lg:w-2/3 p-2 border-b-2 border-gray-400 focus:border-blue-500 focus:outline-none" />
-//                 </div>
-
-//               </form>
-//             </div>
-//           </div>
-
-//           {/* CHANGE PASSWORD */}
-//           <div className="mt-10">
-//             <h1 className="ml-5 text-3xl font-semibold text-primary">Change Your Password</h1>
-//           </div>
-
-//           <div className="flex flex-col lg:flex-row mt-5">
-
-//             <div className="lg:w-1/5 w-full"></div>
-
-//             <div className="lg:w-4/5 w-full">
-//               <form className="flex flex-col space-y-5">
-
-//                 <div className="flex flex-col lg:flex-row lg:items-center">
-//                   <label className="font-semibold text-lg lg:w-1/3">Current Password</label>
-//                   <input type="password"
-//                     className="w-full lg:w-2/3 p-2 border-b-2 border-gray-400 focus:border-blue-500 focus:outline-none" />
-//                 </div>
-
-//                 <div className="flex flex-col lg:flex-row lg:items-center">
-//                   <label className="font-semibold text-lg lg:w-1/3">New Password</label>
-//                   <input type="password"
-//                     className="w-full lg:w-2/3 p-2 border-b-2 border-gray-400 focus:border-blue-500 focus:outline-none" />
-//                 </div>
-
-//                 <div className="flex flex-col lg:flex-row lg:items-center">
-//                   <label className="font-semibold text-lg lg:w-1/3">Confirm Password</label>
-//                   <input type="password"
-//                     className="w-full lg:w-2/3 p-2 border-b-2 border-gray-400 focus:border-blue-500 focus:outline-none" />
-//                 </div>
-
-//               </form>
-//             </div>
-//           </div>
-
-//           {/* SAVE BUTTON */}
-//           <div className="flex justify-end mt-6 pr-5">
-//             <button className="text-lg font-semibold text-black rounded-xl bg-primary shadow-md hover:bg-gray-300 hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/6 h-1/2 border border-gray-400">
-//               Save Changes
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     </>
-//   );
-// }
-
 
 import Navbar from "../components/NavBar";
 import MM from "../assets/man.jpg";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
+import uploadFile from "../utils/meadiaUpload"; // Supabase upload
 
 export default function UserProfile() {
   const { jwtToken, isAuthenticated } = useAuth();
+
   const [user, setUser] = useState({
     name: "",
     email: "",
-    address: "",
     contact: "",
+    address: "",
+    imageUrl: "",
   });
+
+  const [image, setImage] = useState(null);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
+  
+  // Fetch user profile
+  
   useEffect(() => {
-    const fetchUserProfile = async () => {
-      if (!isAuthenticated || !jwtToken) return;
+    if (!jwtToken) return;
 
+    axios
+      .get("http://localhost:8081/user", {
+        headers: { Authorization: `Bearer ${jwtToken}` },
+      })
+      .then((res) => {
+        setUser(res.data);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [jwtToken]);
+
+  
+  // Update user profile
+  
+  const handleUpdate = async () => {
+    if (newPassword && newPassword !== confirmPassword) {
+      alert("New password and confirm password do not match!");
+      return;
+    }
+    let imageUrl = user.imageUrl;
+
+    // Upload image to Supabase if selected
+    if (image) {
       try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${jwtToken}`,
-          },
-        };
-
-        const response = await axios.get("http://localhost:8081/user", config);
-        setUser({
-          name: response.data.name || "",
-          email: response.data.email || "",
-          address: response.data.address || "",
-          contact: response.data.contact || "",
-        });
-        setLoading(false);
+        imageUrl = await uploadFile(image);
       } catch (err) {
-        console.error("Error fetching user profile:", err);
-        setError("Failed to load profile.");
-        setLoading(false);
+        alert("Image upload failed");
+        return;
       }
+    }
+
+    const body = {
+      name: user.name,
+      email: user.email,
+      contact: user.contact,
+      address: user.address,
+      imageUrl: imageUrl,
+      currentPassword: currentPassword,
+      newPassword: newPassword,
     };
 
-    fetchUserProfile();
-  }, [isAuthenticated, jwtToken]);
+    try {
+      const res = await axios.post("http://localhost:8081/user/update", body, {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      });
 
-  if (loading) return <p>Loading profile...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+      setUser(res.data);
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setImage(null);
+      alert("Profile Updated Successfully!");
+    } catch (err) {
+      alert(err.response?.data || "Update failed");
+    }
+  };
+
+  if (loading) return <p>Loading...</p>;
 
   return (
     <>
       <Navbar />
 
-      <div className="mt-19 flex justify-center items-center min-h-screen font-outfit px-4">
-        <div className="shadow-2xl w-[85%] min-h-screen flex flex-col rounded-2xl mt-6 bg-white/10 backdrop-blur-xl p-4">
+      <div className="mt-20 w-full flex justify-center items-center font-outfit px-4 pt-12">
+        <div className="shadow-xl w-[80%] rounded-2xl p-6 ">
 
-          {/* Title */}
-          <div className="mb-4">
-            <h1 className="mt-5 ml-5 text-4xl font-bold text-primary">Your Profile</h1>
-          </div>
+          <h1 className="text-4xl font-bold mb-4 text-primary ">Your Profile</h1>
 
-          {/* DETAILS SECTION */}
-          <div className="mt-5 flex flex-col lg:flex-row">
+          <div className="flex flex-col lg:flex-row gap-10 ">
 
-            {/* PHOTO */}
-            <div className="lg:w-1/4 w-full flex flex-col">
-              <div className="flex justify-center items-center">
-                <div className="w-62 h-62 rounded-full overflow-hidden border-4 border-primary shadow-lg">
-                  <img src={MM} className="w-full h-full object-cover" alt="Profile" />
-                </div>
-              </div>
+            {/* IMAGE */}
+            <div className="flex flex-col items-center">
+              <img
+                src={image ? URL.createObjectURL(image) : user.imageUrl || MM}
+                className="w-50 h-50 rounded-full object-cover border-4 border-primary"
+                alt="Profile"
+              />
+              {/* <input
+                type="file"
+                accept="image/*"
+                className="mt-3"
+                onChange={(e) => setImage(e.target.files[0])}
+              /> */}
 
-              <div className="flex justify-center items-center mt-4">
-                <button className="text-lg font-semibold text-black rounded-xl shadow-md hover:bg-gray-300 hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/3 h-95/100 border border-gray-400">
-                  Edit Image
-                </button>
-              </div>
+              {/* Hidden file input */}
+              <input
+                type="file"
+                accept="image/*"
+                id="fileUpload"
+                className="hidden"
+                onChange={(e) => setImage(e.target.files[0])}
+              />
+
+              {/* Custom Choose Image Button */}
+              <label
+                htmlFor="fileUpload"
+                className="mt-4 px-4 py-2 bg-primary text-white rounded-lg cursor-pointer hover:bg-white hover:-border hover:text-black hover:border-primary transition"
+              >
+                {image ? "Change Image" : "Choose Image"}
+              </label>
+
+              {/* Show selected file name */}
+              {image && <span className="mt-4 text-gray-700">{image.name}</span>}
             </div>
 
-            {/* RIGHT DETAILS */}
-            <div className="lg:w-3/4 w-full mt-6 lg:mt-0">
-              <form className="flex flex-col space-y-5">
+            {/* FORM */}
+            <div className="flex-1 grid grid-cols-1 gap-4  w-full">
 
-                <div className="flex flex-col lg:flex-row lg:items-center">
-                  <label className="font-semibold text-lg lg:w-1/3">User Name</label>
+              <div className="flex w-full items-center justify-center">
+                <div className="w-full flex-2  text-left">
+                  <h1 className="w-full text-lg font-semibold">User Name</h1>
+                </div>
+                <div className="w-full flex-8 ">
                   <input
                     type="text"
                     value={user.name}
-                    readOnly
-                    className="w-full lg:w-2/3 p-2 border-b-2 border-gray-400 focus:border-blue-500 focus:outline-none"
+                    onChange={(e) => setUser({ ...user, name: e.target.value })}
+                    placeholder="Full Name"
+                    className="w-[80%] border border-gray-300 p-2 rounded  focus:outline-1 focus:outline-primary"
                   />
                 </div>
+              </div>
 
-                <div className="flex flex-col lg:flex-row lg:items-center">
-                  <label className="font-semibold text-lg lg:w-1/3">Email</label>
+
+              <div className="flex w-full items-center justify-center">
+                <div className="w-full flex-2  text-left">
+                  <h1 className="w-full text-lg font-semibold">Email</h1>
+                </div>
+                <div className="w-full flex-8">
                   <input
-                    type="text"
+                    type="email"
                     value={user.email}
-                    readOnly
-                    className="w-full lg:w-2/3 p-2 border-b-2 border-gray-400 focus:border-blue-500 focus:outline-none"
+                    onChange={(e) => setUser({ ...user, email: e.target.value })}
+                    placeholder="Email"
+                    className="w-[80%] border border-gray-300 p-2 rounded  focus:outline-1 focus:outline-primary"
                   />
                 </div>
+              </div>
 
-                <div className="flex flex-col lg:flex-row lg:items-center">
-                  <label className="font-semibold text-lg lg:w-1/3">Address</label>
-                  <input
-                    type="text"
-                    value={user.address}
-                    readOnly
-                    className="w-full lg:w-2/3 p-2 border-b-2 border-gray-400 focus:border-blue-500 focus:outline-none"
-                  />
+
+              <div className="flex w-full items-center justify-center">
+                <div className="w-full flex-2 text-left">
+                  <h1 className="w-full text-lg font-semibold">Contact Number</h1>
                 </div>
-
-                <div className="flex flex-col lg:flex-row lg:items-center">
-                  <label className="font-semibold text-lg lg:w-1/3">Contact No</label>
+                <div className="w-full flex-8">
                   <input
                     type="text"
                     value={user.contact}
-                    readOnly
-                    className="w-full lg:w-2/3 p-2 border-b-2 border-gray-400 focus:border-blue-500 focus:outline-none"
+                    onChange={(e) => setUser({ ...user, contact: e.target.value })}
+                    placeholder="Contact Number"
+                    className="w-[80%] border border-gray-300 p-2 rounded  focus:outline-1 focus:outline-primary"
                   />
                 </div>
+              </div>
 
-              </form>
+
+
+              <div className="flex w-full items-center justify-center ">
+                <div className="w-full flex-2  text-left">
+                  <h1 className="w-full text-lg font-semibold">Address</h1>
+                </div>
+                <div className="w-full flex-8">
+
+                  <input
+                    type="text"
+                    value={user.address}
+                    onChange={(e) => setUser({ ...user, address: e.target.value })}
+                    placeholder="Address"
+                    className="w-[80%] border border-gray-300 p-2 rounded  focus:outline-1 focus:outline-primary"
+                  />
+                </div>
+              </div>
+
+                 <h1 className="text-2xl font-bold mb-4 text-primary ">Change Password</h1>
+
+              <input
+                type="password"
+                placeholder="Current Password (optional)"
+                value={currentPassword}
+                onChange={(e) => setCurrentPassword(e.target.value)}
+                className="w-[80%] border border-gray-300 p-2 rounded  focus:outline-1 focus:outline-primary"
+              />
+
+              <input
+                type="password"
+                placeholder="New Password (optional)"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-[80%] border border-gray-300 p-2 rounded  focus:outline-1 focus:outline-primary"
+              />
+
+              <input
+                type="password"
+                placeholder="Confirm New Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="w-[80%] border border-gray-300 p-2 rounded  focus:outline-1 focus:outline-primary"
+              />
+
             </div>
           </div>
 
-          {/* CHANGE PASSWORD */}
-          <div className="mt-10">
-            <h1 className="ml-5 text-3xl font-semibold text-primary">Change Your Password</h1>
-          </div>
-
-          <div className="flex flex-col lg:flex-row mt-5">
-
-            <div className="lg:w-1/5 w-full"></div>
-
-            <div className="lg:w-4/5 w-full">
-              <form className="flex flex-col space-y-5">
-
-                <div className="flex flex-col lg:flex-row lg:items-center">
-                  <label className="font-semibold text-lg lg:w-1/3">Current Password</label>
-                  <input type="password"
-                    className="w-full lg:w-2/3 p-2 border-b-2 border-gray-400 focus:border-blue-500 focus:outline-none" />
-                </div>
-
-                <div className="flex flex-col lg:flex-row lg:items-center">
-                  <label className="font-semibold text-lg lg:w-1/3">New Password</label>
-                  <input type="password"
-                    className="w-full lg:w-2/3 p-2 border-b-2 border-gray-400 focus:border-blue-500 focus:outline-none" />
-                </div>
-
-                <div className="flex flex-col lg:flex-row lg:items-center">
-                  <label className="font-semibold text-lg lg:w-1/3">Confirm Password</label>
-                  <input type="password"
-                    className="w-full lg:w-2/3 p-2 border-b-2 border-gray-400 focus:border-blue-500 focus:outline-none" />
-                </div>
-
-              </form>
-            </div>
-          </div>
-
-          {/* SAVE BUTTON */}
-          <div className="flex justify-end mt-6 pr-5">
-            <button className="text-lg font-semibold text-black rounded-xl bg-primary shadow-md hover:bg-gray-300 hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/6 h-1/2 border border-gray-400">
+          <div className="flex justify-end mt-6">
+            <button
+              onClick={handleUpdate}
+              className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-white hover:text-slate-800 transition"
+            >
               Save Changes
             </button>
           </div>
