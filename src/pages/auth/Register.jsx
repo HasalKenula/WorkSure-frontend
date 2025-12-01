@@ -1,8 +1,8 @@
-
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import uploadFile from "../../utils/meadiaUpload";
+import toast from "react-hot-toast";
 
 function Register() {
 
@@ -16,7 +16,7 @@ function Register() {
 
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-     //  ADD IMAGE STATE
+    //  ADD IMAGE STATE
     const [image, setImage] = useState(null);
 
     const [error, setError] = useState("");
@@ -28,15 +28,17 @@ function Register() {
         // --- VALIDATIONS ---
         if (!name || !username || !email || !contact || !address || !password || !confirmPassword) {
             setError("All fields are required");
+            toast.error("All fields are required!");
             return;
         }
 
         if (password !== confirmPassword) {
             setError("Passwords do not match");
+            toast.error("Passwords do not match!");
             return;
         }
 
-            // UPLOAD IMAGE TO SUPABASE
+        // UPLOAD IMAGE TO SUPABASE
         let imageUrl = "";
         if (image) {
             try {
@@ -62,14 +64,16 @@ function Register() {
 
             setSuccess("User registered successfully!");
             setError("");
-
+            toast.success("Registration successful!");
             setTimeout(() => navigate("/auth/login"), 1000);
 
         } catch (error) {
             if (error.response?.status === 400) {
                 setError(error.response.data);
+                toast.error("Something went wrong!");
             } else {
                 setError("There was an error creating the account");
+                toast.error("There was an error creating the account!");
             }
         }
     }
@@ -83,12 +87,12 @@ function Register() {
 
                 <form onSubmit={submit}>
 
-                     {/* IMAGE UPLOAD */}
+                    {/* IMAGE UPLOAD */}
                     <div className="mb-4">
                         <label className="block mb-1 font-medium">Profile Image</label>
 
                         {/* NEW INPUT */}
-                        <input 
+                        <input
                             type="file"
                             accept="image/*"
                             className="block w-full p-2 border border-gray-200 rounded-lg"

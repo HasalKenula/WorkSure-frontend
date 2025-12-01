@@ -75,15 +75,14 @@ export default function WorkerProfileView() {
                 "Bathroom and kitchen plumbing",
                 "Drain cleanin and blokage removal",
                 "PVC, PEX, and copper pipe fitting",
-                "Water filtration system installation",
-                "Basic electrical knowledge for plumbing equipment (safe-level tasks)"
+                
             ],
 
             certification: [
                 "NVQ Level 4 in Plumbing Technology",
                 "Certified Water System Installer - National Vocational Training Institute",
                 "Occuptional Safety & Health (OSH) Certificate",
-                "Certificate in Domestic Water Supply Systems – NAITA"
+              
 
             ],
 

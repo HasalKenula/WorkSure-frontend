@@ -3,61 +3,109 @@ import { MdOutlineCall } from "react-icons/md";
 import { IoLocationOutline } from "react-icons/io5";
 import { MdOutlineLocalPostOffice } from "react-icons/md";
 import { useAuth } from "../context/AuthContext";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
+
 export default function ContactPage() {
-    const { isAuthenticated, jwtToken } = useAuth();
-    const [contact, setContact] = useState([]);
+  const { isAuthenticated, jwtToken } = useAuth();
+  const [contact, setContact] = useState([]);
 
-    const [name, setName] = useState("");
-    const [contactNumber, setcontactNumber] = useState("");
-    const [subject, setsubject] = useState("");
-    const [message, setmessage] = useState("");
+  const [name, setName] = useState("");
+  const [contactNumber, setcontactNumber] = useState("");
+  const [subject, setsubject] = useState("");
+  const [message, setmessage] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [userId, setUserId] = useState(0);
 
-    const config = {
-        headers: {
-            Authorization: `Bearer ${jwtToken}`
-        }
+
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    contact: "",
+    address: "",
+    imageUrl: "",
+  });
+
+
+
+  // Fetch user profile
+
+
+  useEffect(() => {
+    if (!jwtToken) return;
+
+    axios
+      .get("http://localhost:8081/user", {
+        headers: { Authorization: `Bearer ${jwtToken}` },
+      })
+      .then((res) => {
+        setUser(res.data);
+        setUserId(res.data.id);
+        setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [jwtToken]);
+
+
+  const config = {
+    headers: {
+      Authorization: `Bearer ${jwtToken}`
+    }
+  }
+
+
+  async function createContact() {
+
+    if (!name || !contactNumber || !subject || !message) {
+      toast.error("Please fill out all fields before submitting");
+      return;
+    }
+
+    if (contactNumber.length < 10) {
+      toast.error("Contact number must be at least 10 digits");
+      return;
+    }
+
+    try {
+      const response = await axios.post("http://localhost:8081/contact", {
+        name: name,
+        contactNumber: contactNumber,
+        subject: subject,
+        message: message,
+        userId: userId
+      }, config);
+      toast.success("Message sent successfully!");
+    } catch (error) {
+      toast.error("Failed to send message. Try again!");
+      console.log(error);
     }
 
 
-    async function createContact() {
-      try {
-          const response = await axios.post("http://localhost:8081/contact",{
-            name:name,
-            contactNumber:contactNumber,
-            subject:subject,
-            message:message
-        } ,config);
-      } catch (error) {
-         console.log(error);
-      }
-       
+  }
 
-    }
-
-   function handelName(event){
+  function handelName(event) {
     setName(event.target.value);
-   }
+  }
 
-   function handelcontactNumber(event){
+  function handelcontactNumber(event) {
     setcontactNumber(event.target.value);
-   }
+  }
 
-   function handelsubject(event){
+  function handelsubject(event) {
     setsubject(event.target.value);
-   }
+  }
 
-   function handelmessage(event){
+  function handelmessage(event) {
     setmessage(event.target.value);
-   }
+  }
 
   return (
     <>
       <Navbar />
 
       <div className="mt-20 flex flex-col min-h-screen font-outfit px-4 md:px-10">
-        
+
         {/* Title */}
         <div className="flex justify-center items-center">
           <h1 className="text-4xl font-bold text-primary">Contact</h1>
@@ -86,7 +134,7 @@ export default function ContactPage() {
                 <input
                   type="text"
                   value={name}
-                    onChange={handelName}
+                  onChange={handelName}
                   placeholder="Hasal Kenula"
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 shadow-sm"
                 />
@@ -97,7 +145,7 @@ export default function ContactPage() {
                 <input
                   type="text"
                   value={contactNumber}
-                    onChange={handelcontactNumber}
+                  onChange={handelcontactNumber}
                   placeholder="071-1234567"
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 shadow-sm"
                 />
@@ -108,7 +156,7 @@ export default function ContactPage() {
                 <input
                   type="text"
                   value={subject}
-                    onChange={handelsubject}
+                  onChange={handelsubject}
                   placeholder="Inquiry about"
                   className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 shadow-sm"
                 />
@@ -126,7 +174,7 @@ export default function ContactPage() {
             </form>
 
             <div className="flex justify-center mt-6">
-              <button type="button" onClick={createContact}className="text-lg font-semibold text-black rounded-xl bg-primary shadow-md hover:bg-gray-300 hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/2 py-3 border border-gray-400">
+              <button type="button" onClick={createContact} className="text-lg font-semibold text-black rounded-xl bg-primary shadow-md hover:bg-gray-300 hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/2 py-3 border border-gray-400">
                 Send Message
               </button>
             </div>
@@ -136,7 +184,7 @@ export default function ContactPage() {
           <div className="shadow-2xl w-full lg:w-1/2 rounded-2xl bg-white/10 backdrop-blur-xl p-6">
             <h2 className="text-2xl font-semibold text-center">Get in Touch Directly</h2>
             <p className="text-center mt-1 italic text-sm">
-              Prefer a direct approach? Here’s how you can reach us.
+              Prefer a direct approach? Here's how you can reach us.
             </p>
 
             <div className="flex flex-col mt-8 space-y-8 ml-4">

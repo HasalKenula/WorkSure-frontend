@@ -351,7 +351,8 @@ export default function AdminDashBoard() {
                                     <div className="flex justify-between items-center">
                                         <div className="flex items-center justify-between ">
                                             <img
-                                                src={Man}   // or any image url
+                                                //src={Man}   // or any image url
+                                                  src={comment.user?.imageUrl || Man}
                                                 alt="profile"
                                                 className="w-[50px] aspect-square rounded-full object-cover"
                                             />

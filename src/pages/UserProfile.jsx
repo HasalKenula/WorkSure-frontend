@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import uploadFile from "../utils/meadiaUpload"; // Supabase upload
+import toast from "react-hot-toast";
 
 export default function UserProfile() {
   const { jwtToken, isAuthenticated } = useAuth();
@@ -21,11 +22,11 @@ export default function UserProfile() {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [loading, setLoading] = useState(true);
+ // const [loading, setLoading] = useState(true);
 
-  
+
   // Fetch user profile
-  
+
   useEffect(() => {
     if (!jwtToken) return;
 
@@ -35,17 +36,17 @@ export default function UserProfile() {
       })
       .then((res) => {
         setUser(res.data);
-        setLoading(false);
+        //setLoading(false);
       })
       .catch(() => setLoading(false));
   }, [jwtToken]);
 
-  
+
   // Update user profile
-  
+
   const handleUpdate = async () => {
     if (newPassword && newPassword !== confirmPassword) {
-      alert("New password and confirm password do not match!");
+      toast.error("New password and confirm password do not match!");
       return;
     }
     let imageUrl = user.imageUrl;
@@ -55,7 +56,7 @@ export default function UserProfile() {
       try {
         imageUrl = await uploadFile(image);
       } catch (err) {
-        alert("Image upload failed");
+        toast.error("Image upload failed!");
         return;
       }
     }
@@ -82,13 +83,14 @@ export default function UserProfile() {
       setNewPassword("");
       setConfirmPassword("");
       setImage(null);
-      alert("Profile Updated Successfully!");
+      toast.success("Profile Updated Successfully!");
     } catch (err) {
-      alert(err.response?.data || "Update failed");
+      toast.error(err.response?.data || "Update failed");
+
     }
   };
 
-  if (loading) return <p>Loading...</p>;
+  // if (loading) return <p>Loading...</p>;
 
   return (
     <>
@@ -204,7 +206,7 @@ export default function UserProfile() {
                 </div>
               </div>
 
-                 <h1 className="text-2xl font-bold mb-4 text-primary ">Change Password</h1>
+              <h1 className="text-2xl font-bold mb-4 text-primary ">Change Password</h1>
 
               <input
                 type="password"
