@@ -47,9 +47,6 @@ export default function WorkerRegistration() {
     // Certifications List 
     const [certs, setCerts] = useState(worker.certifications);
 
-    //Experiences LIst
-    const [exp, setExp] = useState(worker.experiences);
-
     // Add a new empty certification row
     const addCertification = () => {
         setCerts((prev) => [...prev, { c_name: "", body: "" }]);
@@ -69,8 +66,11 @@ export default function WorkerRegistration() {
         setCerts((prev) => prev.filter((_, i) => i !== index));
     };
 
-    //
 
+
+    
+    //Experiences LIst
+    const [exp, setExp] = useState(worker.experiences);
 
     const addExperience = () => {
         setExp((prev) => [...prev, { title: "", company: "" }]);
@@ -88,33 +88,13 @@ export default function WorkerRegistration() {
         setExp((prev) => prev.filter((_, i) => i !== index));
     };
 
-    //
-    const [uploadedFiles, setUploadedFiles] = React.useState([]);
+    
 
-    const fileInputRef = React.useRef(null);
+    
+    //Location List
+    const [loc, setLoc] = useState(worker.locations);
 
-    const handleBrowseClick = () => {
-        fileInputRef.current.click(); // Open the hidden input
-    };
-
-    const handleFileChange = (e) => {
-        const files = Array.from(e.target.files);
-        setUploadedFiles((prev) => [...prev, ...files]);
-    };
-
-    const handleDrop = (e) => {
-        e.preventDefault();
-        const files = Array.from(e.dataTransfer.files);
-        setUploadedFiles((prev) => [...prev, ...files]);
-    };
-
-    const handleDragOver = (e) => {
-        e.preventDefault();
-    };
-
-    const removeFile = (index) => {
-        setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
-    };
+    
 
     //
     const [startTime, setStartTime] = React.useState(null);
@@ -225,8 +205,10 @@ export default function WorkerRegistration() {
                         <input  className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Preferred Start Time" />
                         <input  className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Preferred End Time" />
                         <input
-                        className="border border-gray-300 p-1 rounded col-span-1 md:col-span-2 text-sm focus:outline-1 focus:outline-primary"
-                        placeholder="Preferred Service Location"
+                            className="border border-gray-300 p-1 rounded col-span-1 md:col-span-2 text-sm focus:outline-1 focus:outline-primary"
+                            placeholder="Preferred Service Location" 
+                            value={loc}
+                            onChange={(e) => setLoc(e.target.value)}
                         />
                     </div>
                 </section>
@@ -234,9 +216,9 @@ export default function WorkerRegistration() {
                 
                 
 
-                {/* Register Button */}
+                {/* Update Button */}
                 <button className="w-full bg-primary text-white rounded py-1 text-md font-semibold hover:outline-2 hover:outline-offset-1 hover:outline-primary">
-                    Register Account
+                    Update Account
                 </button>
             </div>
         </div>
