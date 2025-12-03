@@ -16,15 +16,20 @@ export default function WorkerRegistration() {
             c_name: 'Diploma', body: 'University of Kelaniya'
         },
         {
-            c_name : 'Degree', body: 'University of Pera'
+            c_name: 'Degree', body: 'University of Pera'
         },
         {
-            c_name : 'Certification', body: 'IIT'
+            c_name: 'Certification', body: 'IIT'
         }
     ],
 
     experiences: [
-        'Professional painter at Cultural department'
+        {
+            title: 'Painter', company: 'Department'
+        },
+        {
+            title: 'abc', company: 'ABC'
+        }
     ],
     locations:[
         'Kottawa','Piliyandala','Gampaha'
@@ -39,8 +44,11 @@ export default function WorkerRegistration() {
     const [address, setAddres] = useState(worker.address);
     const [id, setId] = useState(worker.nic);
 
-    // Certifications state (starts with one empty row)
-    const [certs, setCerts] = React.useState(worker.certifications);
+    // Certifications List 
+    const [certs, setCerts] = useState(worker.certifications);
+
+    //Experiences LIst
+    const [exp, setExp] = useState(worker.experiences);
 
     // Add a new empty certification row
     const addCertification = () => {
@@ -62,16 +70,14 @@ export default function WorkerRegistration() {
     };
 
     //
-    const [experiences, setExperiences] = React.useState([
-        { title: "", company: "" },
-    ]);
+
 
     const addExperience = () => {
-        setExperiences((prev) => [...prev, { title: "", company: "" }]);
+        setExp((prev) => [...prev, { title: "", company: "" }]);
     };
 
     const handleExperienceChange = (index, field, value) => {
-        setExperiences((prev) => {
+        setExp((prev) => {
             const copy = [...prev];
             copy[index] = { ...copy[index], [field]: value };
             return copy;
@@ -79,7 +85,7 @@ export default function WorkerRegistration() {
     };
 
     const removeExperience = (index) => {
-        setExperiences((prev) => prev.filter((_, i) => i !== index));
+        setExp((prev) => prev.filter((_, i) => i !== index));
     };
 
     //
@@ -147,9 +153,9 @@ export default function WorkerRegistration() {
                     <div className="space-y-3">
                         {certs.map((cert, index) => (
                             <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-                                <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary"  value={cert.c_name} onChange={(e) =>handleCertificationChange(index, "c_name", e.target.value)}/>
+                                <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Certification Name" value={cert.c_name} onChange={(e) =>handleCertificationChange(index, "c_name", e.target.value)}/>
                                 <div className="flex gap-2">
-                                    <input className="flex-1 border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary"  value={cert.body} onChange={(e) =>handleCertificationChange(index, "body", e.target.value)}/>
+                                    <input className="flex-1 border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Issuing Body" value={cert.body} onChange={(e) =>handleCertificationChange(index, "body", e.target.value)}/>
                                     {/* remove button */}
                                     <button onClick={() => removeCertification(index)} className="px-3 py-1 bg-gray-300 text-white rounded text-sm hover:bg-gray-400" aria-label={`Remove certification ${index + 1}`}>
                                         Remove
@@ -178,11 +184,11 @@ export default function WorkerRegistration() {
                     </div>
 
                     <div className="space-y-3">
-                        {experiences.map((item, index) => (
+                        {exp.map((item, index) => (
                             <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
                                 <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Job Title" value={item.title} onChange={(e) =>handleExperienceChange(index, "title", e.target.value)}/>
                                 <div className="flex gap-2">
-                                    <input className="flex-1 border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Company" value={item.company} onChange={(e) =>handleExperienceChange(index, "company", e.target.value)}/>
+                                    <input className="flex-1 border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Company Name" value={item.company} onChange={(e) =>handleExperienceChange(index, "company", e.target.value)}/>
                                     {/* remove button */}
                                     <button onClick={() => removeExperience(index)} className="px-3 py-1 bg-gray-300 text-white rounded text-sm hover:bg-gray-400" aria-label={`Remove experience ${index + 1}`}>
                                         Remove
