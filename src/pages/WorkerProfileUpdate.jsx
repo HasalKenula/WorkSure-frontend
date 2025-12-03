@@ -36,7 +36,10 @@ export default function WorkerRegistration() {
 
         start_time: '08.00 AM',
 
-        end_time: '05.00 PM'
+        end_time: '05.00 PM',
+
+        working_days: ['Mon' , 'Wed' , 'Fri'],
+        
     };
 
 
@@ -101,18 +104,22 @@ export default function WorkerRegistration() {
     const [loc, setLoc] = useState(worker.locations);
 
     
+    //working days
+    const [workingDays, setWorkingDays] = useState(worker.working_days);
 
-    //
-    const [startTime, setStartTime] = React.useState(null);
-    const [endTime, setEndTime] = React.useState(null);
+    const toggleDay = (day) => {
+        setWorkingDays((prev) =>
+            prev.includes(day)? prev.filter((d) => d !== day) : [...prev, day]                  
+        );
+    };
 
     
 
   return (
     <div>
-        <Navbar/>
-        <div className="min-h-screen w-full bg-gray-100 flex flex-col items-center p-4 mt-18">
-            <div className="w-full max-w-4xl bg-white shadow-md rounded p-6 space-y-6">
+        <Navbar/> 
+        <div className="min-h-screen w-full flex flex-col items-center p-4 mt-18 bg-gray-100 " >
+            <div className="w-full max-w-4xl shadow-md rounded p-6 space-y-6 bg-white">
                 <h2 className="text-xl font-bold text-gray-800">
                 Update Your Details
                 </h2>
@@ -202,7 +209,7 @@ export default function WorkerRegistration() {
                     <div className="flex flex-wrap gap-4">
                         {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
                         <label key={day} className="flex items-center space-x-2">
-                            <input type="checkbox" className="accent-gray-500"/>
+                            <input type="checkbox" className="accent-gray-500" checked={workingDays.includes(day)} onChange={() => toggleDay(day)}/>
                             <span className="text-sm">{day}</span>
                         </label>
                         ))}
