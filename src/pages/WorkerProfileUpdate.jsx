@@ -1,8 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "../components/NavBar";
 
 export default function WorkerRegistration() {
-
     const worker = {
     name: 'Shehan Fernando',
     email: 'shh@gmail.com',
@@ -12,9 +11,14 @@ export default function WorkerRegistration() {
     nic: '12345676',
     
     certifications: [
-      'Diploma - University of Kelaniya',
-      'Degree - University of Pera',
+        {
+            c_name: 'Diploma', body: 'University of Kelaniya'
+        },
+        {
+            c_name : 'Degree', body: 'University of Pera'
+        }
     ],
+
     experiences: [
         'Professional painter at Cultural department'
     ],
@@ -23,6 +27,13 @@ export default function WorkerRegistration() {
     ],
     documents: ['images.jpeg', 'icons8-location-48.png'],
     };
+
+    const [name, setName] = useState(worker.name);
+    const [email, setEmail] = useState(worker.email);
+    const [no, setNo] = useState(worker.phone);
+    const [job, setJob] = useState(worker.job);
+    const [address, setAddres] = useState(worker.address);
+    const [id, setId] = useState(worker.nic);
 
     // Certifications state (starts with one empty row)
     const [certifications, setCertifications] = React.useState([
@@ -116,12 +127,12 @@ export default function WorkerRegistration() {
                 <section className=" p-5 rounded shadow-sm">
                     <h3 className="text-lg font-semibold mb-4">Personal Information</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={worker.name}/>
-                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={worker.email}/>
-                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={worker.phone}/>
-                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={worker.job}/>
-                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={worker.nic}/>
-                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={worker.address}/>
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={name}/>
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={email}/>
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={no}/>
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={address}/>
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={job}/>
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={id}/>
                     </div>
                 </section>
 
@@ -132,11 +143,11 @@ export default function WorkerRegistration() {
                     </div>
 
                     <div className="space-y-3">
-                        {certifications.map((item, index) => (
+                        {worker.certifications.map((cert, index) => (
                             <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
-                                <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Certification Name" value={item.name} onChange={(e) =>handleCertificationChange(index, "name", e.target.value)}/>
+                                <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary"  value={cert.c_name} onChange={(e) =>handleCertificationChange(cert, "c_name", e.target.value)}/>
                                 <div className="flex gap-2">
-                                    <input className="flex-1 border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Issuing Body" value={item.body} onChange={(e) =>handleCertificationChange(index, "body", e.target.value)}/>
+                                    <input className="flex-1 border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary"  value={cert.body} onChange={(e) =>handleCertificationChange(cert, "body", e.target.value)}/>
                                     {/* remove button */}
                                     <button onClick={() => removeCertification(index)} className="px-3 py-1 bg-gray-300 text-white rounded text-sm hover:bg-gray-400" aria-label={`Remove certification ${index + 1}`}>
                                         Remove
