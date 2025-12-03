@@ -2,6 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 function Login() {
 
@@ -18,6 +19,7 @@ function Login() {
 
         if (username === "" || password === "") { //validate user inputs
             setError("Username and password are required")
+            toast.error("Username and password are required!");
         }
 
         const data = {
@@ -28,9 +30,11 @@ function Login() {
         try {
             const response = await axios.post("http://localhost:8081/auth/login", data);
             login(response.data);
+            toast.success("Loging successful!");
             navigate("/");
         } catch (error) {
             setError("There was an error logging in");
+            toast.error("here was an error logging in!");
         }
     }
 

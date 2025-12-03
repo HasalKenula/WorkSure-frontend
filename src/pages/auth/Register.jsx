@@ -1,7 +1,8 @@
-
 import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import uploadFile from "../../utils/meadiaUpload";
+import toast from "react-hot-toast";
 
 function Register() {
 
@@ -15,6 +16,8 @@ function Register() {
 
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    //  ADD IMAGE STATE
+    const [image, setImage] = useState(null);
 
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
@@ -25,12 +28,25 @@ function Register() {
         // --- VALIDATIONS ---
         if (!name || !username || !email || !contact || !address || !password || !confirmPassword) {
             setError("All fields are required");
+            toast.error("All fields are required!");
             return;
         }
 
         if (password !== confirmPassword) {
             setError("Passwords do not match");
+            toast.error("Passwords do not match!");
             return;
+        }
+
+        // UPLOAD IMAGE TO SUPABASE
+        let imageUrl = "";
+        if (image) {
+            try {
+                imageUrl = await uploadFile(image); // Upload to Supabase storage
+            } catch (err) {
+                setError("Image upload failed");
+                return;
+            }
         }
 
         const data = {
@@ -39,7 +55,8 @@ function Register() {
             email: email,
             contact: contact,
             address: address,
-            password: password
+            password: password,
+            imageUrl: imageUrl     // NEW FIELD
         };
 
         try {
@@ -47,14 +64,16 @@ function Register() {
 
             setSuccess("User registered successfully!");
             setError("");
-
+            toast.success("Registration successful!");
             setTimeout(() => navigate("/auth/login"), 1000);
 
         } catch (error) {
             if (error.response?.status === 400) {
                 setError(error.response.data);
+                toast.error("Something went wrong!");
             } else {
                 setError("There was an error creating the account");
+                toast.error("There was an error creating the account!");
             }
         }
     }
@@ -67,6 +86,28 @@ function Register() {
                 </div>
 
                 <form onSubmit={submit}>
+
+                    {/* IMAGE UPLOAD */}
+                    <div className="mb-4">
+                        <label className="block mb-1 font-medium">Profile Image</label>
+
+                        {/* NEW INPUT */}
+                        <input
+                            type="file"
+                            accept="image/*"
+                            className="block w-full p-2 border border-gray-200 rounded-lg"
+                            onChange={(e) => setImage(e.target.files[0])}
+                        />
+
+                        {/* Optional preview */}
+                        {image && (
+                            <img
+                                src={URL.createObjectURL(image)}
+                                alt="preview"
+                                className="w-24 h-24 mt-2 rounded-full object-cover border"
+                            />
+                        )}
+                    </div>
 
                     {/* NAME */}
                     <div className="mb-4">

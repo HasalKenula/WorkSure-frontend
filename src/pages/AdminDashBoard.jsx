@@ -2,9 +2,11 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import Navbar from "../components/NavBar";
 import PlatformAnalyticsChart from "../components/PlatformAnalyticsChart";
 import Man from "../assets/man.jpg"
-
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useAuth } from "../context/AuthContext";
 export default function AdminDashBoard() {
-
+    const { isAuthenticated, jwtToken } = useAuth();
     const roles = [
         {
             job: "plumber",
@@ -113,6 +115,25 @@ export default function AdminDashBoard() {
         },
 
     ]
+    const [contact, setContact] = useState([]);
+    const config = {
+        headers: {
+            Authorization: `Bearer ${jwtToken}`
+        }
+    }
+
+
+    async function loadContact() {
+        const response = await axios.get("http://localhost:8081/contact", config);
+        setContact(response.data);
+
+    }
+
+    useEffect(function () {
+        if (isAuthenticated) {
+            loadContact();
+        }
+    }, [isAuthenticated])
 
     const workerReviews = [
         {
@@ -324,13 +345,14 @@ export default function AdminDashBoard() {
                     </div>
 
                     <div className="flex flex-col lg:flex-row  flex-wrap items-center justify-center gap-6 ">
-                        {workerReviews.map((comment) => {
+                        {contact.map((comment) => {
                             return (
                                 <div className="border border-slate-200 shadow-xl w-full lg:w-[40%] p-8 gap-6">
                                     <div className="flex justify-between items-center">
                                         <div className="flex items-center justify-between ">
                                             <img
-                                                src={Man}   // or any image url
+                                                //src={Man}   // or any image url
+                                                  src={comment.user?.imageUrl || Man}
                                                 alt="profile"
                                                 className="w-[50px] aspect-square rounded-full object-cover"
                                             />
@@ -339,7 +361,7 @@ export default function AdminDashBoard() {
                                         <div className="flex items-center gap-3">
 
 
-                                            <h1>{comment.label}</h1>
+                                            <h1>{comment.contactNumber}</h1>
 
 
                                             <button
@@ -352,10 +374,10 @@ export default function AdminDashBoard() {
                                     </div>
                                     <div className="flex items-center py-4 text-lg">
 
-                                        <h1 className="text-slate-500 px-2">{comment.contact}</h1>
+                                        <h1 className="text-slate-500 px-2">{comment.subject}</h1>
                                     </div>
                                     <div>
-                                        <p>{comment.review}
+                                        <p>{comment.message}
                                         </p>
                                     </div>
                                 </div>

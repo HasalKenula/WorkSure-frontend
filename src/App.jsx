@@ -26,6 +26,8 @@ import Product from './pages/Product'
 import AdminDashBoard from './pages/AdminDashBoard'
 import WorkerRegistrationDetails from './pages/WorkerRegistrationDetails'
 import WorkerProfileUpdate from './pages/WorkerProfileUpdate'
+import WorkerView from './pages/WorkerView'
+import { Toaster } from 'react-hot-toast'
 
 
 function App() {
@@ -34,7 +36,10 @@ function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+        <Toaster position="top-right" />
         <Routes>
+          <Route path="/auth/login" element={<Login />} />
+          <Route path="/auth/register" element={<Register />} />
           {/* <Route element={<ProtectedRoute />}> */}
             <Route path='/*' element={<HomePage />} />
             <Route path='/about' element={<AboutUs />} />
@@ -55,9 +60,9 @@ function App() {
             <Route path="/adminDashBoard" element={<AdminDashBoard />} />
             <Route path="/workerRegistrationDetails" element={<WorkerRegistrationDetails />} />
             <Route path="/workerProfileUpdate" element={<WorkerProfileUpdate />} />
+            <Route path='/workerView' element={<WorkerView />} />
           {/* </Route> */}
-          <Route path="/auth/login" element={<Login />} />
-          <Route path="/auth/register" element={<Register/>}/>
+
 
 
         </Routes>
