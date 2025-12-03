@@ -2,6 +2,28 @@ import React from "react";
 import Navbar from "../components/NavBar";
 
 export default function WorkerRegistration() {
+
+    const worker = {
+    name: 'Shehan Fernando',
+    email: 'shh@gmail.com',
+    phone: '021-7658904',
+    address: 'Colombo, Sri Lanka',
+    job: 'Painter',
+    nic: '12345676',
+    
+    certifications: [
+      'Diploma - University of Kelaniya',
+      'Degree - University of Pera',
+    ],
+    experiences: [
+        'Professional painter at Cultural department'
+    ],
+    locations:[
+        'Kottawa','Piliyandala','Gampaha'
+    ],
+    documents: ['images.jpeg', 'icons8-location-48.png'],
+    };
+
     // Certifications state (starts with one empty row)
     const [certifications, setCertifications] = React.useState([
         { name: "", body: "" },
@@ -87,19 +109,19 @@ export default function WorkerRegistration() {
         <div className="min-h-screen w-full bg-gray-100 flex flex-col items-center p-4 mt-18">
             <div className="w-full max-w-4xl bg-white shadow-md rounded p-6 space-y-6">
                 <h2 className="text-xl font-bold text-gray-800">
-                Register as a Skilled Worker
+                Update Your Details
                 </h2>
 
                 {/* Personal Information */}
                 <section className=" p-5 rounded shadow-sm">
                     <h3 className="text-lg font-semibold mb-4">Personal Information</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Full Name" />
-                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Email Address" />
-                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Phone No" />
-                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Profession/Trade" />
-                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="NIC No" />
-                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Address" />
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={worker.name}/>
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={worker.email}/>
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={worker.phone}/>
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={worker.job}/>
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={worker.nic}/>
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={worker.address}/>
                     </div>
                 </section>
 
@@ -183,29 +205,6 @@ export default function WorkerRegistration() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                         <input  className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Preferred Start Time" />
                         <input  className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Preferred End Time" />
-                        {/* <div className="flex flex-col">
-                            <label className="text-sm mb-1">Preferred Start Time</label>
-                            <ReactTimePicker
-                                onChange={setStartTime}
-                                value={startTime}
-                                clearIcon={null}
-                                clockIcon={null}
-                                className=" rounded p-2"
-                                disableClock={true}
-                            />
-                        </div> */}
-
-                        {/* <div className="flex flex-col">
-                            <label className="text-sm mb-1">Preferred End Time</label>
-                            <ReactTimePicker
-                                onChange={setEndTime}
-                                value={endTime}
-                                clearIcon={null}
-                                clockIcon={null}
-                                className=" rounded p-2"
-                                disableClock={true}
-                            />
-                        </div> */}
                         <input
                         className="border border-gray-300 p-1 rounded col-span-1 md:col-span-2 text-sm focus:outline-1 focus:outline-primary"
                         placeholder="Preferred Service Location"
