@@ -231,46 +231,8 @@ export default function WorkerRegistration() {
                     </div>
                 </section>
 
-                {/* Documents Upload */}
-                <section className=" p-5 rounded shadow-sm">
-                    <h3 className="text-lg font-semibold mb-4">Documentation</h3>
-                    <div className="border border-dashed border-gray-300 rounded p-6 text-center text-sm "
-                                onDrop={handleDrop}
-                                onDragOver={handleDragOver}>
-                        <p>Please upload your NIC copy, Gramaniladari Certificate, Police Report and Other necessary certifications and documents</p>
-                        <p>Drag & drop your documents here, or click to upload.</p>
-                        <button type="button" onClick={handleBrowseClick} className="mt-3 px-4 py-2 bg-gray-300 text-white rounded text-sm hover:bg-gray-400">
-                            Browse Files
-                        </button>
-                        <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileChange}/>
-
-                        {/* uploaded files display */}
-                        {uploadedFiles.length > 0 && (
-                            <div className="mt-4 text-left space-y-2">
-                                {uploadedFiles.map((file, index) => (
-                                    <div key={index} className="flex justify-between items-center bg-gray-100 p-2 rounded-md">
-                                        <span className="text-sm text-gray-500 truncate">{file.name}</span>
-                                        <button onClick={(e) => {
-                                                e.stopPropagation();
-                                                removeFile(index);
-                                            }}
-                                            className="text-red-500 text-sm hover:underline"
-                                        >
-                                            Remove
-                                        </button>
-                                    </div>
-                                ))}
-                            </div>
-                        )}
-                    </div>
-
-                    {/* File Count */}
-                    <p className="text-sm text-gray-600 mt-2">
-                        {uploadedFiles.length === 0
-                        ? "No files uploaded yet."
-                        : `${uploadedFiles.length} file(s) uploaded`}
-                    </p>
-                </section>
+                
+                
 
                 {/* Register Button */}
                 <button className="w-full bg-primary text-white rounded py-1 text-md font-semibold hover:outline-2 hover:outline-offset-1 hover:outline-primary">
