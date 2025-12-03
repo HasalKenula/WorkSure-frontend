@@ -4,38 +4,41 @@ import Navbar from "../components/NavBar";
 export default function WorkerRegistration() {
     //dummy data
     const worker = {
-    name: 'Shehan Fernando',
-    email: 'shh@gmail.com',
-    phone: '021-7658904',
-    address: 'Colombo, Sri Lanka',
-    job: 'Painter',
-    nic: '12345676',
-    
-    certifications: [
-        {
-            c_name: 'Diploma', body: 'University of Kelaniya'
-        },
-        {
-            c_name: 'Degree', body: 'University of Pera'
-        },
-        {
-            c_name: 'Certification', body: 'IIT'
-        }
-    ],
+        name: 'Shehan Fernando',
+        email: 'shh@gmail.com',
+        phone: '021-7658904',
+        address: 'Colombo, Sri Lanka',
+        job: 'Painter',
+        nic: '12345676',
+        
+        certifications: [
+            {
+                c_name: 'Diploma', body: 'University of Kelaniya'
+            },
+            {
+                c_name: 'Degree', body: 'University of Pera'
+            },
+            {
+                c_name: 'Certification', body: 'IIT'
+            }
+        ],
 
-    experiences: [
-        {
-            title: 'Painter', company: 'Department'
-        },
-        {
-            title: 'abc', company: 'ABC'
-        }
-    ],
-    locations:[
-        'Kottawa','Piliyandala','Gampaha'
-    ],
-    documents: ['images.jpeg', 'icons8-location-48.png'],
+        experiences: [
+            {
+                title: 'Painter', company: 'Department'
+            },
+            {
+                title: 'abc', company: 'ABC'
+            }
+        ],
+
+        locations:['Kottawa','Piliyandala','Gampaha'],
+
+        start_time: '08.00 AM',
+
+        end_time: '05.00 PM'
     };
+
 
     const [name, setName] = useState(worker.name);
     const [email, setEmail] = useState(worker.email);
@@ -43,6 +46,9 @@ export default function WorkerRegistration() {
     const [job, setJob] = useState(worker.job);
     const [address, setAddres] = useState(worker.address);
     const [id, setId] = useState(worker.nic);
+    const [stime, setStime] = useState(worker.start_time);
+    const [etime, setEtime] = useState(worker.end_time);
+
 
     // Certifications List 
     const [certs, setCerts] = useState(worker.certifications);
@@ -202,8 +208,8 @@ export default function WorkerRegistration() {
                         ))}
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-                        <input  className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Preferred Start Time" />
-                        <input  className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Preferred End Time" />
+                        <input  className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Preferred Start Time" value={stime} onChange={(e) => setStime(e.target.value)}/>
+                        <input  className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Preferred End Time" value={etime} onChange={(e) => setEtime(e.target.value)}/>
                         <input
                             className="border border-gray-300 p-1 rounded col-span-1 md:col-span-2 text-sm focus:outline-1 focus:outline-primary"
                             placeholder="Preferred Service Location" 
@@ -217,8 +223,8 @@ export default function WorkerRegistration() {
                 
 
                 {/* Update Button */}
-                <button className="w-full bg-primary text-white rounded py-1 text-md font-semibold hover:outline-2 hover:outline-offset-1 hover:outline-primary">
-                    Update Account
+                <button className="w-full bg-white text-primary rounded py-1 text-md font-bold outline hover:text-white hover:bg-primary">
+                    UPDATE ACCOUNT
                 </button>
             </div>
         </div>
