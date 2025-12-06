@@ -28,6 +28,7 @@ import WorkerRegistrationDetails from './pages/WorkerRegistrationDetails'
 import WorkerProfileUpdate from './pages/WorkerProfileUpdate'
 import WorkerView from './pages/WorkerView'
 import { Toaster } from 'react-hot-toast'
+import WorkerProfileCard from './pages/WorkerProfileCard'
 
 
 function App() {
@@ -61,6 +62,8 @@ function App() {
             <Route path="/workerRegistrationDetails" element={<WorkerRegistrationDetails />} />
             <Route path="/workerProfileUpdate" element={<WorkerProfileUpdate />} />
             <Route path='/workerView' element={<WorkerView />} />
+            <Route path='/workerCard/:workerId' element={<WorkerProfileCard />} />
+
           </Route>
 
 
