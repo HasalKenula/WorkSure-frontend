@@ -5,6 +5,7 @@ import Man from "../assets/man.jpg"
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 export default function AdminDashBoard() {
     const { isAuthenticated, jwtToken } = useAuth();
     const roles = [
@@ -115,6 +116,9 @@ export default function AdminDashBoard() {
         },
 
     ]
+
+
+
     const [contact, setContact] = useState([]);
     const config = {
         headers: {
@@ -129,11 +133,41 @@ export default function AdminDashBoard() {
 
     }
 
+    const [workers, setWorkers] = useState([]);
+    async function loadWorkerDetails() {
+        try {
+            const workers = await axios.get("http://localhost:8081/worker", config);
+            setWorkers(workers.data);
+            toast.success("workers are loaded successfully");
+        } catch (error) {
+            toast.error("have error here not loaded workers");
+        }
+    }
+
     useEffect(function () {
         if (isAuthenticated) {
             loadContact();
+            loadWorkerDetails();
         }
     }, [isAuthenticated])
+
+    async function handleToggleBlock(workerId) {
+        try {
+            await axios.put(`http://localhost:8081/worker/toggle-block/${workerId}`, {}, config);
+
+           
+            setWorkers(prev =>
+                prev.map(worker =>
+                    worker.id === workerId ? { ...worker, isBlocked: !worker.isBlocked } : worker
+                )
+            );
+
+            toast.success("Worker status updated successfully");
+        } catch (error) {
+            toast.error("Failed to update worker status");
+        }
+    }
+
 
     const workerReviews = [
         {
@@ -270,25 +304,40 @@ export default function AdminDashBoard() {
                             <thead class="bg-gray-200">
                                 <tr>
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Id</th>
-                                    <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Client</th>
-                                    <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Date</th>
-                                    <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Time</th>
+                                    <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Worker Name</th>
+                                    <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Email</th>
+                                    <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Contact Numaber</th>
+                                    <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Status</th>
                                     <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Action</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                {users.map((user) => {
+                                {workers.map((user) => {
                                     return (
                                         <tr class="hover:bg-gray-50">
-                                            <td class="border  border-gray-300 px-6 py-3">{user.Id}</td>
-                                            <td class="border  border-gray-300 px-6 py-3">{user.Client}</td>
-                                            <td class="border border-gray-300 px-6 py-3">{user.Date}</td>
-                                            <td class="border border-gray-300 px-6 py-3">{user.Time}</td>
+                                            <td class="border  border-gray-300 px-6 py-3">{user.id}</td>
+                                            <td class="border  border-gray-300 px-6 py-3">{user.fullName}</td>
+                                            <td class="border border-gray-300 px-6 py-3">{user.email}</td>
+                                            <td class="border border-gray-300 px-6 py-3">{user.phoneNumber}</td>
+                                            <td className="border border-gray-300 px-6 py-3">
+                                                {Boolean(user.isBlocked) ? (
+                                                    <span className="text-red-600 font-semibold">Blocked</span>
+                                                ) : (
+                                                    <span className="text-green-600 font-semibold">Active</span>
+                                                )}
+
+
+                                            </td>
+
                                             <td class="border border-gray-300 px-6 py-3"><div className="flex items-center gap-3">
-                                                <button className="px-3 py-1 bg-primary text-white rounded-lg border hover:bg-white hover:text-primary">
-                                                    Approve
+                                                <button
+                                                    onClick={() => handleToggleBlock(user.id)}
+                                                    className={`px-3 py-1 rounded-lg border ${user.isBlocked ? "bg-green-500 text-white" : "bg-red-500 text-white"}hover:opacity-80`}
+                                                >
+                                                    {user.isBlocked ? "Approve" : "Block"}
                                                 </button>
+
                                                 <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white">
                                                     Reject
                                                 </button>
@@ -312,6 +361,7 @@ export default function AdminDashBoard() {
                                     <p><span className="font-semibold">Client:</span> {user.Client}</p>
                                     <p><span className="font-semibold">Date:</span> {user.Date}</p>
                                     <p><span className="font-semibold">Time:</span> {user.Time}</p>
+
 
 
                                     <div className="flex gap-3 mt-4">
@@ -352,7 +402,7 @@ export default function AdminDashBoard() {
                                         <div className="flex items-center justify-between ">
                                             <img
                                                 //src={Man}   // or any image url
-                                                  src={comment.user?.imageUrl || Man}
+                                                src={comment.user?.imageUrl || Man}
                                                 alt="profile"
                                                 className="w-[50px] aspect-square rounded-full object-cover"
                                             />

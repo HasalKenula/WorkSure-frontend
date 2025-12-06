@@ -107,6 +107,7 @@ export default function WorkerRegistration() {
     const [startTime, setStartTime] = useState("");
     const [endTime, setEndTime] = useState("");
     const [location, setLocation] = useState("");
+    const [isBlocked, setIsBlocked] = useState(true);
 
     function handleFullname(event) {
         setFullname(event.target.value);
@@ -191,7 +192,7 @@ export default function WorkerRegistration() {
                 preferredStartTime: startTime,
                 preferredEndTime: endTime,
                 preferredServiceLocation: location,
-
+                isBlocked:isBlocked,
                 mon: days.includes("Mon"),
                 tue: days.includes("Tue"),
                 wed: days.includes("Wed"),
