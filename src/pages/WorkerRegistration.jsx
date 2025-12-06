@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Navbar from "../components/NavBar";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import toast from "react-hot-toast";
 export default function WorkerRegistration() {
     const { jwtToken, isAuthenticated } = useAuth();
 
@@ -162,6 +163,10 @@ export default function WorkerRegistration() {
             .then((res) => {
 
                 setUserId(res.data.id);
+                setFullname(res.data.name);
+                setEmail(res.data.email);
+                setContact(res.data.contact);
+                setAddress(res.data.address);
 
             })
             .catch(() => setLoading(false));
@@ -195,7 +200,7 @@ export default function WorkerRegistration() {
                 sat: days.includes("Sat"),
                 sun: days.includes("Sun"),
 
-                userId: userId,  // ✔ Add user ID
+                userId: userId,  // Add user ID
 
                 certificates: certifications.map(c => ({
                     certificateName: c.name,
@@ -208,11 +213,25 @@ export default function WorkerRegistration() {
                     years: Number(e.years)
                 }))
             }, config)
-            alert("Worker registered successfully");
+           toast.success("Registration is successfull!");
+
+            setFullname("");
+            setEmail("");
+            setContact("");
+            setNIC("");
+            setAddress("");
+            setJob("");
+            setStartTime("");
+            setEndTime("");
+            setLocation("");
+            setDays([]);
+            setCertifications([{ name: "", body: "" }]);
+            setExperiences([{ title: "", company: "", years: "" }]);
+            setUploadedFiles([]);
 
         } catch (error) {
             console.log(error)
-            alert("Worker not registered");
+           toast.error("Registration is faild!");
         }
     }
 
