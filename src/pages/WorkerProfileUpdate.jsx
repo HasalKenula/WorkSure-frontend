@@ -1,9 +1,240 @@
-export default function WorkerProfileUpdate() {
-    return (
-        <div className="flex items-center justify-center h-screen w-screen ">
-            <h1 className="text-red-500 text-4xl font-bold text-center">
-               WorkerProfileUpdate
-            </h1>
+import React, { useState } from "react";
+import Navbar from "../components/NavBar";
+
+export default function WorkerRegistration() {
+    //dummy data
+    const worker = {
+        name: 'Shehan Fernando',
+        email: 'shh@gmail.com',
+        phone: '021-7658904',
+        address: 'Colombo, Sri Lanka',
+        job: 'Painter',
+        nic: '12345676',
+        
+        certifications: [
+            {
+                c_name: 'Diploma', body: 'University of Kelaniya'
+            },
+            {
+                c_name: 'Degree', body: 'University of Pera'
+            },
+            {
+                c_name: 'Certification', body: 'IIT'
+            }
+        ],
+
+        experiences: [
+            {
+                title: 'Painter', company: 'Department'
+            },
+            {
+                title: 'abc', company: 'ABC'
+            }
+        ],
+
+        locations:['Kottawa','Piliyandala','Gampaha'],
+
+        start_time: '08.00 AM',
+
+        end_time: '05.00 PM',
+
+        working_days: ['Mon' , 'Wed' , 'Fri'],
+        
+    };
+
+
+    const [name, setName] = useState(worker.name);
+    const [email, setEmail] = useState(worker.email);
+    const [no, setNo] = useState(worker.phone);
+    const [job, setJob] = useState(worker.job);
+    const [address, setAddres] = useState(worker.address);
+    const [id, setId] = useState(worker.nic);
+    const [stime, setStime] = useState(worker.start_time);
+    const [etime, setEtime] = useState(worker.end_time);
+
+
+    // Certifications List 
+    const [certs, setCerts] = useState(worker.certifications);
+
+    // Add a new empty certification row
+    const addCertification = () => {
+        setCerts((prev) => [...prev, { c_name: "", body: "" }]);
+    };
+
+    // Update one field of a certification row
+    const handleCertificationChange = (index, field, value) => {
+        setCerts((prev) => {
+            const copy = [...prev];
+            copy[index] = { ...copy[index], [field]: value };
+            return copy;
+        });
+    };
+
+    // remove a certification row
+    const removeCertification = (index) => {
+        setCerts((prev) => prev.filter((_, i) => i !== index));
+    };
+
+
+
+    
+    //Experiences LIst
+    const [exp, setExp] = useState(worker.experiences);
+
+    const addExperience = () => {
+        setExp((prev) => [...prev, { title: "", company: "" }]);
+    };
+
+    const handleExperienceChange = (index, field, value) => {
+        setExp((prev) => {
+            const copy = [...prev];
+            copy[index] = { ...copy[index], [field]: value };
+            return copy;
+        });
+    };
+
+    const removeExperience = (index) => {
+        setExp((prev) => prev.filter((_, i) => i !== index));
+    };
+
+    
+
+    
+    //Location List
+    const [loc, setLoc] = useState(worker.locations);
+
+    
+    //working days
+    const [workingDays, setWorkingDays] = useState(worker.working_days);
+
+    const toggleDay = (day) => {
+        setWorkingDays((prev) =>
+            prev.includes(day)? prev.filter((d) => d !== day) : [...prev, day]                  
+        );
+    };
+
+    
+
+  return (
+    <div>
+        <Navbar/> 
+        <div className="min-h-screen w-full flex flex-col items-center p-4 mt-18 bg-gray-100 " >
+            <div className="w-full max-w-4xl shadow-md rounded p-6 space-y-6 bg-white">
+                <h2 className="text-xl font-bold text-gray-800">
+                Update Your Details
+                </h2>
+
+                {/* Personal Information */}
+                <section className=" p-5 rounded shadow-sm">
+                    <h3 className="text-lg font-semibold mb-4">Personal Information</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={name}  onChange={(e) => setName(e.target.value)}/>
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={email}  onChange={(e) => setEmail(e.target.value)}/>
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={no}  onChange={(e) => setNo(e.target.value)}/>
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={address}  onChange={(e) => setAddres(e.target.value)}/>
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={job}  onChange={(e) => setJob(e.target.value)}/>
+                        <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={id}  onChange={(e) => setId(e.target.value)}/>
+                    </div>
+                </section>
+
+                {/* Certifications */}
+                <section className="p-5 rounded shadow-sm">
+                    <div className="flex items-center justify-between ">
+                        <h3 className="text-lg font-semibold mb-4">Certifications & Qualifications</h3>
+                    </div>
+
+                    <div className="space-y-3">
+                        {certs.map((cert, index) => (
+                            <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                                <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Certification Name" value={cert.c_name} onChange={(e) =>handleCertificationChange(index, "c_name", e.target.value)}/>
+                                <div className="flex gap-2">
+                                    <input className="flex-1 border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Issuing Body" value={cert.body} onChange={(e) =>handleCertificationChange(index, "body", e.target.value)}/>
+                                    {/* remove button */}
+                                    <button onClick={() => removeCertification(index)} className="px-3 py-1 bg-gray-300 text-white rounded text-sm hover:bg-gray-400" aria-label={`Remove certification ${index + 1}`}>
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                            ))
+                        }
+                    </div>
+
+                    <div>
+                        <button
+                            onClick={addCertification}
+                            className="mt-3 px-3 py-1 bg-primary text-white rounded text-sm hover:outline-2 hover:outline-offset-1 hover:outline-primary"
+                            aria-label="Add certification"
+                        >
+                            + Add Certification
+                        </button>
+                    </div>
+                </section>
+
+                {/* Work Experience */}
+                <section className="p-5 rounded shadow-sm">
+                    <div className="flex items-center justify-between ">
+                        <h3 className="text-lg font-semibold mb-4">Work Experience</h3>
+                    </div>
+
+                    <div className="space-y-3">
+                        {exp.map((item, index) => (
+                            <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 items-center">
+                                <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Job Title" value={item.title} onChange={(e) =>handleExperienceChange(index, "title", e.target.value)}/>
+                                <div className="flex gap-2">
+                                    <input className="flex-1 border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Company Name" value={item.company} onChange={(e) =>handleExperienceChange(index, "company", e.target.value)}/>
+                                    {/* remove button */}
+                                    <button onClick={() => removeExperience(index)} className="px-3 py-1 bg-gray-300 text-white rounded text-sm hover:bg-gray-400" aria-label={`Remove experience ${index + 1}`}>
+                                        Remove
+                                    </button>
+                                </div>
+                            </div>
+                            ))
+                        }
+                    </div>
+
+                    <div>
+                        <button
+                            onClick={addExperience}
+                            className="mt-3 px-3 py-1 bg-primary text-white rounded text-sm hover:outline-2 hover:outline-offset-1 hover:outline-primary"
+                            aria-label="Add Experience"
+                        >
+                            + Add Experience
+                        </button>
+                    </div>
+                </section>
+
+                {/* Availability & Preferences */}
+                <section className=" p-5 rounded shadow-sm">
+                    <h3 className="text-lg font-semibold mb-4">Availability & Preferences</h3>
+                    <div className="flex flex-wrap gap-4">
+                        {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
+                        <label key={day} className="flex items-center space-x-2">
+                            <input type="checkbox" className="accent-gray-500" checked={workingDays.includes(day)} onChange={() => toggleDay(day)}/>
+                            <span className="text-sm">{day}</span>
+                        </label>
+                        ))}
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
+                        <input  className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Preferred Start Time" value={stime} onChange={(e) => setStime(e.target.value)}/>
+                        <input  className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Preferred End Time" value={etime} onChange={(e) => setEtime(e.target.value)}/>
+                        <input
+                            className="border border-gray-300 p-1 rounded col-span-1 md:col-span-2 text-sm focus:outline-1 focus:outline-primary"
+                            placeholder="Preferred Service Location" 
+                            value={loc}
+                            onChange={(e) => setLoc(e.target.value)}
+                        />
+                    </div>
+                </section>
+
+                
+                
+
+                {/* Update Button */}
+                <button className="w-full bg-white text-primary rounded py-1 text-md font-bold outline hover:text-white hover:bg-primary">
+                    UPDATE ACCOUNT
+                </button>
+            </div>
         </div>
-    )
+    </div>
+  );
 }
