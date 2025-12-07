@@ -5,6 +5,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import MM from "../assets/man.jpg";
 
 // const workers = Array(18).fill({
 //   name: "Eve Adams",
@@ -95,11 +96,13 @@ export default function WorkersPage() {
               <div className="absolute top-2 right-4 text-green-600 font-semibold text-sm">
                 {worker.status}
               </div>
-
-              <div className="bg-gray-200 w-20 h-20 rounded-full flex justify-center items-center text-4xl mx-auto">
-                👤
+              <div className="bg-gray-200 w-20 h-20 rounded-full flex justify-center items-center mx-auto overflow-hidden">
+                <img
+                  src={worker.user?.imageUrl || MM}
+                  alt={worker.fullName}
+                  className="w-full h-full object-cover rounded-full"
+                />
               </div>
-
               <h3 className="mt-3 text-lg font-bold">{worker.fullName}</h3>
               <p className="text-yellow-600 font-semibold my-1">{worker.jobRole}</p>
 
@@ -108,11 +111,11 @@ export default function WorkersPage() {
 
               <button
                 className="w-full py-2 mb-2 bg-yellow-400 text-white rounded-md hover:bg-blue-700"
-                onClick={() => navigate(`/workerCard/${worker.id}`)}   
+                onClick={() => navigate(`/workerCard/${worker.id}`)}
               >
                 View Profile
               </button>
-              <button className="w-full py-2 border border-black rounded-md font-semibold hover:bg-gray-200">
+              <button className="w-full py-2 border border-black rounded-md font-semibold hover:bg-gray-200"   onClick={() => navigate(`/hire`)}>
                 Hire Now
               </button>
             </div>

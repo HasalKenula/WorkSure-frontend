@@ -89,8 +89,8 @@ export default function WorkerProfileCard() {
           <div className="h-[40vh] flex flex-row space-x-25 p-6">
             <div className="w-1/4 flex justify-center items-center">
               <div className="w-62 h-62 rounded-full overflow-hidden border-4 border-primary shadow-lg">
-                <img src={MM} className="w-full h-full object-cover" alt="profile" />
-              </div>
+                <img src={ worker.user?.imageUrl || MM} className="w-full h-full object-cover" alt="profile" />
+              </div> 
             </div>
 
             <div className="w-3/4 flex flex-col space-y-5 p-6">
