@@ -14,6 +14,13 @@ export default function WorkerProfileView() {
     const [loading, setLoading] = useState(false);
     const [worker, setWorker] = useState(null);
 
+
+    const goToHirePage = () => {
+        navigate("/workerDashboard");
+    };
+
+
+
     const config = {
         headers: {
             Authorization: `Bearer ${jwtToken}`
@@ -50,12 +57,6 @@ export default function WorkerProfileView() {
     }
 
 
-    //  useEffect(function () {
-    //     if (isAuthenticated) {
-    //         getWorkers();
-
-    //     }
-    // }, [isAuthenticated])
     useEffect(() => {
         if (isAuthenticated && userId) {
             getWorkers();
@@ -177,7 +178,7 @@ export default function WorkerProfileView() {
                             {/*image*/}
                             <div className=" w-1/4  flex justify-center items-center ">
                                 <div className="w-62 h-62 rounded-full  overflow-hidden border-4 border-primary shadow-lg">
-                                    <img src={MM} className="w-full h-full object-cover " alt="mm" />
+                                    <img src={worker.user?.imageUrl || MM} className="w-full h-full object-cover " alt="mm" />
                                 </div>
                             </div>
 
@@ -211,7 +212,7 @@ export default function WorkerProfileView() {
                                             <span className="text-gray-600 ml-1"> (75 Reviews)</span>
                                         </p>
                                     </div>
-                                    <button className="px-6 py-3 text-lg font-semibold bg-primary text-white rounded shadow-md hover:bg-accent hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/3">Hire Now</button>
+                                    <button onClick={goToHirePage} className="px-6 py-3 text-lg font-semibold bg-primary text-white rounded shadow-md hover:bg-accent hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/3">Hire Now</button>
 
                                 </div>
                             </div>
