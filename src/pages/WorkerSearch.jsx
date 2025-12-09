@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import MM from "../assets/man.jpg";
+import { CiLocationOn } from "react-icons/ci";
 
 // const workers = Array(18).fill({
 //   name: "Eve Adams",
@@ -111,7 +112,7 @@ export default function WorkersPage() {
                   <p className="text-yellow-600 font-semibold my-1">{worker.jobRole}</p>
 
                   <div className="text-sm my-2">⭐⭐⭐⭐⭐ {worker.rating}</div>
-                  <div className="text-sm mb-3">📍 {worker.preferredServiceLocation}</div>
+                  <div className="flex items-center justify-center text-sm mb-3"> <CiLocationOn color="#f59e0b" size={24}  strokeWidth={2} />{worker.preferredServiceLocation}</div>
 
                   <button
                     className="w-full py-2 mb-2 bg-yellow-400 text-white rounded-md hover:bg-slate-400"
