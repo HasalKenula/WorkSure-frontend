@@ -1,12 +1,12 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import WorkerCardModal from "./WorkerCardModal";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
-   const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    // Check if user is logged in (token stored?)
+  // Check if user is logged in (token stored?)
   const isLoggedIn = Boolean(localStorage.getItem("token"));
 
   // Logout function
@@ -24,13 +24,14 @@ export default function Navbar() {
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex gap-8 text-gray-700 font-medium">
-          <li className="hover:text-primary cursor-pointer">Home</li>
-          <li className="hover:text-primary cursor-pointer"> <WorkerCardModal triggerButtonText="Find Workers" /></li>
-          <li className="hover:text-primary cursor-pointer">Contact</li>
-          <li className="hover:text-primary cursor-pointer">About</li>
+          <li className="hover:text-primary cursor-pointer"><Link to="/">Home</Link></li>
+          <li className="hover:text-primary cursor-pointer"><Link to="/workerDetails">Find Workers</Link></li>
+          <li className="hover:text-primary cursor-pointer"><Link to="/contact">Contact</Link></li>
+          <li className="hover:text-primary cursor-pointer"><Link to="/about">About</Link></li>
+          <li className="hover:text-primary cursor-pointer"> <WorkerCardModal triggerButtonText="Worker Registration" /></li>
         </ul>
 
-         <ul className="hidden md:flex gap-8 text-gray-700 font-medium">
+        <ul className="hidden md:flex gap-8 text-gray-700 font-medium">
           {!isLoggedIn ? (
             <button
               type="button"
@@ -59,10 +60,11 @@ export default function Navbar() {
       {/* Mobile Menu */}
       {open && (
         <ul className="md:hidden bg-white px-6 pb-4 space-y-4 shadow">
-          <li className="hover:text-primary cursor-pointer">Home</li>
-          <li className="hover:text-primary cursor-pointer">Find Workers</li>
-          <li className="hover:text-primary cursor-pointer">Contact</li>
-          <li className="hover:text-primary cursor-pointer">About</li>
+          <li className="hover:text-primary cursor-pointer"><Link to="/">Home</Link></li>
+          <li className="hover:text-primary cursor-pointer"><Link to="/workerDetails">Find Workers</Link></li>
+          <li className="hover:text-primary cursor-pointer"><Link to="/contact">Contact</Link></li>
+          <li className="hover:text-primary cursor-pointer"><Link to="/about">About</Link></li>
+          <li className="hover:text-primary cursor-pointer"> <WorkerCardModal triggerButtonText="Find Workers" /></li>
         </ul>
       )}
     </nav>

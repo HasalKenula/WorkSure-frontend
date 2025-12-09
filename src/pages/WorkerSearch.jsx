@@ -47,7 +47,7 @@ export default function WorkersPage() {
   return (
     <div>
       <Navbar />
-      <div className="bg-[#fffdef] min-h-screen p-5 mt-10 pt-20">
+      <div className="bg-white min-h-screen p-5 mt-10 pt-20">
 
         {/* Filters Section */}
         <div className="flex flex-wrap justify-center items-center gap-4 mb-15 w-[95%]">
@@ -94,7 +94,7 @@ export default function WorkersPage() {
            // {
               // workers.map((worker, index) => (
                 <div
-                  className="bg-white p-5 rounded-xl text-center shadow-md relative"
+                  className="bg-white p-5 rounded-xl text-center shadow-md relative  border border-slate-300"
                   key={index}
                 >
                   <div className="absolute top-2 right-4 text-green-600 font-semibold text-sm">
@@ -114,7 +114,7 @@ export default function WorkersPage() {
                   <div className="text-sm mb-3">📍 {worker.preferredServiceLocation}</div>
 
                   <button
-                    className="w-full py-2 mb-2 bg-yellow-400 text-white rounded-md hover:bg-blue-700"
+                    className="w-full py-2 mb-2 bg-yellow-400 text-white rounded-md hover:bg-slate-400"
                     onClick={() => navigate(`/workerCard/${worker.id}`)}
                   >
                     View Profile
