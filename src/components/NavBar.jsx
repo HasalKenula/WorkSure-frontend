@@ -1,10 +1,37 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import WorkerCardModal from "./WorkerCardModal";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
+import MM from "../assets/man.jpg";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+
+  const { jwtToken, isAuthenticated } = useAuth();
+
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    contact: "",
+    address: "",
+    imageUrl: "",
+  });
+
+  useEffect(() => {
+    if (!jwtToken) return;
+
+    axios
+      .get("http://localhost:8081/user", {
+        headers: { Authorization: `Bearer ${jwtToken}` },
+      })
+      .then((res) => {
+        setUser(res.data);
+        //setLoading(false);
+      })
+      .catch(() => setLoading(false));
+  }, [jwtToken]);
 
   // Check if user is logged in (token stored?)
   const isLoggedIn = Boolean(localStorage.getItem("token"));
@@ -31,7 +58,18 @@ export default function Navbar() {
           <li className="hover:text-primary cursor-pointer"> <WorkerCardModal triggerButtonText="Worker Registration" /></li>
         </ul>
 
-        <ul className="hidden md:flex gap-8 text-gray-700 font-medium">
+        <div className="hidden md:flex items-center gap-4">
+
+       
+          {isLoggedIn && (
+            <img
+              src={user.imageUrl || MM}  
+              alt="User"
+              onClick={() => navigate("/userProfile")}         
+              className="w-10 h-10 rounded-full object-cover cursor-pointer border border-gray-300"  
+            />
+          )}
+
           {!isLoggedIn ? (
             <button
               type="button"
@@ -49,7 +87,7 @@ export default function Navbar() {
               Logout
             </button>
           )}
-        </ul>
+        </div>
 
         {/* Mobile Menu Icon */}
         <div className="md:hidden cursor-pointer" onClick={() => setOpen(!open)}>
@@ -65,6 +103,15 @@ export default function Navbar() {
           <li className="hover:text-primary cursor-pointer"><Link to="/contact">Contact</Link></li>
           <li className="hover:text-primary cursor-pointer"><Link to="/about">About</Link></li>
           <li className="hover:text-primary cursor-pointer"> <WorkerCardModal triggerButtonText="Find Workers" /></li>
+
+          {isLoggedIn && (
+            <img
+              src={user.imageUrl || MM}       
+              alt="User"
+              onClick={() => { setOpen(false); navigate("/userProfile"); }} 
+              className="w-12 h-12 rounded-full object-cover cursor-pointer border border-gray-300" 
+            />
+          )}
         </ul>
       )}
     </nav>
