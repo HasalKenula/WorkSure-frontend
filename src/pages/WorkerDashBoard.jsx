@@ -1,8 +1,87 @@
 import { IoStarSharp } from "react-icons/io5";
 import Navbar from "../components/NavBar";
 import Man from "../assets/man.jpg"
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState, } from "react";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 
 export default function WorkerDashBoard() {
+    const { jwtToken, isAuthenticated } = useAuth();
+    const navigate = useNavigate();
+   
+    const [userId, setUserId] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [worker, setWorker] = useState(null);
+   
+
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${jwtToken}`
+        },
+    }
+
+
+    useEffect(() => {
+        if (!jwtToken) return;
+
+        axios
+            .get("http://localhost:8081/user", {
+                headers: { Authorization: `Bearer ${jwtToken}` },
+            })
+            .then((res) => {
+
+                setUserId(res.data.id);
+
+
+            })
+            .catch(() => setLoading(false));
+
+
+    }, [jwtToken]);
+
+
+
+    async function getWorkers() {
+        try {
+            const response = await axios.get(`http://localhost:8081/worker/${userId}`, config);
+            setWorker(response.data);
+        } catch (error) {
+            console.log("error to load the correct worker according to the id");
+            console.log("Error loading worker:", error);
+        }
+    }
+
+    const [hire, setHire] = useState([]);
+
+    async function getHires() {
+        if (!worker || !worker.id) return;   
+        try {
+            const response = await axios.get(`http://localhost:8081/hire/${worker.id}`, config);
+            setHire(response.data);
+        } catch (error) {
+            console.log("error to load the correct worker according to the id");
+            console.log("Error loading worker:", error);
+        }
+    }
+
+
+    useEffect(() => {
+        if (isAuthenticated && userId) {
+            getWorkers();
+
+        }
+    }, [isAuthenticated, userId]);
+
+   
+    useEffect(() => {
+        if (worker?.id) {
+            getHires();                               
+        }
+    }, [worker?.id]);
+
+
 
     const users = [
 
@@ -110,6 +189,25 @@ export default function WorkerDashBoard() {
         }
     ];
 
+    async function handleToggleBlock(hireId) {
+        try {
+            await axios.put(`http://localhost:8081/hire/toggle-block/${hireId}`, {}, config);
+
+            setHire(prev =>
+                prev.map(hire =>
+                    hire.id === hireId ? { ...hire, isBlocked: !hire.isBlocked } : hire
+                )
+            );
+             getHires();
+            
+            toast.success("Hire status updated successfully");
+        } catch (error) {
+            toast.error("Failed to update hire status");
+        }
+    }
+
+
+
     return (
         <div>
             <Navbar />
@@ -162,8 +260,10 @@ export default function WorkerDashBoard() {
                                 <IoStarSharp />
                                 <h1 className="text-slate-500">5.0</h1>
                             </div>
-                            <div className="flex items-center justify-center text-xl">
+                            <div className="flex items-center flex-col justify-center text-xl">
                                 <h1>(75 Reviews)</h1>
+                                <h1>{hire?.worker?.id}</h1>
+                                <h1>{hire?.user?.id}</h1>
                             </div>
                         </div>
                     </div>
@@ -187,23 +287,39 @@ export default function WorkerDashBoard() {
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Date</th>
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Time</th>
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Description</th>
+                                    <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Status</th>
                                     <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Action</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                {users.map((user) => {
+                                {hire.map((user) => {
                                     return (
                                         <tr class="hover:bg-gray-50">
-                                            <td class="border  border-gray-300 px-6 py-3">{user.Id}</td>
-                                            <td class="border  border-gray-300 px-6 py-3">{user.Client}</td>
-                                            <td class="border border-gray-300 px-6 py-3">{user.Date}</td>
-                                            <td class="border border-gray-300 px-6 py-3">{user.Time}</td>
-                                            <td class="border  border-gray-300 px-6 py-3">{user.Description}</td>
+                                            <td class="border  border-gray-300 px-6 py-3">{user.id}</td>
+                                            <td class="border  border-gray-300 px-6 py-3">{user.user.name}</td>
+                                            <td class="border border-gray-300 px-6 py-3">{user.bookingDate}</td>
+                                            <td class="border border-gray-300 px-6 py-3">{user.bookingTime}</td>
+                                            <td class="border  border-gray-300 px-6 py-3">{user.description}</td>
+                                            <td className="border border-gray-300 px-6 py-3">
+                                                {Boolean(user.isBooked) ? (
+                                                    <span className="text-red-600 font-semibold">Blocked</span>
+                                                ) : (
+                                                    <span className="text-green-600 font-semibold">Active</span>
+                                                )}
+
+
+                                            </td>
                                             <td class="border border-gray-300 px-6 py-3"><div className="flex items-center gap-3">
-                                                <button className="px-3 py-1 bg-primary text-white rounded-lg border hover:bg-white hover:text-primary">
-                                                    Confirm
+                                                <button
+                                                    onClick={() => handleToggleBlock(user.id)}
+                                                    className={`px-3 py-1 rounded-lg border ${user.isBooked ? "bg-green-500 text-white" : "bg-red-500 text-white"}hover:opacity-80`}
+                                                >
+                                                    {user.isBooked ? "Approve" : "Block"}
                                                 </button>
+
+
+
                                                 <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white">
                                                     Cancel
                                                 </button>

@@ -1,13 +1,70 @@
-
 import Navbar from "../components/NavBar";
 import MM from "../assets/man.jpg";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaStar } from "react-icons/fa";
 import { FaUserCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-
+import { useEffect, useState } from "react";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext";
 export default function WorkerProfileView() {
+    const { jwtToken, isAuthenticated } = useAuth();
     const navigate = useNavigate();
+    const [userId, setUserId] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [worker, setWorker] = useState(null);
+
+
+    const goToHirePage = () => {
+        navigate("/workerDashboard");
+    };
+
+
+
+    const config = {
+        headers: {
+            Authorization: `Bearer ${jwtToken}`
+        },
+    }
+
+
+    useEffect(() => {
+        if (!jwtToken) return;
+
+        axios
+            .get("http://localhost:8081/user", {
+                headers: { Authorization: `Bearer ${jwtToken}` },
+            })
+            .then((res) => {
+
+                setUserId(res.data.id);
+
+
+            })
+            .catch(() => setLoading(false));
+
+
+    }, [jwtToken]);
+
+    async function getWorkers() {
+        try {
+            const response = await axios.get(`http://localhost:8081/worker/${userId}`, config);
+            setWorker(response.data);
+        } catch (error) {
+            console.log("error to load the correct worker according to the id");
+            console.log("Error loading worker:", error);
+        }
+    }
+
+
+    useEffect(() => {
+        if (isAuthenticated && userId) {
+            getWorkers();
+        }
+    }, [isAuthenticated, userId]);
+
+
+
     const p = {
         name: "Eva Adams",
     }
@@ -50,11 +107,11 @@ export default function WorkerProfileView() {
 
 
 
-    const profile = [
+    const profile = worker ? [
         {
 
-            name: "Eva Adams",
-            position: "Plumber",
+            // name: worker.fullName,
+            // position: worker.jobRole,
             rating: 5,
             location: " Colombo",
             workingArea: [
@@ -75,19 +132,33 @@ export default function WorkerProfileView() {
                 "Bathroom and kitchen plumbing",
                 "Drain cleanin and blokage removal",
                 "PVC, PEX, and copper pipe fitting",
-                
+
             ],
 
             certification: [
                 "NVQ Level 4 in Plumbing Technology",
                 "Certified Water System Installer - National Vocational Training Institute",
                 "Occuptional Safety & Health (OSH) Certificate",
-              
+
 
             ],
 
         }
-    ]
+    ] : [];
+
+    // Converts boolean day fields into an array of strings
+    const getWorkingDays = (worker) => {
+        if (!worker) return [];
+        const days = [];
+        if (worker.mon) days.push("Monday");
+        if (worker.tue) days.push("Tuesday");
+        if (worker.wed) days.push("Wednesday");
+        if (worker.thu) days.push("Thursday");
+        if (worker.fri) days.push("Friday");
+        if (worker.sat) days.push("Saturday");
+        if (worker.sun) days.push("Sunday");
+        return days;
+    };
 
 
     return (
@@ -107,7 +178,7 @@ export default function WorkerProfileView() {
                             {/*image*/}
                             <div className=" w-1/4  flex justify-center items-center ">
                                 <div className="w-62 h-62 rounded-full  overflow-hidden border-4 border-primary shadow-lg">
-                                    <img src={MM} className="w-full h-full object-cover " alt="mm" />
+                                    <img src={worker.user?.imageUrl || MM} className="w-full h-full object-cover " alt="mm" />
                                 </div>
                             </div>
 
@@ -118,16 +189,16 @@ export default function WorkerProfileView() {
 
                                     <div className="flex flex-col space-y-0.5 ">
                                         <p className="text-4xl font-bold">
-                                            {prof.name}
+                                            {worker.fullName}
                                         </p>
                                         <p className=" font-bold text-primary text-xl">
-                                            {prof.position}
+                                            {worker.jobRole}
                                         </p>
                                     </div>
                                     <div className="flex flex-row items-center space-x-1.5">
                                         <IoLocationSharp className="text-2xl " />
                                         <p className="text-lg font-medium ">
-                                            {prof.location}
+                                            {worker.address}
                                         </p>
                                     </div>
 
@@ -141,7 +212,7 @@ export default function WorkerProfileView() {
                                             <span className="text-gray-600 ml-1"> (75 Reviews)</span>
                                         </p>
                                     </div>
-                                    <button className="px-6 py-3 text-lg font-semibold bg-primary text-white rounded shadow-md hover:bg-accent hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/3">Hire Now</button>
+                                    <button onClick={goToHirePage} className="px-6 py-3 text-lg font-semibold bg-primary text-white rounded shadow-md hover:bg-accent hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/3">Hire Now</button>
 
                                 </div>
                             </div>
@@ -152,7 +223,7 @@ export default function WorkerProfileView() {
                         <div className=" border-solid h-[160vh] flex flex-row">
                             {/*skills,work day,hour ,certification*/}
                             <div className="  w-[30%] flex flex-col space-x-8 gap-1.5">
-                                {/* workk area */}
+                                {/* work area */}
                                 <div className=" h-[40vh]">
                                     <div className=" h-[65%] p-6 flex flex-col space-y-3.5 ">
                                         <div className="flex items-center space-x-3 text-xl font-medium">
@@ -165,18 +236,17 @@ export default function WorkerProfileView() {
 
                                         <ul className="list-disc pl-5 space-y-1 text-gray-800 text-lg font-sans">
 
-                                            {
-                                                prof.workingArea.map((area, index) => (
-                                                    <li key={index}>{area}</li>
-                                                ))
-                                            }
+
+                                            <li>{worker.preferredServiceLocation}</li>
+
+
                                         </ul>
 
                                     </div>
                                 </div>
 
                                 {/*work days*/}
-                                <div className=" h-[30vh]">
+                                {/* <div className=" h-[30vh]">
                                     <div className=" p-6 flex flex-col space-y-3.5">
                                         <div className="flex items-center space-x-3 text-xl font-medium">
                                             <div className="flex-1 h-px bg-gray-400"></div>
@@ -192,10 +262,32 @@ export default function WorkerProfileView() {
                                         </ul>
 
                                     </div>
+                                </div> */}
+
+                                {/*work days*/}
+                                <div className="h-[30vh]">
+                                    <div className="p-6 flex flex-col space-y-3.5">
+                                        <div className="flex items-center space-x-3 text-xl font-medium">
+                                            <div className="flex-1 h-px bg-gray-400"></div>
+                                            <p className="text-xl font-bold font-inter text-primary text-stroke">WORKING DAYS</p>
+                                            <div className="flex-1 h-px bg-gray-400"></div>
+                                        </div>
+
+                                        <ul className="list-disc pl-5 space-y-1 text-gray-800 text-lg font-sans">
+                                            {worker &&
+                                                getWorkingDays(worker).map((day, index) => (
+                                                    <li key={index}>
+                                                        {day} ({worker.preferredStartTime} - {worker.preferredEndTime})
+                                                    </li>
+                                                ))}
+                                        </ul>
+
+                                    </div>
                                 </div>
 
+
                                 {/*skills*/}
-                                <div className=" h-[60vh]">
+                                {/* <div className=" h-[60vh]">
                                     <div className=" p-6 flex flex-col space-y-3.5">
                                         <div className="flex items-center space-x-3 text-xl font-medium">
                                             <div className="flex-1 h-px bg-gray-400"></div>
@@ -205,14 +297,18 @@ export default function WorkerProfileView() {
 
                                         <ul className="list-disc pl-5 space-y-1 text-gray-800 text-lg font-sans">
 
-                                            {prof.skills.map((skills, index) => (
-                                                <li key={index}>{skills}</li>
+                                            {worker.jobExperiences.map((skills, index) => (
+                                                <li key={index}>
+                                                    <strong>Job Title:</strong> {skills.jobTitle} <br />
+                                                    <strong>Company:</strong> {skills.companyName} <br />
+                                                    <strong>Years:</strong> {skills.years} <br /> <br />
+                                                </li>
                                             ))}
                                         </ul>
 
                                     </div>
 
-                                </div>
+                                </div> */}
 
                                 {/*Certification */}
                                 <div className=" h-[60vh]">
@@ -225,8 +321,12 @@ export default function WorkerProfileView() {
 
                                         <ul className="list-disc pl-5 space-y-1 text-gray-800 text-lg font-sans">
 
-                                            {prof.certification.map((certification, index) => (
-                                                <li key={index}>{certification}</li>
+                                            {worker.certificates.map((certification, index) => (
+                                                <li key={index}>
+                                                    <strong>certificateName:</strong> {certification.certificateName} <br />
+
+                                                    <strong>issuingBody:</strong> {certification.issuingBody} <br /> <br />
+                                                </li>
                                             ))}
 
                                         </ul>
@@ -251,26 +351,15 @@ export default function WorkerProfileView() {
 
                                         <div className=" pl-4  flex-1 flex-col space-y-5.5 ">
                                             <div>
-                                                <p className="text-lg font-sans font-semibold">Senior Plumber - AquaFix Services (2020 - Present)</p>
-                                                <ul className="list-disc pl-5 space-y-1 text-gray-800 text-lg font-sans">
-                                                    <li>Handles Residential and Commercial Plumbing Projects</li>
-                                                    <li>Leads a team of 3 junior plumbers</li>
-                                                    <li>Completed over 250 service calls with 100% client satisfication</li>
-                                                    <li>Successfully completed 250+ service calls with high customer satisfaction</li>
-
-
-                                                </ul>
+                                                {worker.jobExperiences.map((skills, index) => (
+                                                    <li key={index}>
+                                                        <strong>Job Title:</strong> {skills.jobTitle} <br />
+                                                        <strong>Company:</strong> {skills.companyName} <br />
+                                                        <strong>Years:</strong> {skills.years} <br /> <br />
+                                                    </li>
+                                                ))}
                                             </div>
-                                            <div>
-                                                <p className="text-lg font-sans font-semibold">Assistant Plumber - PipePro Lanka (2017 -2020)</p>
-                                                <ul className="list-disc pl-5 space-y-1 text-gray-800 text-lg font-sans">
-                                                    <li>Assisted in installation of water and drainge systems</li>
-                                                    <li>Specialized in bathroom fitting and water pressure testing</li>
-                                                    <li>Maintained job site cleanliness and ensured safety compliance</li>
 
-
-                                                </ul>
-                                            </div>
                                         </div>
 
                                     </div>
@@ -344,3 +433,4 @@ export default function WorkerProfileView() {
         </>
     );
 }
+

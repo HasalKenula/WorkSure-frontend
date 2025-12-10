@@ -28,6 +28,7 @@ import WorkerRegistrationDetails from './pages/WorkerRegistrationDetails'
 import WorkerProfileUpdate from './pages/WorkerProfileUpdate'
 import WorkerView from './pages/WorkerView'
 import { Toaster } from 'react-hot-toast'
+import WorkerProfileCard from './pages/WorkerProfileCard'
 
 
 function App() {
@@ -40,7 +41,7 @@ function App() {
         <Routes>
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/register" element={<Register />} />
-          {/* <Route element={<ProtectedRoute />}> */}
+          <Route element={<ProtectedRoute />}>
             <Route path='/*' element={<HomePage />} />
             <Route path='/about' element={<AboutUs />} />
             <Route path='/contact' element={<ContactPage />} />
@@ -50,7 +51,7 @@ function App() {
             <Route path='/registration' element={<UserRegistration />} />
             <Route path='/userProfile' element={<UserProfile />} />
             <Route path='/workerDashboard' element={<WorkerDashBoard />} />
-            <Route path='/hire' element={<WorkerHire />} />
+            <Route path='/hire/:workerId' element={<WorkerHire />} />
             <Route path='/workerLogin' element={<WorkerLogin />} />
             <Route path='/workerProfile' element={<WorkerProfileView />} />
             <Route path='/workerRegistration' element={<WorkerRegistration />} />
@@ -61,7 +62,9 @@ function App() {
             <Route path="/workerRegistrationDetails" element={<WorkerRegistrationDetails />} />
             <Route path="/workerProfileUpdate" element={<WorkerProfileUpdate />} />
             <Route path='/workerView' element={<WorkerView />} />
-          {/* </Route> */}
+            <Route path='/workerCard/:workerId' element={<WorkerProfileCard />} />
+
+          </Route>
 
 
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import WorkerCardModal from "./WorkerCardModal";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -24,7 +25,7 @@ export default function Navbar() {
         {/* Desktop Menu */}
         <ul className="hidden md:flex gap-8 text-gray-700 font-medium">
           <li className="hover:text-primary cursor-pointer">Home</li>
-          <li className="hover:text-primary cursor-pointer">Find Workers</li>
+          <li className="hover:text-primary cursor-pointer"> <WorkerCardModal triggerButtonText="Find Workers" /></li>
           <li className="hover:text-primary cursor-pointer">Contact</li>
           <li className="hover:text-primary cursor-pointer">About</li>
         </ul>
