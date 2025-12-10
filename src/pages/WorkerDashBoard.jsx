@@ -1,19 +1,23 @@
-import { IoStarSharp } from "react-icons/io5";
+import { IoCheckmarkDoneCircleOutline, IoCloudDoneOutline, IoStarSharp } from "react-icons/io5";
 import Navbar from "../components/NavBar";
 import Man from "../assets/man.jpg"
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, } from "react";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import CountUp from "react-countup";
+import { FiPhoneOutgoing } from "react-icons/fi";
+import { MdOutlineGeneratingTokens, MdOutlinePendingActions } from "react-icons/md";
+import { GiTakeMyMoney } from "react-icons/gi";
 
 export default function WorkerDashBoard() {
     const { jwtToken, isAuthenticated } = useAuth();
     const navigate = useNavigate();
-   
+
     const [userId, setUserId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [worker, setWorker] = useState(null);
-   
+
 
 
     const config = {
@@ -56,7 +60,7 @@ export default function WorkerDashBoard() {
     const [hire, setHire] = useState([]);
 
     async function getHires() {
-        if (!worker || !worker.id) return;   
+        if (!worker || !worker.id) return;
         try {
             const response = await axios.get(`http://localhost:8081/hire/${worker.id}`, config);
             setHire(response.data);
@@ -74,10 +78,10 @@ export default function WorkerDashBoard() {
         }
     }, [isAuthenticated, userId]);
 
-   
+
     useEffect(() => {
         if (worker?.id) {
-            getHires();                               
+            getHires();
         }
     }, [worker?.id]);
 
@@ -198,8 +202,8 @@ export default function WorkerDashBoard() {
                     hire.id === hireId ? { ...hire, isBlocked: !hire.isBlocked } : hire
                 )
             );
-             getHires();
-            
+            getHires();
+
             toast.success("Hire status updated successfully");
         } catch (error) {
             toast.error("Failed to update hire status");
@@ -215,40 +219,50 @@ export default function WorkerDashBoard() {
                 <div className="w-full mx-auto flex flex-col  text-slate-400 lg:flex-row items-center justify-center gap-6 p-6">
                     <div className="flex-1 flex flex-col items-center justify-center gap-6 ">
                         <div className="w-[75%] flex-1 flex items-center shadow-xl gap-6 border border-slate-200 py-4 px-8  justify-between">
+                            <IoCloudDoneOutline    color="#f59e0b" size={40} />
                             <div className="text-xl font-bold text-slate-500">
                                 <h1>Number of completed works</h1>
                             </div>
                             <div className="text-5xl font-bold">
-                                <h1>08</h1>
+                                <CountUp start={0} end={300} duration={2} enableScrollSpy scrollSpyOnce />
                             </div>
                         </div>
                         <div className="w-[75%] flex-1 flex items-center gap-6  shadow-xl border border-slate-200 border py-4 px-8  justify-between">
+                            <FiPhoneOutgoing  color="#f59e0b" size={40} />
                             <div className="text-xl font-bold text-slate-500">
                                 <h1>Number of On Going works</h1>
                             </div>
                             <div className="text-5xl font-bold">
-                                <h1>08</h1>
+                                <CountUp start={0} end={20} duration={2} enableScrollSpy scrollSpyOnce />
                             </div>
                         </div>
                         <div className="w-[75%] flex-1 flex items-center gap-6 shadow-xl border border-slate-200 border py-4 px-8  justify-between">
+                            <MdOutlinePendingActions color="#f59e0b" size={40}/>
                             <div className="text-xl font-bold text-slate-500">
                                 <h1>Number of Pending Request</h1>
                             </div>
                             <div className="text-5xl font-bold">
-                                <h1>08</h1>
+                                <CountUp start={0} end={20} duration={2} enableScrollSpy scrollSpyOnce />
                             </div>
                         </div>
                     </div>
                     <div className="flex-1 flex flex-col items-center justify-center gap-18 ">
                         <div className="w-[75%] flex-1 flex-col  shadow-xl items-center justify-center gap-6  border  border-slate-200  py-4 px-8">
+                            <div className="flex items-center justify-center ">
+                                 <GiTakeMyMoney color="#f59e0b" size={80}/>
+                            </div>
+                           
                             <div className="flex items-center justify-center  text-4xl font-bold pb-4">
                                 <h1 className="text-slate-500">Total Earning</h1>
                             </div>
                             <div className="flex items-center justify-center text-5xl font-bold">
-                                <h1>Rs. 200,000</h1>
+                                <CountUp start={0} end={200000} duration={2.5} separator="," prefix="Rs. " enableScrollSpy scrollSpyOnce />
                             </div>
                         </div>
                         <div className="w-[75%] flex-1 flex-col  shadow-xl items-center justify-center gap-6  border  border-slate-200 py-4 px-8">
+                            <div className="flex items-center justify-center ">
+                                 <MdOutlineGeneratingTokens  color="#f59e0b" size={80}/>
+                            </div>
                             <div className="flex items-center justify-center text-4xl font-bold pb-4">
                                 <h1 className="text-slate-500">Rating</h1>
                             </div>
@@ -258,7 +272,7 @@ export default function WorkerDashBoard() {
                                 <IoStarSharp />
                                 <IoStarSharp />
                                 <IoStarSharp />
-                                <h1 className="text-slate-500">5.0</h1>
+                                <CountUp start={0} end={5} duration={2} decimals={1} enableScrollSpy scrollSpyOnce />
                             </div>
                             <div className="flex items-center flex-col justify-center text-xl">
                                 <h1>(75 Reviews)</h1>

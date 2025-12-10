@@ -1,4 +1,4 @@
-import { RiDeleteBin6Line } from "react-icons/ri";
+import { RiDeleteBin6Line, RiPassPendingLine } from "react-icons/ri";
 import Navbar from "../components/NavBar";
 import PlatformAnalyticsChart from "../components/PlatformAnalyticsChart";
 import Man from "../assets/man.jpg"
@@ -6,6 +6,9 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
+import CountUp from "react-countup";
+import { SlUserFollow } from "react-icons/sl";
+import { LiaUserSecretSolid } from "react-icons/lia";
 export default function AdminDashBoard() {
     const { isAuthenticated, jwtToken } = useAuth();
     const roles = [
@@ -144,6 +147,18 @@ export default function AdminDashBoard() {
         }
     }
 
+
+    async function deleteContact(contactId) {
+        try {
+            await axios.delete(`http://localhost:8081/contact/${contactId}`, config);
+            loadContact();
+            toast.success("contact message status deleted successfully");
+        } catch (error) {
+            toast.error("Failed to delete contact message status");
+        }
+    }
+
+
     useEffect(function () {
         if (isAuthenticated) {
             loadContact();
@@ -155,15 +170,16 @@ export default function AdminDashBoard() {
         try {
             await axios.put(`http://localhost:8081/worker/toggle-block/${workerId}`, {}, config);
 
-           
+
             setWorkers(prev =>
                 prev.map(worker =>
                     worker.id === workerId ? { ...worker, isBlocked: !worker.isBlocked } : worker
                 )
             );
-
             toast.success("Worker status updated successfully");
+
         } catch (error) {
+
             toast.error("Failed to update worker status");
         }
     }
@@ -223,27 +239,36 @@ export default function AdminDashBoard() {
                 <div className=" w-full mx-auto flex flex-col lg:flex-row text-slate-400 lg:flex-row items-center justify-center gap-6 p-6 lg:pt-0">
 
                     <div className="bg-white  w-full lg:w-[25%] flex-1 flex flex-col items-center shadow-xl gap-6 border border-slate-200 py-8 px-8  justify-between">
+                        <div className="flex items-center justify-center ">
+                            <SlUserFollow color="#f59e0b" size={80} />
+                        </div>
                         <div className="text-xl font-bold text-slate-500">
-                            <h1>Number of completed works</h1>
+                            <h1>Total Number of Users</h1>
                         </div>
                         <div className="text-5xl font-bold">
-                            <h1>2500</h1>
+                            <CountUp start={0} end={300} duration={2} enableScrollSpy scrollSpyOnce />
                         </div>
                     </div>
                     <div className="bg-white w-full lg:w-[25%] flex-1 flex flex-col items-center gap-6  shadow-xl border border-slate-200 border py-8 px-8  justify-between">
+                        <div className="flex items-center justify-center ">
+                            <LiaUserSecretSolid color="#f59e0b" size={80} />
+                        </div>
                         <div className="text-xl font-bold text-slate-500">
-                            <h1>Number of On Going works</h1>
+                            <h1>Total Number of Works</h1>
                         </div>
                         <div className="text-5xl font-bold">
-                            <h1>1500</h1>
+                            <CountUp start={0} end={20} duration={2} enableScrollSpy scrollSpyOnce />
                         </div>
                     </div>
                     <div className="bg-white w-full lg:w-[25%] flex-1 flex flex-col items-center gap-6 shadow-xl border border-slate-200 border py-8 px-8  justify-between">
+                        <div className="flex items-center justify-center ">
+                            <RiPassPendingLine color="#f59e0b" size={80} />
+                        </div>
                         <div className="text-xl font-bold text-slate-500">
                             <h1>Number of Pending Request</h1>
                         </div>
                         <div className="text-5xl font-bold">
-                            <h1>103</h1>
+                            <CountUp start={0} end={20} duration={2} enableScrollSpy scrollSpyOnce />
                         </div>
                     </div>
 
@@ -415,7 +440,7 @@ export default function AdminDashBoard() {
 
 
                                             <button
-                                                onClick={() => handleDelete(comment.id)}
+                                                onClick={() => deleteContact(comment.id)}
                                                 className="text-primary hover:text-red-700 transition"
                                             >
                                                 <RiDeleteBin6Line size={24} />

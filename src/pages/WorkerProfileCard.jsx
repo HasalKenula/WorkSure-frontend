@@ -109,7 +109,7 @@ export default function WorkerProfileCard() {
                   <span className="text-gray-600 ml-1">(75 Reviews)</span>
                 </p>
               </div>
-              <button className="px-6 py-3 text-lg font-semibold bg-primary text-white rounded shadow-md hover:bg-accent hover:scale-105 transition-all duration-300 w-1/3">
+              <button className="px-6 py-3 text-lg font-semibold bg-primary text-white rounded shadow-md hover:bg-accent hover:scale-105 transition-all duration-300 w-1/3" onClick={() => navigate(`/hire/${worker.id}`)}>
                 Hire Now
               </button>
             </div>
