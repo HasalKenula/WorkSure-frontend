@@ -211,6 +211,24 @@ export default function WorkerDashBoard() {
     }
 
 
+     async function handleTogglePending(hireId) {
+        try {
+            await axios.put(`http://localhost:8081/hire/toggle-pending/${hireId}`, {}, config);
+
+            setHire(prev =>
+                prev.map(hire =>
+                    hire.id === hireId ? { ...hire, isPending: !hire.isPending } : hire
+                )
+            );
+            getHires();
+
+            toast.success("Hire status updated successfully");
+        } catch (error) {
+            toast.error("Failed to update hire status");
+        }
+    }
+
+
 
     return (
         <div>
@@ -302,6 +320,7 @@ export default function WorkerDashBoard() {
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Time</th>
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Description</th>
                                     <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Status</th>
+                                     <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Pending</th>
                                     <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Action</th>
                                 </tr>
                             </thead>
@@ -324,12 +343,28 @@ export default function WorkerDashBoard() {
 
 
                                             </td>
+                                             <td className="border border-gray-300 px-6 py-3">
+                                                {Boolean(user.isPending) ? (
+                                                    <span className="text-yellow-600 font-semibold">Pending</span>
+                                                ) : (
+                                                    <span className="text-blue-600 font-semibold">Seen</span>
+                                                )}
+
+
+                                            </td>
                                             <td class="border border-gray-300 px-6 py-3"><div className="flex items-center gap-3">
                                                 <button
                                                     onClick={() => handleToggleBlock(user.id)}
                                                     className={`px-3 py-1 rounded-lg border ${user.isBooked ? "bg-green-500 text-white" : "bg-red-500 text-white"}hover:opacity-80`}
                                                 >
                                                     {user.isBooked ? "Approve" : "Block"}
+                                                </button>
+
+                                                <button
+                                                    onClick={() => handleTogglePending(user.id)}
+                                                    className={`px-3 py-1 rounded-lg border ${user.isPending ? "bg-yellow-500 text-white" : "bg-blue-500 text-white"}hover:opacity-80`}
+                                                >
+                                                    {user.isPending ? "Pending" : "Seen"}
                                                 </button>
 
 

@@ -14,6 +14,7 @@ export default function WorkerHire() {
     const [selectedTime, setSelectedTime] = useState("");
     const [description, setDescription] = useState("");
     const [isBooked, setIsBooked] = useState(true);
+    const [isPending, setIsPending] = useState(true);
 
     // Sample booked time slots for demo
     // const bookedSlots = [
@@ -92,10 +93,12 @@ export default function WorkerHire() {
                 bookingDate: format(selectedDate, "yyyy-MM-dd"),
                 bookingTime: selectedTime,
                 description: description,
-                isBooked: isBooked
+                isBooked: isBooked,
+                isPending: isPending
             }, config
             );
-            setWorker(response.data);
+            // setWorker(response.data);
+            getHires();
 
             alert("Job Request Sent Successfully!");
         } catch (error) {
@@ -132,7 +135,7 @@ export default function WorkerHire() {
     useEffect(() => {
         const map = {};
         hires
-            .filter(hire => hire.isBooked)
+            .filter(hire => !hire.isBooked)
             .forEach(hire => {
                 const date = hire.bookingDate;
                 if (!map[date]) map[date] = [];
@@ -147,6 +150,19 @@ export default function WorkerHire() {
         const formattedDate = format(date, "yyyy-MM-dd");
         return hiresByDate[formattedDate] || [];
     };
+
+
+    const [myHires, setMyHires] = useState([]);
+
+
+    useEffect(() => {
+        if (hires.length > 0 && user?.id) {
+            const userHires = hires.filter(h => h.user?.id === user.id);
+
+            setMyHires(userHires); // <-- Save ALL matching hires
+        }
+    }, [hires, user]);
+
 
 
     return (
@@ -279,6 +295,45 @@ export default function WorkerHire() {
                     </div>
                 </div>
             </div>
+            {myHires.length > 0 && (
+                <div className="bg-white border p-6 rounded-lg shadow-md mt-6">
+                    <h3 className="text-xl font-semibold mb-4">Your Requests</h3>
+
+                    {myHires.map((hire, index) => (
+                        <div key={index} className="border-b border-gray-300 pb-4 mb-4">
+                            <p><strong>User ID:</strong> {user?.id}</p>
+                            <p><strong>Worker ID:</strong> {worker?.id}</p>
+                            <p><strong>Date:</strong> {hire.bookingDate}</p>
+                            <p><strong>Time:</strong> {hire.bookingTime}</p>
+
+                            <p className="mt-2">
+                                <strong>Description:</strong><br />
+                                <span className="text-gray-700">{hire.description}</span>
+                            </p>
+
+                            <div className="mt-4">
+                                <strong>Status:</strong>
+                                {hire.isPending ? (
+                                    <span className="text-yellow-500 ml-2 font-semibold">Pending</span>
+                                ) : (
+                                    <span className="text-green-600 ml-2 font-semibold">Accepted / Completed</span>
+                                )}
+                            </div>
+
+                            <div className="mt-2">
+                                <strong>Booking:</strong>
+                                {hire.isBooked ? (
+                                    <span className="text-red-600 ml-2 font-semibold">Blocked</span>
+                                ) : (
+                                    <span className="text-green-600 ml-2 font-semibold">Not Blocked</span>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+
         </div>
     );
 }
