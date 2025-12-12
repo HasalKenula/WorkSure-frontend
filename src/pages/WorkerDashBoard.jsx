@@ -263,7 +263,7 @@ export default function WorkerDashBoard() {
         }
     }
 
-const visibleWorkers = hire.filter(w => !w.isBooked);
+    const visibleWorkers = hire.filter(w => !w.isBooked);
     return (
         <div>
             <Navbar />
@@ -386,7 +386,7 @@ const visibleWorkers = hire.filter(w => !w.isBooked);
 
 
                                             </td>
-                                          
+
                                             <td class="border border-gray-300 px-6 py-3"><div className="flex items-center gap-3">
                                                 <button
                                                     onClick={() => handleToggleBlock(user.id)}
@@ -402,8 +402,8 @@ const visibleWorkers = hire.filter(w => !w.isBooked);
                                                     {user.isPending ? "Pending" : "Seen"}
                                                 </button>
 
-                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white">
-                                                    Cancel
+                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/workerView/${user.user.id}`)}>
+                                                    User Profile view
                                                 </button>
                                             </div></td>
 
@@ -485,7 +485,7 @@ const visibleWorkers = hire.filter(w => !w.isBooked);
 
 
                                             </td>
-                                          
+
                                             <td className="border border-gray-300 px-6 py-3">
                                                 {Boolean(user.isOngoing) ? (
                                                     <span className="text-yellow-600 font-semibold">Ongoing</span>
@@ -528,8 +528,8 @@ const visibleWorkers = hire.filter(w => !w.isBooked);
 
 
 
-                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white">
-                                                    Cancel
+                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/workerView/${user.user.id}`)}>
+                                                    User Profile view
                                                 </button>
                                             </div></td>
 
