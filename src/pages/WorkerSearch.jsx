@@ -89,6 +89,27 @@ export default function WorkersPage() {
     }
   }
 
+  //search by skill
+  const [selectedSkill,setSelectedSkill] = useState("");
+
+  async function handleSkillSearch(selectedSkill){
+    if(selectedSkill.trim()===""){
+      loadWorkerDetails();
+      return;
+    }
+
+    try{
+      const res = await axios.get(
+        `http://localhost:8081/worker/searchbyskill?keyword=${selectedSkill}`,
+        config
+      );
+      setWorkers(res.data);
+    }
+    catch(error){
+      toast.error("Search error!");
+    }
+  }
+
   return (
     <div>
       <Navbar />
@@ -133,6 +154,22 @@ export default function WorkersPage() {
             <option>Anuradhapura</option>
             <option>Trinco</option>
             <option>Kadawatha</option>
+          </select>
+
+          <select className="px-4 py-3 rounded-full border border-gray-300 text-sm bg-white cursor-pointer"
+            value={selectedSkill}
+            onChange={(e)=>{
+              setSelectedSkill(e.target.value);
+              handleSkillSearch(e.target.value);
+            }}
+
+          >
+            <option>Select Job Role</option>
+            <option >PLUMBER</option>
+            <option>ELECTRICIAN</option>
+            <option>CARPENTER</option>
+            <option>PAINTER</option>
+            <option>CLEANER</option>
           </select>
 
           <div className="flex justify-end w-full mt-5">
