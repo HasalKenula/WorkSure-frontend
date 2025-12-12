@@ -228,6 +228,22 @@ export default function AdminDashBoard() {
         }
     ];
 
+    function handleDownloadPDF(pdfUrl, fullName) {
+        if (!pdfUrl) {
+            toast.error("No PDF uploaded for this worker.");
+            return;
+        }
+
+        // Create a temporary link element
+        const link = document.createElement("a");
+        link.href = pdfUrl;
+        link.download = `${fullName}_document.pdf`; // File name for download
+        link.target = "_blank";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
 
     return (
         <div>
@@ -361,6 +377,12 @@ export default function AdminDashBoard() {
                                                     className={`px-3 py-1 rounded-lg border ${user.isBlocked ? "bg-green-500 text-white" : "bg-red-500 text-white"}hover:opacity-80`}
                                                 >
                                                     {user.isBlocked ? "Approve" : "Block"}
+                                                </button>
+                                                <button
+                                                    className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white"
+                                                    onClick={() => handleDownloadPDF(user.pdfUrl, user.fullName)}
+                                                >
+                                                    Download PDF
                                                 </button>
 
                                                 <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white">

@@ -15,6 +15,9 @@ export default function WorkerHire() {
     const [description, setDescription] = useState("");
     const [isBooked, setIsBooked] = useState(true);
     const [isPending, setIsPending] = useState(true);
+    const [isOngoing, setIsOngoing] = useState(false);
+    const [isComplete, setIsComplete] = useState(false);
+
 
     // Sample booked time slots for demo
     // const bookedSlots = [
@@ -94,7 +97,9 @@ export default function WorkerHire() {
                 bookingTime: selectedTime,
                 description: description,
                 isBooked: isBooked,
-                isPending: isPending
+                isPending: isPending,
+                isOngoing: isOngoing,
+                isComplete: isComplete,
             }, config
             );
             // setWorker(response.data);
@@ -164,6 +169,14 @@ export default function WorkerHire() {
     }, [hires, user]);
 
 
+    //  const bookedDates = Object.keys(hiresByDate);
+    const bookedDates = Array.from(
+        new Set(
+            hires
+                .filter(hire => hire.isBooked) // only booked hires
+                .map(hire => format(new Date(hire.bookingDate), "yyyy-MM-dd")) // normalize format
+        )
+    );
 
     return (
         <div>
@@ -176,7 +189,7 @@ export default function WorkerHire() {
                         <div className="flex flex-col md:flex-row md:items-center justify-between">
 
                             <div className="flex items-center gap-8">
-                                <div className="bg-gray-200 w-20 h-20 rounded-full flex justify-center items-center mx-auto overflow-hidden">
+                                <div className="bg-gray-200 w-20 h-20 lg:w-40 lg:h-40 rounded-full flex justify-center items-center mx-auto overflow-hidden">
                                     <img
                                         src={worker?.user?.imageUrl || MM}
                                         alt={worker?.fullName || "Worker Image"}
@@ -202,19 +215,58 @@ export default function WorkerHire() {
 
                         <h3 className="text-xl font-semibold mb-4">Reserve Your Time</h3>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start ">
 
                             {/* Calendar */}
-                            <div className="flex justify-center">
+                            <div className="flex justify-center  items-start md:justify-center w-full">
                                 <Calendar
                                     onChange={setSelectedDate}
                                     value={selectedDate}
-                                    className="rounded-lg shadow-sm p-2"
+                                    className="rounded-lg shadow-sm p-2 w-[320px]"
+                                    tileContent={({ date, view }) => {
+                                        // Only highlight dates in the month view
+                                        if (view !== "month") return null;
+
+                                        const formatted = format(date, "yyyy-MM-dd");
+                                        const isBooked = bookedDates.includes(formatted);
+
+                                        if (isBooked) {
+                                            return (
+                                                <div
+                                                    style={{
+                                                        backgroundColor: "#fecaca",
+                                                        borderRadius: "50%",
+                                                        width: "32px",
+                                                        height: "32px",
+                                                        display: "flex",
+                                                        justifyContent: "center",
+                                                        alignItems: "center",
+                                                        margin: "auto",
+                                                    }}
+                                                >
+                                                    {/* Don't render the date number here - it's already rendered by the calendar */}
+                                                </div>
+                                            );
+                                        }
+
+                                        return null;
+                                    }}
+                                    tileClassName={({ date, view }) => {
+                                        // Use tileClassName for styling instead of tileContent for content
+                                        if (view !== "month") return null;
+
+                                        const formatted = format(date, "yyyy-MM-dd");
+                                        const isBooked = bookedDates.includes(formatted);
+
+                                        return isBooked ? 'booked-date' : null;
+                                    }}
+
+
                                 />
                             </div>
 
                             {/* Time Slots */}
-                            {Object.keys(hiresByDate).length > 0 ? (
+                            {/* {Object.keys(hiresByDate).length > 0 ? (
                                 Object.entries(hiresByDate).map(([date, slots]) => (
                                     <div key={date} className="mb-4 p-2 border rounded-md">
                                         <h4 className="font-semibold mb-2">{format(new Date(date), "dd MMMM yyyy")}</h4>
@@ -231,14 +283,54 @@ export default function WorkerHire() {
                                 ))
                             ) : (
                                 <p className="text-gray-500">No bookings for this worker yet.</p>
-                            )}
+                            )} */}
+
+                            {/* Time Slots */}
+                            <div className="mt-6">
+                                {Object.keys(hiresByDate).length > 0 ? (
+                                    Object.entries(hiresByDate).map(([date, slots]) => (
+                                        <div
+                                            key={date}
+                                            className="mb-6 p-5 bg-white border rounded-2xl shadow-md hover:shadow-lg transition duration-300"
+                                        >
+                                            {/* Date Header */}
+                                            <h4 className="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">
+                                                {format(new Date(date), "dd MMMM yyyy")}
+                                            </h4>
+
+                                            {/* Slots */}
+                                            <div className="space-y-3">
+                                                {slots.map((slot, i) => (
+                                                    <div
+                                                        key={i}
+                                                        className="flex items-center justify-between p-3 bg-gray-50 border rounded-lg hover:bg-gray-100 transition"
+                                                    >
+                                                        {/* Time */}
+                                                        <div className="flex items-center gap-2 text-gray-800 font-medium">
+                                                            <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                                                            {slot}
+                                                        </div>
+
+                                                        {/* Status Badge */}
+                                                        <span className="px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-600">
+                                                            Booked
+                                                        </span>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="text-gray-500 text-center mt-4">No bookings for this worker yet.</p>
+                                )}
+                            </div>
 
 
                         </div>
                     </div>
 
                     {/* Job Request Form */}
-                    <div className="p-6 mb-10">
+                    <div className="p-6 mb-10 border border-slate-300 shadow-lg rounded-lg">
 
                         {/* Date */}
                         <div className="mb-4">
@@ -295,7 +387,7 @@ export default function WorkerHire() {
                     </div>
                 </div>
             </div>
-            {myHires.length > 0 && (
+            {/* {myHires.length > 0 && (
                 <div className="bg-white border p-6 rounded-lg shadow-md mt-6">
                     <h3 className="text-xl font-semibold mb-4">Your Requests</h3>
 
@@ -328,12 +420,104 @@ export default function WorkerHire() {
                                     <span className="text-green-600 ml-2 font-semibold">Not Blocked</span>
                                 )}
                             </div>
+
+                            <div className="mt-2">
+                                <strong>OnGoing:</strong>
+                                {hire.isOngoing ? (
+                                    <span className="text-red-600 ml-2 font-semibold">Yes</span>
+                                ) : (
+                                    <span className="text-green-600 ml-2 font-semibold">No</span>
+                                )}
+                            </div>
+
+                            <div className="mt-2">
+                                <strong>Complete:</strong>
+                                {hire.isComplete ? (
+                                    <span className="text-red-600 ml-2 font-semibold">Yes</span>
+                                ) : (
+                                    <span className="text-green-600 ml-2 font-semibold">No</span>
+                                )}
+                            </div>
                         </div>
                     ))}
                 </div>
-            )}
+            )} */}
 
+            <div>
+                {myHires.length > 0 && (
+                    <div className="bg-white p-6 rounded-xl shadow-lg mt-10">
+                        <h3 className="text-2xl font-bold mb-6 text-primary">Your Requests</h3>
 
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {myHires.map((hire, index) => (
+                                <div
+                                    key={index}
+                                    className="border border-slate-300 rounded-xl p-5 shadow-lg hover:shadow-md transition duration-300 bg-gray-50"
+                                >
+                                    {/* Header */}
+                                    <div className="flex justify-between items-center mb-3">
+                                        <h4 className="text-lg font-semibold text-gray-800">
+                                            Request #{index + 1}
+                                        </h4>
+
+                                        <span
+                                            className={`px-3 py-1 rounded-full text-sm font-semibold ${hire.isPending
+                                                ? "bg-yellow-100 text-yellow-700"
+                                                : "bg-green-100 text-green-700"
+                                                }`}
+                                        >
+                                            {hire.isPending ? "Pending" : "Accepted / Completed"}
+                                        </span>
+                                    </div>
+
+                                    {/* Details */}
+                                    <div className="text-sm text-gray-700 space-y-1">
+                                        <p><strong>Date:</strong> {hire.bookingDate}</p>
+                                        <p><strong>Time:</strong> {hire.bookingTime}</p>
+
+                                        <p className="mt-3">
+                                            <strong>Description:</strong>
+                                            <div className="mt-1 p-3 bg-white rounded-md shadow-inner border border-slate-300">
+                                                {hire.description}
+                                            </div>
+                                        </p>
+                                    </div>
+
+                                    {/* Status Badges */}
+                                    <div className="mt-4 flex flex-wrap gap-2">
+                                        <span
+                                            className={`px-3 py-1 rounded-full text-xs font-semibold ${hire.isBooked
+                                                ? "bg-red-100 text-red-700"
+                                                : "bg-green-100 text-green-700"
+                                                }`}
+                                        >
+                                            {hire.isBooked ? "Booked / Blocked" : "Available"}
+                                        </span>
+
+                                        <span
+                                            className={`px-3 py-1 rounded-full text-xs font-semibold ${hire.isOngoing
+                                                ? "bg-blue-100 text-blue-700"
+                                                : "bg-gray-200 text-gray-600"
+                                                }`}
+                                        >
+                                            {hire.isOngoing ? "Ongoing" : "Not Ongoing"}
+                                        </span>
+
+                                        <span
+                                            className={`px-3 py-1 rounded-full text-xs font-semibold ${hire.isComplete
+                                                ? "bg-purple-100 text-purple-700"
+                                                : "bg-gray-200 text-gray-600"
+                                                }`}
+                                        >
+                                            {hire.isComplete ? "Completed" : "Incomplete"}
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+            </div>
         </div>
     );
 }

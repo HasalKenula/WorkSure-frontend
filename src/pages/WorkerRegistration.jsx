@@ -3,6 +3,8 @@ import Navbar from "../components/NavBar";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
+import uploadFile from "../utils/meadiaUpload";
+
 export default function WorkerRegistration() {
     const { jwtToken, isAuthenticated } = useAuth();
 
@@ -61,16 +63,16 @@ export default function WorkerRegistration() {
         fileInputRef.current.click(); // Open the hidden input
     };
 
-    const handleFileChange = (e) => {
-        const files = Array.from(e.target.files);
-        setUploadedFiles((prev) => [...prev, ...files]);
-    };
+    // const handleFileChange = (e) => {
+    //     const files = Array.from(e.target.files);
+    //     setUploadedFiles((prev) => [...prev, ...files]);
+    // };
 
-    const handleDrop = (e) => {
-        e.preventDefault();
-        const files = Array.from(e.dataTransfer.files);
-        setUploadedFiles((prev) => [...prev, ...files]);
-    };
+    // const handleDrop = (e) => {
+    //     e.preventDefault();
+    //     const files = Array.from(e.dataTransfer.files);
+    //     setUploadedFiles((prev) => [...prev, ...files]);
+    // };
 
     const handleDragOver = (e) => {
         e.preventDefault();
@@ -108,6 +110,10 @@ export default function WorkerRegistration() {
     const [endTime, setEndTime] = useState("");
     const [location, setLocation] = useState("");
     const [isBlocked, setIsBlocked] = useState(true);
+    //  ADD IMAGE STATE
+    const [pdf, setPdf] = useState(null);
+    const [fileError, setFileError] = useState("");
+
 
     function handleFullname(event) {
         setFullname(event.target.value);
@@ -173,11 +179,58 @@ export default function WorkerRegistration() {
             .catch(() => setLoading(false));
     }, [jwtToken]);
 
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        setUploadedFiles([file]); // show file
+        setPdf(file); // IMPORTANT: save file as PDF
+    };
+
+    const handleDrop = (e) => {
+        e.preventDefault();
+        const file = e.dataTransfer.files[0];
+        if (!file) return;
+
+        setUploadedFiles([file]);
+        setPdf(file); // IMPORTANT
+    };
+
+
 
     async function handleSubmit() {
         if (!jwtToken) {
-            alert("You must log in first.");
+            toast.error("You must log in first.");
             return;
+        }
+
+
+        if (!pdf) {
+            toast.error("Please upload your documents before submitting.");
+            return;
+        }
+
+        if (!job) {
+            toast.error("Please select a job role before submitting.");
+            return;
+        }
+
+        if (!fullname || !email || !contact || !NIC || !address || !location) {
+            toast.error("Please fill all required fields before submitting.");
+            return;
+        }
+
+
+        // UPLOAD IMAGE TO SUPABASE
+        let pdfUrl = "";
+        if (pdf) {
+            try {
+                pdfUrl = await uploadFile(pdf); // Upload to Supabase storage
+            } catch (err) {
+                setError("Pdf upload failed");
+                toast.error("PDF upload failed. Please try again.");
+                return;
+            }
         }
 
 
@@ -192,7 +245,7 @@ export default function WorkerRegistration() {
                 preferredStartTime: startTime,
                 preferredEndTime: endTime,
                 preferredServiceLocation: location,
-                isBlocked:isBlocked,
+                isBlocked: isBlocked,
                 mon: days.includes("Mon"),
                 tue: days.includes("Tue"),
                 wed: days.includes("Wed"),
@@ -200,7 +253,7 @@ export default function WorkerRegistration() {
                 fri: days.includes("Fri"),
                 sat: days.includes("Sat"),
                 sun: days.includes("Sun"),
-
+                pdfUrl: pdfUrl,
                 userId: userId,  // Add user ID
 
                 certificates: certifications.map(c => ({
@@ -214,7 +267,7 @@ export default function WorkerRegistration() {
                     years: Number(e.years)
                 }))
             }, config)
-           toast.success("Registration is successfull!");
+            toast.success("Registration is successfull!");
 
             setFullname("");
             setEmail("");
@@ -232,7 +285,7 @@ export default function WorkerRegistration() {
 
         } catch (error) {
             console.log(error)
-           toast.error("Registration is faild!");
+            toast.error("Registration is faild!");
         }
     }
 
@@ -383,7 +436,7 @@ export default function WorkerRegistration() {
                     </section>
 
                     {/* Documents Upload */}
-                    <section className=" p-5 rounded shadow-sm">
+                    {/* <section className=" p-5 rounded shadow-sm">
                         <h3 className="text-lg font-semibold mb-4">Documentation</h3>
                         <div className="border border-dashed border-gray-300 rounded p-6 text-center text-sm "
                             onDrop={handleDrop}
@@ -393,10 +446,10 @@ export default function WorkerRegistration() {
                             <button type="button" onClick={handleBrowseClick} className="mt-3 px-4 py-2 bg-gray-300 text-white rounded text-sm hover:bg-gray-400">
                                 Browse Files
                             </button>
-                            <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileChange} />
+                            <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileChange} /> */}
 
-                            {/* uploaded files display */}
-                            {uploadedFiles.length > 0 && (
+                    {/* uploaded files display */}
+                    {/* {uploadedFiles.length > 0 && (
                                 <div className="mt-4 text-left space-y-2">
                                     {uploadedFiles.map((file, index) => (
                                         <div key={index} className="flex justify-between items-center bg-gray-100 p-2 rounded-md">
@@ -413,15 +466,70 @@ export default function WorkerRegistration() {
                                     ))}
                                 </div>
                             )}
-                        </div>
+                        </div> */}
 
-                        {/* File Count */}
-                        <p className="text-sm text-gray-600 mt-2">
+                    {/* File Count */}
+                    {/* <p className="text-sm text-gray-600 mt-2">
                             {uploadedFiles.length === 0
                                 ? "No files uploaded yet."
                                 : `${uploadedFiles.length} file(s) uploaded`}
                         </p>
+                    </section> */}
+
+
+                    {/* Documents Upload */}
+                    <section className=" p-5 rounded shadow-sm">
+                        <h3 className="text-lg font-semibold mb-4">Documentation</h3>
+
+                        <div
+                            className="border border-dashed border-gray-300 rounded p-6 text-center text-sm"
+                            onDrop={handleDrop}
+                            onDragOver={handleDragOver}
+                            onClick={handleBrowseClick}
+                        >
+                            <p>Please upload your NIC copy, Gramaniladari Certificate, Police Report and other necessary documents.</p>
+                            <p>Drag & drop your documents here, or click to upload.</p>
+
+                            <input
+                                type="file"
+                                ref={fileInputRef}
+                                className="hidden"
+                                onChange={handleFileChange}
+                                accept="application/pdf,image/*"
+                            />
+
+                            {uploadedFiles.length > 0 && (
+                                <div className="mt-4 text-left space-y-2">
+                                    <div className="flex justify-between items-center bg-gray-100 p-2 rounded-md">
+                                        <span className="text-sm text-gray-500 truncate">
+                                            {uploadedFiles[0].name}
+                                        </span>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setUploadedFiles([]);
+                                                setPdf(null);
+                                            }}
+                                            className="text-red-500 text-sm hover:underline"
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <p className="text-sm text-gray-600 mt-2">
+                            {uploadedFiles.length === 0
+                                ? "No files uploaded yet."
+                                : "1 file uploaded"}
+                        </p>
+
+                        {fileError && (
+                            <p className="text-sm text-red-500 mt-1">{fileError}</p>
+                        )}
                     </section>
+
 
                     {/* Register Button */}
                     <button type="button" onClick={handleSubmit} className="w-full bg-primary text-white rounded py-1 text-md font-semibold hover:outline-2 hover:outline-offset-1 hover:outline-primary">

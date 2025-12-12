@@ -211,7 +211,7 @@ export default function WorkerDashBoard() {
     }
 
 
-     async function handleTogglePending(hireId) {
+    async function handleTogglePending(hireId) {
         try {
             await axios.put(`http://localhost:8081/hire/toggle-pending/${hireId}`, {}, config);
 
@@ -228,8 +228,42 @@ export default function WorkerDashBoard() {
         }
     }
 
+    async function handleToggleOngoing(hireId) {
+        try {
+            await axios.put(`http://localhost:8081/hire/toggle-ongoging/${hireId}`, {}, config);
+
+            setHire(prev =>
+                prev.map(hire =>
+                    hire.id === hireId ? { ...hire, isOngoing: !hire.isOngoing } : hire
+                )
+            );
+            getHires();
+
+            toast.success("Hire status updated successfully");
+        } catch (error) {
+            toast.error("Failed to update hire status");
+        }
+    }
 
 
+    async function handleToggleComplete(hireId) {
+        try {
+            await axios.put(`http://localhost:8081/hire/toggle-complete/${hireId}`, {}, config);
+
+            setHire(prev =>
+                prev.map(hire =>
+                    hire.id === hireId ? { ...hire, isComplete: !hire.isComplete } : hire
+                )
+            );
+            getHires();
+
+            toast.success("Hire status updated successfully");
+        } catch (error) {
+            toast.error("Failed to update hire status");
+        }
+    }
+
+const visibleWorkers = hire.filter(w => !w.isBooked);
     return (
         <div>
             <Navbar />
@@ -237,7 +271,7 @@ export default function WorkerDashBoard() {
                 <div className="w-full mx-auto flex flex-col  text-slate-400 lg:flex-row items-center justify-center gap-6 p-6">
                     <div className="flex-1 flex flex-col items-center justify-center gap-6 ">
                         <div className="w-[75%] flex-1 flex items-center shadow-xl gap-6 border border-slate-200 py-4 px-8  justify-between">
-                            <IoCloudDoneOutline    color="#f59e0b" size={40} />
+                            <IoCloudDoneOutline color="#f59e0b" size={40} />
                             <div className="text-xl font-bold text-slate-500">
                                 <h1>Number of completed works</h1>
                             </div>
@@ -246,7 +280,7 @@ export default function WorkerDashBoard() {
                             </div>
                         </div>
                         <div className="w-[75%] flex-1 flex items-center gap-6  shadow-xl border border-slate-200 border py-4 px-8  justify-between">
-                            <FiPhoneOutgoing  color="#f59e0b" size={40} />
+                            <FiPhoneOutgoing color="#f59e0b" size={40} />
                             <div className="text-xl font-bold text-slate-500">
                                 <h1>Number of On Going works</h1>
                             </div>
@@ -255,7 +289,7 @@ export default function WorkerDashBoard() {
                             </div>
                         </div>
                         <div className="w-[75%] flex-1 flex items-center gap-6 shadow-xl border border-slate-200 border py-4 px-8  justify-between">
-                            <MdOutlinePendingActions color="#f59e0b" size={40}/>
+                            <MdOutlinePendingActions color="#f59e0b" size={40} />
                             <div className="text-xl font-bold text-slate-500">
                                 <h1>Number of Pending Request</h1>
                             </div>
@@ -267,9 +301,9 @@ export default function WorkerDashBoard() {
                     <div className="flex-1 flex flex-col items-center justify-center gap-18 ">
                         <div className="w-[75%] flex-1 flex-col  shadow-xl items-center justify-center gap-6  border  border-slate-200  py-4 px-8">
                             <div className="flex items-center justify-center ">
-                                 <GiTakeMyMoney color="#f59e0b" size={80}/>
+                                <GiTakeMyMoney color="#f59e0b" size={80} />
                             </div>
-                           
+
                             <div className="flex items-center justify-center  text-4xl font-bold pb-4">
                                 <h1 className="text-slate-500">Total Earning</h1>
                             </div>
@@ -279,7 +313,7 @@ export default function WorkerDashBoard() {
                         </div>
                         <div className="w-[75%] flex-1 flex-col  shadow-xl items-center justify-center gap-6  border  border-slate-200 py-4 px-8">
                             <div className="flex items-center justify-center ">
-                                 <MdOutlineGeneratingTokens  color="#f59e0b" size={80}/>
+                                <MdOutlineGeneratingTokens color="#f59e0b" size={80} />
                             </div>
                             <div className="flex items-center justify-center text-4xl font-bold pb-4">
                                 <h1 className="text-slate-500">Rating</h1>
@@ -320,7 +354,7 @@ export default function WorkerDashBoard() {
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Time</th>
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Description</th>
                                     <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Status</th>
-                                     <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Pending</th>
+                                    <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Pending</th>
                                     <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Action</th>
                                 </tr>
                             </thead>
@@ -343,7 +377,7 @@ export default function WorkerDashBoard() {
 
 
                                             </td>
-                                             <td className="border border-gray-300 px-6 py-3">
+                                            <td className="border border-gray-300 px-6 py-3">
                                                 {Boolean(user.isPending) ? (
                                                     <span className="text-yellow-600 font-semibold">Pending</span>
                                                 ) : (
@@ -352,6 +386,7 @@ export default function WorkerDashBoard() {
 
 
                                             </td>
+                                          
                                             <td class="border border-gray-300 px-6 py-3"><div className="flex items-center gap-3">
                                                 <button
                                                     onClick={() => handleToggleBlock(user.id)}
@@ -366,8 +401,6 @@ export default function WorkerDashBoard() {
                                                 >
                                                     {user.isPending ? "Pending" : "Seen"}
                                                 </button>
-
-
 
                                                 <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white">
                                                     Cancel
@@ -427,24 +460,77 @@ export default function WorkerDashBoard() {
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Date</th>
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Time</th>
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Description</th>
+                                    <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Status</th>
+                                    <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Ongoing</th>
+                                    <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Complete</th>
                                     <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Action</th>
                                 </tr>
                             </thead>
 
                             <tbody>
-                                {users.map((user) => {
+                                {visibleWorkers.map((user) => {
                                     return (
                                         <tr class="hover:bg-gray-50">
-                                            <td class="border  border-gray-300 px-6 py-3">{user.Id}</td>
-                                            <td class="border  border-gray-300 px-6 py-3">{user.Client}</td>
-                                            <td class="border border-gray-300 px-6 py-3">{user.Date}</td>
-                                            <td class="border border-gray-300 px-6 py-3">{user.Time}</td>
-                                            <td class="border  border-gray-300 px-6 py-3">{user.Description}</td>
+                                            <td class="border  border-gray-300 px-6 py-3">{user.id}</td>
+                                            <td class="border  border-gray-300 px-6 py-3">{user.user.name}</td>
+                                            <td class="border border-gray-300 px-6 py-3">{user.bookingDate}</td>
+                                            <td class="border border-gray-300 px-6 py-3">{user.bookingTime}</td>
+                                            <td class="border  border-gray-300 px-6 py-3">{user.description}</td>
+                                            <td className="border border-gray-300 px-6 py-3">
+                                                {Boolean(user.isBooked) ? (
+                                                    <span className="text-red-600 font-semibold">Blocked</span>
+                                                ) : (
+                                                    <span className="text-green-600 font-semibold">Active</span>
+                                                )}
+
+
+                                            </td>
+                                          
+                                            <td className="border border-gray-300 px-6 py-3">
+                                                {Boolean(user.isOngoing) ? (
+                                                    <span className="text-yellow-600 font-semibold">Ongoing</span>
+                                                ) : (
+                                                    <span className="text-blue-600 font-semibold">False</span>
+                                                )}
+
+
+                                            </td>
+                                            <td className="border border-gray-300 px-6 py-3">
+                                                {Boolean(user.isComplete) ? (
+                                                    <span className="text-yellow-600 font-semibold">Complete</span>
+                                                ) : (
+                                                    <span className="text-blue-600 font-semibold">False</span>
+                                                )}
+
+
+                                            </td>
                                             <td class="border border-gray-300 px-6 py-3"><div className="flex items-center gap-3">
-                                                <button className="px-3 py-1 bg-primary text-white rounded-lg border hover:bg-white hover:text-primary">
-                                                    Completed Work
+                                                <button
+                                                    onClick={() => handleToggleBlock(user.id)}
+                                                    className={`px-3 py-1 rounded-lg border ${user.isBooked ? "bg-green-500 text-white" : "bg-red-500 text-white"}hover:opacity-80`}
+                                                >
+                                                    {user.isBooked ? "Approve" : "Block"}
                                                 </button>
 
+                                                <button
+                                                    onClick={() => handleToggleOngoing(user.id)}
+                                                    className={`px-3 py-1 rounded-lg border ${user.isOngoing ? "bg-yellow-500 text-white" : "bg-blue-500 text-white"}hover:opacity-80`}
+                                                >
+                                                    {user.isOngoing ? "Ongoing" : "False"}
+                                                </button>
+
+                                                <button
+                                                    onClick={() => handleToggleComplete(user.id)}
+                                                    className={`px-3 py-1 rounded-lg border ${user.isComplete ? "bg-yellow-500 text-white" : "bg-blue-500 text-white"}hover:opacity-80`}
+                                                >
+                                                    {user.isComplete ? "Complete" : "False"}
+                                                </button>
+
+
+
+                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white">
+                                                    Cancel
+                                                </button>
                                             </div></td>
 
                                         </tr>
