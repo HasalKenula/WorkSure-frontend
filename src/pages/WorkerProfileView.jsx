@@ -212,7 +212,7 @@ export default function WorkerProfileView() {
                                             <span className="text-gray-600 ml-1"> (75 Reviews)</span>
                                         </p>
                                     </div>
-                                    <button onClick={goToHirePage} className="px-6 py-3 text-lg font-semibold bg-primary text-white rounded shadow-md hover:bg-accent hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/3">Hire Now</button>
+                                    <button onClick={goToHirePage} className="px-6 py-3 text-lg font-semibold bg-primary text-white rounded shadow-md hover:bg-accent hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/3">Worker DashBoard</button>
 
                                 </div>
                             </div>

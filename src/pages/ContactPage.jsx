@@ -4,8 +4,10 @@ import { IoLocationOutline } from "react-icons/io5";
 import { MdOutlineLocalPostOffice } from "react-icons/md";
 import { useAuth } from "../context/AuthContext";
 import { useEffect, useState } from "react";
+import Contact from "../assets/contact.jpg"
 import axios from "axios";
 import toast from "react-hot-toast";
+import Footer from "../components/Footer";
 
 export default function ContactPage() {
   const { isAuthenticated, jwtToken } = useAuth();
@@ -104,25 +106,27 @@ export default function ContactPage() {
     <>
       <Navbar />
 
-      <div className="mt-20 flex flex-col min-h-screen font-outfit px-4 md:px-10">
+      <div className="mt-20 flex flex-col min-h-screen font-outfit px-4 md:px-10 mb-12">
+        <div className="w-full relative flex flex-col gap-4 items-center justify-center h-[200px] bg-no-repeat bg-cover bg-center" style={{ backgroundImage: `url(${Contact})` }}>
+          <div className="absolute inset-0 bg-black/40"></div>
+          {/* Title */}
+          <div className="relative flex justify-center items-center">
+            <h1 className="text-5xl font-bold text-primary text-white">Contact</h1>
+          </div>
 
-        {/* Title */}
-        <div className="flex justify-center items-center">
-          <h1 className="text-4xl font-bold text-primary">Contact</h1>
-        </div>
-
-        {/* Subtitle */}
-        <div className="mt-2 flex justify-center items-center text-center">
-          <p className="font-sans text-lg max-w-2xl">
-            We'd love to hear from you! Whether you have a question, feedback, or need support, our team is ready to help.
-          </p>
+          {/* Subtitle */}
+          <div className="relative mt-2 flex justify-center items-center text-center">
+            <p className="font-sans text-lg max-w-2xl text-white">
+              We'd love to hear from you! Whether you have a question, feedback, or need support, our team is ready to help.
+            </p>
+          </div>
         </div>
 
         {/*  2-Column Box */}
         <div className="mt-10 flex flex-col lg:flex-row gap-8">
 
           {/* Left Box */}
-          <div className="shadow-2xl w-full lg:w-1/2 rounded-2xl bg-white/10 backdrop-blur-xl p-6">
+          <div className="shadow-2xl w-full lg:w-1/2 rounded-2xl bg-white/10 backdrop-blur-xl p-6 border border-slate-300 rounded-xl">
             <h2 className="text-2xl font-semibold text-center">Send Us a Message</h2>
             <p className="text-center mt-1 text-sm">
               Fill out the form below and we'll get back to you as soon as possible.
@@ -181,7 +185,7 @@ export default function ContactPage() {
           </div>
 
           {/* Right Box */}
-          <div className="shadow-2xl w-full lg:w-1/2 rounded-2xl bg-white/10 backdrop-blur-xl p-6">
+          <div className="shadow-2xl w-full lg:w-1/2 rounded-2xl bg-white/10 backdrop-blur-xl p-6  border border-slate-300 rounded-xl">
             <h2 className="text-2xl font-semibold text-center">Get in Touch Directly</h2>
             <p className="text-center mt-1 italic text-sm">
               Prefer a direct approach? Here's how you can reach us.
@@ -207,6 +211,7 @@ export default function ContactPage() {
           </div>
         </div>
       </div>
+      <Footer/>
     </>
   );
 }

@@ -1,8 +1,11 @@
 import React from "react";
+import { CiLocationOn } from "react-icons/ci";
 import { FaFacebook } from "react-icons/fa";
 import { FaTwitter } from "react-icons/fa";
 import { FaWhatsapp } from "react-icons/fa";
 import { FaYoutube } from "react-icons/fa";
+import { GiSpanner } from "react-icons/gi";
+import { MdOutlineEmail, MdOutlinePhone } from "react-icons/md";
 
 const Footer = () => {
   return (
@@ -15,8 +18,8 @@ const Footer = () => {
           {/* WorkSure Section */}
           <div className="bg-[#F4A31D] p-6 rounded-md shadow-md">
             <h2 className="text-4xl font-black mb-4 text-center ">WorkSure</h2>
-            <p className="text-1xl  text-black leading-relaxed ">
-              🔧 Thanks for visiting WorkSure! Your projects deserve the best developers and we deliver. Let’s build something amazing! ✨
+            <p className="text-1xl  text-black leading-relaxed flex flex-col flex-wrap items-center ">
+             <GiSpanner color="#ffffff" size={64}  /> Thanks for visiting WorkSure! Your projects deserve the best developers and we deliver. Let's build something amazing!
             </p>
           </div>
 
@@ -28,9 +31,9 @@ const Footer = () => {
             </h3>
 
             <ul className="space-y-3 text-gray-300 text-1xl mb-5">
-              <li>📍 Banco Ceylon pvt Ltd, 966 4-F <br /> Palawaththa, Battaramulla, Sri Lanka</li>
-              <li>📞 +94 77-7444866</li>
-              <li>✉️ bancojobs@gmail.com</li>
+              <li className="flex items-center justify-start gap-4"><CiLocationOn color="#f59e0b" size={24}  strokeWidth={2} /> Banco Ceylon pvt Ltd, 966 4-F <br /> Palawaththa, Battaramulla, Sri Lanka</li>
+              <li className="flex items-center justify-start gap-4"><MdOutlinePhone color="#f59e0b" size={24} /> +94 77-7444866</li>
+              <li className="flex items-center justify-start gap-4"><MdOutlineEmail  color="#f59e0b" size={24} />  bancojobs@gmail.com</li>
             </ul>
 
 
@@ -90,11 +93,11 @@ const Footer = () => {
             </h3>
 
             <ul className="space-y-3 text-gray-300 text-1xl">
-              <li><a className="hover:text-yellow-400" href="#">Food & Restaurant</a></li>
-              <li><a className="hover:text-yellow-400" href="#">Spa & Fitness</a></li>
-              <li><a className="hover:text-yellow-400" href="#">Sports & Gaming</a></li>
-              <li><a className="hover:text-yellow-400" href="#">Event & Party</a></li>
-              <li><a className="hover:text-yellow-400" href="#">GYM & Yoga</a></li>
+              <li><a className="hover:text-yellow-400" href="#">Electrician</a></li>
+              <li><a className="hover:text-yellow-400" href="#">Plumbers</a></li>
+              <li><a className="hover:text-yellow-400" href="#">Capenters</a></li>
+              <li><a className="hover:text-yellow-400" href="#">Painters</a></li>
+              <li><a className="hover:text-yellow-400" href="#">Masons</a></li>
             </ul>
           </div>
 
@@ -112,7 +115,7 @@ const Footer = () => {
 
         {/* COPYRIGHT */}
         <div className="border-t border-white/10 mt-4 pt-4 text-center text-gray-400 text-1xl">
-          © <span className="text-white font-semibold">GOLK</span>, All Right Reserved. Designed By <span className="text-yellow-400">Group</span>
+          © <span className="text-white font-semibold">WorkSure</span>, All Right Reserved. Designed By <span className="text-yellow-400">Group</span>
         </div>
       </div>
     </footer>

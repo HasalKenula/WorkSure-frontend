@@ -6,6 +6,7 @@ import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import MM from "../assets/man.jpg";
+import { CiLocationOn } from "react-icons/ci";
 
 // const workers = Array(18).fill({
 //   name: "Eve Adams",
@@ -47,7 +48,7 @@ export default function WorkersPage() {
   return (
     <div>
       <Navbar />
-      <div className="bg-[#fffdef] min-h-screen p-5 mt-10 pt-20">
+      <div className="bg-white min-h-screen p-5 mt-10 pt-20">
 
         {/* Filters Section */}
         <div className="flex flex-wrap justify-center items-center gap-4 mb-15 w-[95%]">
@@ -94,7 +95,7 @@ export default function WorkersPage() {
            // {
               // workers.map((worker, index) => (
                 <div
-                  className="bg-white p-5 rounded-xl text-center shadow-md relative"
+                  className="bg-white p-5 rounded-xl text-center shadow-md relative  border border-slate-300"
                   key={index}
                 >
                   <div className="absolute top-2 right-4 text-green-600 font-semibold text-sm">
@@ -111,10 +112,10 @@ export default function WorkersPage() {
                   <p className="text-yellow-600 font-semibold my-1">{worker.jobRole}</p>
 
                   <div className="text-sm my-2">⭐⭐⭐⭐⭐ {worker.rating}</div>
-                  <div className="text-sm mb-3">📍 {worker.preferredServiceLocation}</div>
+                  <div className="flex items-center justify-center text-sm mb-3"> <CiLocationOn color="#f59e0b" size={24}  strokeWidth={2} />{worker.preferredServiceLocation}</div>
 
                   <button
-                    className="w-full py-2 mb-2 bg-yellow-400 text-white rounded-md hover:bg-blue-700"
+                    className="w-full py-2 mb-2 bg-yellow-400 text-white rounded-md hover:bg-slate-400"
                     onClick={() => navigate(`/workerCard/${worker.id}`)}
                   >
                     View Profile
