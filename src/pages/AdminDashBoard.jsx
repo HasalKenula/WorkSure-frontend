@@ -9,8 +9,10 @@ import toast from "react-hot-toast";
 import CountUp from "react-countup";
 import { SlUserFollow } from "react-icons/sl";
 import { LiaUserSecretSolid } from "react-icons/lia";
+import { useNavigate } from "react-router-dom";
 export default function AdminDashBoard() {
     const { isAuthenticated, jwtToken } = useAuth();
+     const navigate = useNavigate();
     const roles = [
         {
             job: "plumber",
@@ -384,11 +386,8 @@ export default function AdminDashBoard() {
                                                 >
                                                     Download PDF
                                                 </button>
-
-                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white">
-                                                    Reject
-                                                </button>
-                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white">
+                                             
+                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/workerRegistrationDetails/${user.id}`)}>
                                                     Review Details
                                                 </button>
                                             </div></td>

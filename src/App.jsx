@@ -59,7 +59,7 @@ function App() {
             <Route path='/category' element={<Category />} />
             <Route path="/product" element={<Product />} />
             <Route path="/adminDashBoard" element={<AdminDashBoard />} />
-            <Route path="/workerRegistrationDetails" element={<WorkerRegistrationDetails />} />
+            <Route path="/workerRegistrationDetails/:workerId" element={<WorkerRegistrationDetails />} />
             <Route path="/workerProfileUpdate" element={<WorkerProfileUpdate />} />
             <Route path='/workerView' element={<WorkerView />} />
             <Route path='/workerCard/:workerId' element={<WorkerProfileCard />} />
