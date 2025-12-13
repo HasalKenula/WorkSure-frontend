@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import MM from "../assets/man.jpg";
 import { CiLocationOn } from "react-icons/ci";
 
+
 // const workers = Array(18).fill({
 //   name: "Eve Adams",
 //   skill: "Carpenter",
@@ -71,37 +72,65 @@ export default function WorkersPage() {
   //search by location
   const [selectedLocation, setSelectedLocation] = useState("");
 
-  async function handleLocationSearch(selectedLocation){
-    if(selectedLocation.trim()===""){
-      loadWorkerDetails();
-      return;
-    }
+  // async function handleLocationSearch(selectedLocation){
+  //   if(selectedLocation.trim()===""){
+  //     loadWorkerDetails();
+  //     return;
+  //   }
 
-    try{
-      const res = await axios.get(
-        `http://localhost:8081/worker/searchbyloc?keyword=${selectedLocation}`,
-        config
-      );
-      setWorkers(res.data);
-    }
-    catch(error){
-      toast.error("Search error!");
-    }
-  }
+  //   try{
+  //     const res = await axios.get(
+  //       `http://localhost:8081/worker/searchbyloc?keyword=${selectedLocation}`,
+  //       config
+  //     );
+  //     setWorkers(res.data);
+  //   }
+  //   catch(error){
+  //     toast.error("Search error!");
+  //   }
+  // }
 
   //search by skill
-  const [selectedSkill,setSelectedSkill] = useState("");
+   const [selectedSkill,setSelectedSkill] = useState("");
 
-  async function handleSkillSearch(selectedSkill){
-    if(selectedSkill.trim()===""){
+  // async function handleSkillSearch(selectedSkill){
+  //   if(selectedSkill.trim()===""){
+  //     loadWorkerDetails();
+  //     return;
+  //   }
+
+  //   try{
+  //     const res = await axios.get(
+  //       `http://localhost:8081/worker/searchbyskill?keyword=${selectedSkill}`,
+  //       config
+  //     );
+  //     setWorkers(res.data);
+  //   }
+  //   catch(error){
+  //     toast.error("Search error!");
+  //   }
+  // }
+
+
+  //serach by location and skill
+  async function handleSkillLocFilter(selectedLocation,selectedSkill){
+    if(!selectedSkill && !selectedLocation){
       loadWorkerDetails();
       return;
     }
 
     try{
       const res = await axios.get(
-        `http://localhost:8081/worker/searchbyskill?keyword=${selectedSkill}`,
-        config
+        "http://localhost:8081/worker/searchbylocandskill",
+        {
+          params: {
+            location: selectedLocation || null,
+            jobRole: selectedSkill || null
+          },
+          headers: {
+            Authorization: `Bearer ${jwtToken}`
+          }
+        }
       );
       setWorkers(res.data);
     }
@@ -138,11 +167,11 @@ export default function WorkersPage() {
             value={selectedLocation}
             onChange={(e)=>{
               setSelectedLocation(e.target.value);
-              handleLocationSearch(e.target.value);
+              handleSkillLocFilter(e.target.value, selectedSkill);
             }}
 
           >
-            <option>Location</option>
+            <option value="">Location</option>
             <option >Colombo</option>
             <option>Gampaha</option>
             <option>Kandy</option>
@@ -160,11 +189,11 @@ export default function WorkersPage() {
             value={selectedSkill}
             onChange={(e)=>{
               setSelectedSkill(e.target.value);
-              handleSkillSearch(e.target.value);
+              handleSkillLocFilter(selectedLocation,e.target.value);
             }}
 
           >
-            <option>Select Job Role</option>
+            <option value="">Select Job Role</option>
             <option >PLUMBER</option>
             <option>ELECTRICIAN</option>
             <option>CARPENTER</option>
