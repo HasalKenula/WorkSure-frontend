@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import MM from "../assets/man.jpg";
 import { CiLocationOn } from "react-icons/ci";
 
+
 // const workers = Array(18).fill({
 //   name: "Eve Adams",
 //   skill: "Carpenter",
@@ -18,6 +19,7 @@ import { CiLocationOn } from "react-icons/ci";
 
 export default function WorkersPage() {
   const navigate = useNavigate();
+
   const { isAuthenticated, jwtToken } = useAuth();
 
 
@@ -26,7 +28,9 @@ export default function WorkersPage() {
       Authorization: `Bearer ${jwtToken}`
     }
   }
+
   const [workers, setWorkers] = useState([]);
+
   async function loadWorkerDetails() {
     try {
       const workers = await axios.get("http://localhost:8081/worker", config);
@@ -45,6 +49,96 @@ export default function WorkersPage() {
   }, [isAuthenticated])
   const visibleWorkers = workers.filter(w => !w.isBlocked);
 
+  //search by name
+  const [searchText, setSearchText] = useState("");
+
+  async function handleNameSearch(){
+    if (searchText.trim() === "") {
+      loadWorkerDetails(); // reset list
+      return;
+    }
+
+    try {
+      const res = await axios.get(
+      `http://localhost:8081/worker/searchbyname?keyword=${searchText}`,
+      config
+      );
+      setWorkers(res.data);
+    } catch (error) {
+      toast.error("Search error!");
+    }
+  }
+
+  //search by location
+  const [selectedLocation, setSelectedLocation] = useState("");
+
+  // async function handleLocationSearch(selectedLocation){
+  //   if(selectedLocation.trim()===""){
+  //     loadWorkerDetails();
+  //     return;
+  //   }
+
+  //   try{
+  //     const res = await axios.get(
+  //       `http://localhost:8081/worker/searchbyloc?keyword=${selectedLocation}`,
+  //       config
+  //     );
+  //     setWorkers(res.data);
+  //   }
+  //   catch(error){
+  //     toast.error("Search error!");
+  //   }
+  // }
+
+  //search by skill
+   const [selectedSkill,setSelectedSkill] = useState("");
+
+  // async function handleSkillSearch(selectedSkill){
+  //   if(selectedSkill.trim()===""){
+  //     loadWorkerDetails();
+  //     return;
+  //   }
+
+  //   try{
+  //     const res = await axios.get(
+  //       `http://localhost:8081/worker/searchbyskill?keyword=${selectedSkill}`,
+  //       config
+  //     );
+  //     setWorkers(res.data);
+  //   }
+  //   catch(error){
+  //     toast.error("Search error!");
+  //   }
+  // }
+
+
+  //serach by location and skill
+  async function handleSkillLocFilter(selectedLocation,selectedSkill){
+    if(!selectedSkill && !selectedLocation){
+      loadWorkerDetails();
+      return;
+    }
+
+    try{
+      const res = await axios.get(
+        "http://localhost:8081/worker/searchbylocandskill",
+        {
+          params: {
+            location: selectedLocation || null,
+            jobRole: selectedSkill || null
+          },
+          headers: {
+            Authorization: `Bearer ${jwtToken}`
+          }
+        }
+      );
+      setWorkers(res.data);
+    }
+    catch(error){
+      toast.error("Search error!");
+    }
+  }
+
   return (
     <div>
       <Navbar />
@@ -58,6 +152,9 @@ export default function WorkersPage() {
             type="text"
             placeholder="Search workers by skill, name, location"
             className="flex-1 min-w-[200px] px-4 py-3 rounded-full border border-gray-300 text-sm outline-none"
+            value={searchText}
+            onChange={(e) => setSearchText(e.target.value)}
+            onKeyUp={()=>handleNameSearch()}
           />
 
           <select className="px-4 py-3 rounded-full border border-gray-300 text-sm bg-white cursor-pointer">
@@ -66,9 +163,16 @@ export default function WorkersPage() {
             <option>Lowest rating</option>
           </select>
 
-          <select className="px-4 py-3 rounded-full border border-gray-300 text-sm bg-white cursor-pointer">
-            <option>Location</option>
-            <option>Colombo</option>
+          <select className="px-4 py-3 rounded-full border border-gray-300 text-sm bg-white cursor-pointer"
+            value={selectedLocation}
+            onChange={(e)=>{
+              setSelectedLocation(e.target.value);
+              handleSkillLocFilter(e.target.value, selectedSkill);
+            }}
+
+          >
+            <option value="">Location</option>
+            <option >Colombo</option>
             <option>Gampaha</option>
             <option>Kandy</option>
             <option>Kurunegala</option>
@@ -79,6 +183,22 @@ export default function WorkersPage() {
             <option>Anuradhapura</option>
             <option>Trinco</option>
             <option>Kadawatha</option>
+          </select>
+
+          <select className="px-4 py-3 rounded-full border border-gray-300 text-sm bg-white cursor-pointer"
+            value={selectedSkill}
+            onChange={(e)=>{
+              setSelectedSkill(e.target.value);
+              handleSkillLocFilter(selectedLocation,e.target.value);
+            }}
+
+          >
+            <option value="">Select Job Role</option>
+            <option >PLUMBER</option>
+            <option>ELECTRICIAN</option>
+            <option>CARPENTER</option>
+            <option>PAINTER</option>
+            <option>CLEANER</option>
           </select>
 
           <div className="flex justify-end w-full mt-5">
