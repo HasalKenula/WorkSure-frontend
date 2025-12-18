@@ -378,70 +378,10 @@ export default function WorkerHire() {
                                 Cancel
                             </button>
                         </div>
-                        {/* status */}
-                        <div className="bg-gray-200 p-6 text-center rounded-lg mt-8">
-                            <span className=" text-primary px-6 py-2 rounded-md font-medium">
-                                Your Request is Pending.
-                            </span>
-                        </div>
+
                     </div>
                 </div>
             </div>
-            {/* {myHires.length > 0 && (
-                <div className="bg-white border p-6 rounded-lg shadow-md mt-6">
-                    <h3 className="text-xl font-semibold mb-4">Your Requests</h3>
-
-                    {myHires.map((hire, index) => (
-                        <div key={index} className="border-b border-gray-300 pb-4 mb-4">
-                            <p><strong>User ID:</strong> {user?.id}</p>
-                            <p><strong>Worker ID:</strong> {worker?.id}</p>
-                            <p><strong>Date:</strong> {hire.bookingDate}</p>
-                            <p><strong>Time:</strong> {hire.bookingTime}</p>
-
-                            <p className="mt-2">
-                                <strong>Description:</strong><br />
-                                <span className="text-gray-700">{hire.description}</span>
-                            </p>
-
-                            <div className="mt-4">
-                                <strong>Status:</strong>
-                                {hire.isPending ? (
-                                    <span className="text-yellow-500 ml-2 font-semibold">Pending</span>
-                                ) : (
-                                    <span className="text-green-600 ml-2 font-semibold">Accepted / Completed</span>
-                                )}
-                            </div>
-
-                            <div className="mt-2">
-                                <strong>Booking:</strong>
-                                {hire.isBooked ? (
-                                    <span className="text-red-600 ml-2 font-semibold">Blocked</span>
-                                ) : (
-                                    <span className="text-green-600 ml-2 font-semibold">Not Blocked</span>
-                                )}
-                            </div>
-
-                            <div className="mt-2">
-                                <strong>OnGoing:</strong>
-                                {hire.isOngoing ? (
-                                    <span className="text-red-600 ml-2 font-semibold">Yes</span>
-                                ) : (
-                                    <span className="text-green-600 ml-2 font-semibold">No</span>
-                                )}
-                            </div>
-
-                            <div className="mt-2">
-                                <strong>Complete:</strong>
-                                {hire.isComplete ? (
-                                    <span className="text-red-600 ml-2 font-semibold">Yes</span>
-                                ) : (
-                                    <span className="text-green-600 ml-2 font-semibold">No</span>
-                                )}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )} */}
 
             <div>
                 {myHires.length > 0 && (
@@ -466,7 +406,7 @@ export default function WorkerHire() {
                                                 : "bg-green-100 text-green-700"
                                                 }`}
                                         >
-                                            {hire.isPending ? "Pending" : "Accepted / Completed"}
+                                            {hire.isPending ? "Pending" : "Seen"}
                                         </span>
                                     </div>
 
@@ -491,7 +431,7 @@ export default function WorkerHire() {
                                                 : "bg-green-100 text-green-700"
                                                 }`}
                                         >
-                                            {hire.isBooked ? "Booked / Blocked" : "Available"}
+                                            {hire.isBooked ? "Not Approved" : "Approved"}
                                         </span>
 
                                         <span

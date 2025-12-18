@@ -12,7 +12,7 @@ import { LiaUserSecretSolid } from "react-icons/lia";
 import { useNavigate } from "react-router-dom";
 export default function AdminDashBoard() {
     const { isAuthenticated, jwtToken } = useAuth();
-     const navigate = useNavigate();
+    const navigate = useNavigate();
     const roles = [
         {
             job: "plumber",
@@ -246,6 +246,11 @@ export default function AdminDashBoard() {
         document.body.removeChild(link);
     }
 
+    function formatDate(dateString) {
+        if (!dateString) return "";
+        return new Date(dateString).toLocaleDateString();
+    }
+
 
     return (
         <div>
@@ -386,7 +391,7 @@ export default function AdminDashBoard() {
                                                 >
                                                     Download PDF
                                                 </button>
-                                             
+
                                                 <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/workerRegistrationDetails/${user.id}`)}>
                                                     Review Details
                                                 </button>
@@ -471,11 +476,18 @@ export default function AdminDashBoard() {
                                     <div className="flex items-center py-4 text-lg">
 
                                         <h1 className="text-slate-500 px-2">{comment.subject}</h1>
+
                                     </div>
-                                    <div>
-                                        <p>{comment.message}
+                                    <div className="flex items-center ">
+                                        <p className="px-2">{comment.message}
                                         </p>
                                     </div>
+                                    <div className="flex py-4 text-lg w-full">
+                                        <h1 className="text-slate-500 px-2 w-full text-right">
+                                            {formatDate(comment.createdAt)}
+                                        </h1>
+                                    </div>
+
                                 </div>
 
                             )
