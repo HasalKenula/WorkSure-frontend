@@ -370,9 +370,9 @@ export default function AdminDashBoard() {
                                             <td class="border border-gray-300 px-6 py-3">{user.phoneNumber}</td>
                                             <td className="border border-gray-300 px-6 py-3">
                                                 {Boolean(user.isBlocked) ? (
-                                                    <span className="text-red-600 font-semibold">Blocked</span>
+                                                    <span className="bg-red-100 text-red-700 font-semibold">Blocked</span>
                                                 ) : (
-                                                    <span className="text-green-600 font-semibold">Active</span>
+                                                    <span className="bg-green-100 text-green-700 font-semibold">Active</span>
                                                 )}
 
 
@@ -381,7 +381,7 @@ export default function AdminDashBoard() {
                                             <td class="border border-gray-300 px-6 py-3"><div className="flex items-center gap-3">
                                                 <button
                                                     onClick={() => handleToggleBlock(user.id)}
-                                                    className={`px-3 py-1 rounded-lg border ${user.isBlocked ? "bg-green-500 text-white" : "bg-red-500 text-white"}hover:opacity-80`}
+                                                    className={`px-3 py-1 rounded-lg border ${user.isBlocked ? "bg-green-100 text-green-700 text-white" : "bg-red-100 text-red-700 text-white"}hover:opacity-80`}
                                                 >
                                                     {user.isBlocked ? "Approve" : "Block"}
                                                 </button>
