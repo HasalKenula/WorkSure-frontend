@@ -29,6 +29,7 @@ import WorkerProfileUpdate from './pages/WorkerProfileUpdate'
 import WorkerView from './pages/WorkerView'
 import { Toaster } from 'react-hot-toast'
 import WorkerProfileCard from './pages/WorkerProfileCard'
+import ChatbotWidget from "./chatbot/ChatbotWidget";
 
 
 function App() {
@@ -69,6 +70,7 @@ function App() {
 
 
         </Routes>
+        <ChatbotWidget />
       </BrowserRouter>
     </AuthProvider>
   )
