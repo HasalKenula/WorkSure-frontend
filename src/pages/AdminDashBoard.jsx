@@ -202,7 +202,7 @@ export default function AdminDashBoard() {
                             <h1>Total Number of Users</h1>
                         </div>
                         <div className="text-5xl font-bold">
-                            <CountUp start={0} end={user.length} duration={2} enableScrollSpy scrollSpyOnce />
+                            <CountUp key={`users-${user.length}`} start={0} end={user.length} duration={2} enableScrollSpy scrollSpyOnce />
                         </div>
                     </div>
                     <div className="bg-white w-full lg:w-[25%] flex-1 flex flex-col items-center gap-6  shadow-xl border border-slate-200 border py-8 px-8  justify-between">
@@ -213,7 +213,7 @@ export default function AdminDashBoard() {
                             <h1>Total Number of Works</h1>
                         </div>
                         <div className="text-5xl font-bold">
-                            <CountUp start={0} end={workers.length} duration={2} enableScrollSpy scrollSpyOnce />
+                            <CountUp   key={`workers-${workers.length}`} start={0} end={workers.length} duration={2} enableScrollSpy scrollSpyOnce />
                         </div>
                     </div>
                     <div className="bg-white w-full lg:w-[25%] flex-1 flex flex-col items-center gap-6 shadow-xl border border-slate-200 border py-8 px-8  justify-between">
@@ -224,7 +224,7 @@ export default function AdminDashBoard() {
                             <h1>Number of All Request</h1>
                         </div>
                         <div className="text-5xl font-bold">
-                            <CountUp start={0} end={hires.length} duration={2} enableScrollSpy scrollSpyOnce />
+                            <CountUp key={`hires-${hires.length}`} start={0} end={hires.length} duration={2} enableScrollSpy scrollSpyOnce />
                         </div>
                     </div>
 

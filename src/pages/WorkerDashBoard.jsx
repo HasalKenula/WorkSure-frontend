@@ -264,15 +264,21 @@ export default function WorkerDashBoard() {
     }
 
     const visibleWorkers = hire.filter(w => !w.isBooked);
+
+
+    const pendingCount = hire.filter(h => h.isPending && !h.isComplete).length;
+    const ongoingCount = hire.filter(h => h.isOngoing && !h.isComplete).length;
+    const completedCount = hire.filter(h => h.isComplete).length;
+
     return (
         <div>
             <Navbar />
             <div className="w-full h-[1000px] lg:h-screen flex flex-col items-center justify-center  lg:pt-24 my-auto">
-                  <div className="px-6">
+                <div className="px-6">
                     <h1 className="text-4xl font-bold">Admin DashBoard</h1>
                 </div>
                 <div className="w-full mx-auto flex flex-col  text-slate-400 lg:flex-row items-center justify-center gap-6 p-6">
-                  
+
                     <div className="flex-1 flex flex-col items-center justify-center gap-6 ">
                         <div className="w-[75%] flex-1 flex items-center shadow-xl gap-6 border border-slate-200 py-4 px-8  justify-between">
                             <IoCloudDoneOutline color="#f59e0b" size={40} />
@@ -280,7 +286,7 @@ export default function WorkerDashBoard() {
                                 <h1>Number of completed works</h1>
                             </div>
                             <div className="text-5xl font-bold">
-                                <CountUp start={0} end={300} duration={2} enableScrollSpy scrollSpyOnce />
+                                <CountUp  key={`completed-${completedCount}`} start={0}   end={completedCount} duration={2} enableScrollSpy scrollSpyOnce />
                             </div>
                         </div>
                         <div className="w-[75%] flex-1 flex items-center gap-6  shadow-xl border border-slate-200 border py-4 px-8  justify-between">
@@ -289,7 +295,7 @@ export default function WorkerDashBoard() {
                                 <h1>Number of On Going works</h1>
                             </div>
                             <div className="text-5xl font-bold">
-                                <CountUp start={0} end={20} duration={2} enableScrollSpy scrollSpyOnce />
+                                <CountUp   key={`ongoing-${ongoingCount}`} start={0} end={ongoingCount} duration={2} enableScrollSpy scrollSpyOnce />
                             </div>
                         </div>
                         <div className="w-[75%] flex-1 flex items-center gap-6 shadow-xl border border-slate-200 border py-4 px-8  justify-between">
@@ -298,7 +304,7 @@ export default function WorkerDashBoard() {
                                 <h1>Number of Pending Request</h1>
                             </div>
                             <div className="text-5xl font-bold">
-                                <CountUp start={0} end={20} duration={2} enableScrollSpy scrollSpyOnce />
+                                <CountUp   key={`pending-${pendingCount}`} start={0}  end={pendingCount} duration={2} enableScrollSpy scrollSpyOnce />
                             </div>
                         </div>
                     </div>
@@ -407,7 +413,7 @@ export default function WorkerDashBoard() {
                                                 </button>
 
                                                 <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/workerView/${user.user.id}`)}>
-                                                     Profile 
+                                                    Profile
                                                 </button>
                                             </div></td>
 
@@ -472,7 +478,7 @@ export default function WorkerDashBoard() {
                             </thead>
 
                             <tbody>
-                                {visibleWorkers.map((user,index) => {
+                                {visibleWorkers.map((user, index) => {
                                     return (
                                         <tr class="hover:bg-gray-50" key={user.id}>
                                             <td class="border  border-gray-300 px-6 py-3">{index + 1}</td>
@@ -533,7 +539,7 @@ export default function WorkerDashBoard() {
 
 
                                                 <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/workerView/${user.user.id}`)}>
-                                                     Profile 
+                                                    Profile
                                                 </button>
                                             </div></td>
 
