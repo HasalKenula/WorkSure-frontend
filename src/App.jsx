@@ -29,6 +29,7 @@ import WorkerProfileUpdate from './pages/WorkerProfileUpdate'
 import WorkerView from './pages/WorkerView'
 import { Toaster } from 'react-hot-toast'
 import WorkerProfileCard from './pages/WorkerProfileCard'
+import WorkerProgress from './pages/WorkerProgress'
 
 
 function App() {
@@ -63,6 +64,7 @@ function App() {
             <Route path="/workerProfileUpdate" element={<WorkerProfileUpdate />} />
             <Route path='/workerView/:userId' element={<WorkerView />} />
             <Route path='/workerCard/:workerId' element={<WorkerProfileCard />} />
+            <Route path='/WorkerProgress/:workerId' element={<WorkerProgress />} />
 
           </Route>
 

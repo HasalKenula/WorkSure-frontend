@@ -236,10 +236,10 @@ export default function AdminDashBoard() {
             return;
         }
 
-        // Create a temporary link element
+
         const link = document.createElement("a");
         link.href = pdfUrl;
-        link.download = `${fullName}_document.pdf`; // File name for download
+        link.download = `${fullName}_document.pdf`;
         link.target = "_blank";
         document.body.appendChild(link);
         link.click();
@@ -324,7 +324,7 @@ export default function AdminDashBoard() {
                                 return (
                                     <div className="w-[40%] flex justify-center items-center lg:gap-2 lg:p-2">
                                         <img
-                                            src={Man}   // or any image url
+                                            src={Man}
                                             alt="profile"
                                             className="w-[50px] aspect-square rounded-full object-cover"
                                         />
@@ -395,6 +395,10 @@ export default function AdminDashBoard() {
                                                 <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/workerRegistrationDetails/${user.id}`)}>
                                                     Review Details
                                                 </button>
+
+                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/WorkerProgress/${user.id}`)}>
+                                                    Progress
+                                                </button>
                                             </div></td>
 
                                         </tr>
@@ -452,7 +456,7 @@ export default function AdminDashBoard() {
                                     <div className="flex justify-between items-center">
                                         <div className="flex items-center justify-between ">
                                             <img
-                                                //src={Man}   // or any image url
+
                                                 src={comment.user?.imageUrl || Man}
                                                 alt="profile"
                                                 className="w-[50px] aspect-square rounded-full object-cover"
