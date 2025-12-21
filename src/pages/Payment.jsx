@@ -1,7 +1,9 @@
 import React from "react";
 import { AiOutlineCreditCard, AiOutlineWallet } from "react-icons/ai";
-
+import { useLocation } from "react-router-dom";
 export default function SecurePayment() {
+  const location = useLocation();
+  const { planName, planPrice } = location.state || { planName: "N/A", planPrice: 0 };
   return (
     <div className="max-w-[1400px] mx-auto p-8 bg-gray-50 min-h-screen">
 
@@ -10,7 +12,7 @@ export default function SecurePayment() {
         Secure Payment
       </h1>
       <p className="text-center text-gray-600 mb-10 text-lg">
-        Finalize your payment for the service below.
+        Finalize your payment for the <b>{planName}</b> plan.
       </p>
 
       {/* Grid */}
@@ -86,14 +88,13 @@ export default function SecurePayment() {
 
           <div className="flex flex-col gap-4">
             <div className="flex justify-between text-gray-700">
-              <span>Service:</span> 
-              <b>Plumbing Installation</b> by Kamal Perera
+              <span>Selected Plan:</span> <b>{planName}</b>
             </div>
             <div className="flex justify-between text-gray-700">
-              <span>Service Fee:</span> $250.00
+              <span>Service Fee:</span> <b>Rs. {planPrice}</b>
             </div>
             <div className="flex justify-between text-gray-700">
-              <span>Tax (8%):</span> $20.00
+              <span>Tax (8%):</span> <b>Rs. {(planPrice * 0.08).toFixed(2)}</b>
             </div>
           </div>
 
@@ -101,7 +102,7 @@ export default function SecurePayment() {
 
           <div className="flex justify-between font-bold text-lg text-gray-800 mb-4">
             <span>Total Amount:</span>
-            <b>Rs. 270.00</b>
+            <b>Rs. {(planPrice * 1.08).toFixed(2)}</b>
           </div>
 
           <label className="flex items-center gap-2 text-sm text-gray-600 mb-4">
