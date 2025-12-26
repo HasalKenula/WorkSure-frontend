@@ -3,7 +3,7 @@ import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
-import toast from "react-hot-toast"; // for messages
+import toast from "react-hot-toast";
 
 Modal.setAppElement('#root');
 
@@ -25,7 +25,7 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
         },
     };
 
-    // Get logged-in user ID
+
     useEffect(() => {
         if (!jwtToken) return;
 
@@ -39,14 +39,14 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
             .catch(() => setLoading(false));
     }, [jwtToken]);
 
-    // Get worker info if exists
+
     async function getWorkers() {
         try {
             const response = await axios.get(`http://localhost:8081/worker/${userId}`, config);
-            setWorker(response.data); // If found, worker object, else null
+            setWorker(response.data);
         } catch (error) {
             console.log("Error loading worker:", error);
-            setWorker(null); // User not in worker table
+            setWorker(null);
         }
     }
 
@@ -56,7 +56,7 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
         }
     }, [isAuthenticated, userId]);
 
-    // Handle Worker Registration button
+
     const handleRegisterClick = () => {
         if (worker) {
             toast.error("You are already registered as a worker.");
@@ -65,7 +65,7 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
         }
     };
 
-    // Handle Worker Profile button
+
     const handleProfileClick = () => {
         if (!worker) {
             toast.error("Please register first to view your profile.");
@@ -79,6 +79,21 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
 
         navigate("/workerProfile");
     };
+
+    const handleProfileUpdateClick = () => {
+        if (!worker) {
+            toast.error("Please register first to view your profile.");
+            return;
+        }
+
+        if (worker.isBlocked) {
+            toast.error("Your account is blocked. You cannot update your profile.");
+            return;
+        }
+
+        navigate("/workerProfileUpdate");
+    };
+
 
     return (
         <div>
@@ -112,6 +127,13 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
                         className="px-4 py-2 bg-blue-500 text-white rounded-lg"
                     >
                         Worker Profile
+                    </button>
+
+                    <button
+                        onClick={handleProfileUpdateClick}
+                        className="px-4 py-2 bg-yellow-500 text-white rounded-lg"
+                    >
+                        Worker Profile Update
                     </button>
                 </div>
 

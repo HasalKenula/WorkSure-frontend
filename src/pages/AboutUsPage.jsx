@@ -117,28 +117,28 @@ export default function AboutUs() {
 
             <div className="flex gap-5 items-start mb-10">
               <span className="text-3xl" ><IoMdSearch color="#f59e0b" size={40} /></span>
-              <p className="text-2xl text-justify leading-relaxed text-gray-800">
+              <p className="text-lg text-justify leading-relaxed text-gray-800">
                 Discover top talent and specialized services tailored precisely to your project needs quickly and efficiently.
               </p>
             </div>
 
             <div className="flex gap-5 items-start mb-10">
               <span className="text-3xl"><IoNewspaperOutline color="#f59e0b" size={40} /></span>
-              <p className="text-2xl text-justify leading-relaxed text-gray-800">
+              <p className="text-lg text-justify leading-relaxed text-gray-800">
                 Effortlessly share your project details and receive tailored proposals from skilled professionals.
               </p>
             </div>
 
             <div className="flex gap-5 items-start mb-10">
               <span className="text-3xl"><MdOutlineMessage color="#f59e0b" size={40} /></span>
-              <p className="text-2xl text-justify leading-relaxed text-gray-800">
+              <p className="text-lg text-justify leading-relaxed text-gray-800">
                 Communicate directly with workers through integrated chat and manage project milestones effectively.
               </p>
             </div>
 
             <div className="flex gap-5 items-start">
               <span className="text-3xl"><MdOutlineVerified color="#f59e0b" size={40} /></span>
-              <p className="text-2xl text-justify leading-relaxed text-gray-800">
+              <p className="text-lg text-justify leading-relaxed text-gray-800">
                 Approve deliverables confidently and process secure payments upon successful project completion.
               </p>
             </div>
@@ -150,28 +150,28 @@ export default function AboutUs() {
 
             <div className="flex gap-5 items-start mb-10">
               <span className="text-3xl"><FaRegUser color="#f59e0b" size={40} /></span>
-              <p className="text-2xl leading-relaxed text-gray-800">
+              <p className="text-lg leading-relaxed text-gray-800">
                 Create a compelling professional profile highlighting your unique skills and valuable experience to attract clients.
               </p>
             </div>
 
             <div className="flex gap-5 items-start mb-10">
               <span className="text-3xl"><BsSuitcaseLg color="#f59e0b" size={40} /></span>
-              <p className="text-2xl leading-relaxed text-gray-800">
+              <p className="text-lg leading-relaxed text-gray-800">
                 Browse and apply for relevant projects that perfectly match your expertise and career aspirations.
               </p>
             </div>
 
             <div className="flex gap-5 items-start mb-10">
               <span className="text-3xl"><FaCode color="#f59e0b" size={40} /></span>
-              <p className="text-2xl leading-relaxed text-gray-800">
+              <p className="text-lg leading-relaxed text-gray-800">
                 Collaborate seamlessly with clients using our integrated communication and comprehensive project management tools.
               </p>
             </div>
 
             <div className="flex gap-5 items-start">
               <span className="text-3xl"><FaRegCreditCard color="#f59e0b" size={40} /></span>
-              <p className="text-2xl leading-relaxed text-gray-800">
+              <p className="text-lg leading-relaxed text-gray-800">
                 Receive timely and secure payments for your completed work, ensuring financial stability and peace of mind.
               </p>
             </div>

@@ -12,7 +12,7 @@ import { LiaUserSecretSolid } from "react-icons/lia";
 import { useNavigate } from "react-router-dom";
 export default function AdminDashBoard() {
     const { isAuthenticated, jwtToken } = useAuth();
-     const navigate = useNavigate();
+    const navigate = useNavigate();
     const roles = [
         {
             job: "plumber",
@@ -75,54 +75,6 @@ export default function AdminDashBoard() {
         },
     ]
 
-    const users = [
-
-        {
-            Id: "001",
-            Client: "Sunil",
-            Date: "2025-11-04",
-            Time: "09:00 AM",
-            Action: "Completed"
-        },
-        {
-            Id: "002",
-            Client: "Kamal",
-            Date: "2025-11-05",
-            Time: "09:00 AM",
-            Action: "On Going"
-        },
-        {
-            Id: "003",
-            Client: "Nadeesha",
-            Date: "2025-11-06",
-            Time: "09:00 AM",
-            Action: "Pending"
-        },
-        {
-            Id: "003",
-            Client: "Nadeesha",
-            Date: "2025-11-06",
-            Time: "09:00 AM",
-            Action: "Pending"
-        },
-        {
-            Id: "003",
-            Client: "Nadeesha",
-            Date: "2025-11-06",
-            Time: "09:00 AM",
-            Action: "Pending"
-        },
-        {
-            Id: "003",
-            Client: "Nadeesha",
-            Date: "2025-11-06",
-            Time: "09:00 AM",
-            Action: "Pending"
-        },
-
-    ]
-
-
 
     const [contact, setContact] = useState([]);
     const config = {
@@ -139,6 +91,8 @@ export default function AdminDashBoard() {
     }
 
     const [workers, setWorkers] = useState([]);
+    const [user, setUsers] = useState([]);
+    const [hires, setHires] = useState([]);
     async function loadWorkerDetails() {
         try {
             const workers = await axios.get("http://localhost:8081/worker", config);
@@ -146,6 +100,26 @@ export default function AdminDashBoard() {
             toast.success("workers are loaded successfully");
         } catch (error) {
             toast.error("have error here not loaded workers");
+        }
+    }
+
+    async function loadUserDetails() {
+        try {
+            const user = await axios.get("http://localhost:8081/user/count", config);
+            setUsers(user.data);
+
+        } catch (error) {
+            toast.error("have error here not loaded users");
+        }
+    }
+
+    async function loadHireDetails() {
+        try {
+            const hires = await axios.get("http://localhost:8081/hire", config);
+            setHires(hires.data);
+
+        } catch (error) {
+            toast.error("have error here not loaded hires");
         }
     }
 
@@ -165,6 +139,8 @@ export default function AdminDashBoard() {
         if (isAuthenticated) {
             loadContact();
             loadWorkerDetails();
+            loadUserDetails();
+            loadHireDetails();
         }
     }, [isAuthenticated])
 
@@ -187,63 +163,25 @@ export default function AdminDashBoard() {
     }
 
 
-    const workerReviews = [
-        {
-            id: 1,
-            name: "John Doe",
-            label: new Date().toLocaleDateString(),
-            profileColor: "bg-red-300",
-            contact: "0712234567",
-
-            review:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        },
-        {
-            id: 2,
-            name: "Michael Silva",
-            label: new Date().toLocaleDateString(),
-            profileColor: "bg-blue-300",
-            contact: "0712234567",
-
-            review:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer non sem vel odio tempor viverra."
-        },
-        {
-            id: 3,
-            name: "Kamal Perera",
-            label: new Date().toLocaleDateString(),
-            profileColor: "bg-green-300",
-            contact: "0712234567",
-
-            review:
-                "Praesent aliquet, leo non facilisis malesuada, velit lorem malesuada orci, et facilisis neque odio at sapien."
-        },
-        {
-            id: 4,
-            name: "Amal Perera",
-            label: new Date().toLocaleDateString(),
-            profileColor: "bg-green-300",
-            contact: "0712234567",
-
-            review:
-                "Praesent aliquet, leo non facilisis malesuada, velit lorem malesuada orci, et facilisis neque odio at sapien."
-        }
-    ];
-
     function handleDownloadPDF(pdfUrl, fullName) {
         if (!pdfUrl) {
             toast.error("No PDF uploaded for this worker.");
             return;
         }
 
-        // Create a temporary link element
+
         const link = document.createElement("a");
         link.href = pdfUrl;
-        link.download = `${fullName}_document.pdf`; // File name for download
+        link.download = `${fullName}_document.pdf`;
         link.target = "_blank";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    }
+
+    function formatDate(dateString) {
+        if (!dateString) return "";
+        return new Date(dateString).toLocaleDateString();
     }
 
 
@@ -264,7 +202,7 @@ export default function AdminDashBoard() {
                             <h1>Total Number of Users</h1>
                         </div>
                         <div className="text-5xl font-bold">
-                            <CountUp start={0} end={300} duration={2} enableScrollSpy scrollSpyOnce />
+                            <CountUp key={`users-${user.length}`} start={0} end={user.length} duration={2} enableScrollSpy scrollSpyOnce />
                         </div>
                     </div>
                     <div className="bg-white w-full lg:w-[25%] flex-1 flex flex-col items-center gap-6  shadow-xl border border-slate-200 border py-8 px-8  justify-between">
@@ -275,7 +213,7 @@ export default function AdminDashBoard() {
                             <h1>Total Number of Works</h1>
                         </div>
                         <div className="text-5xl font-bold">
-                            <CountUp start={0} end={20} duration={2} enableScrollSpy scrollSpyOnce />
+                            <CountUp   key={`workers-${workers.length}`} start={0} end={workers.length} duration={2} enableScrollSpy scrollSpyOnce />
                         </div>
                     </div>
                     <div className="bg-white w-full lg:w-[25%] flex-1 flex flex-col items-center gap-6 shadow-xl border border-slate-200 border py-8 px-8  justify-between">
@@ -283,10 +221,10 @@ export default function AdminDashBoard() {
                             <RiPassPendingLine color="#f59e0b" size={80} />
                         </div>
                         <div className="text-xl font-bold text-slate-500">
-                            <h1>Number of Pending Request</h1>
+                            <h1>Number of All Request</h1>
                         </div>
                         <div className="text-5xl font-bold">
-                            <CountUp start={0} end={20} duration={2} enableScrollSpy scrollSpyOnce />
+                            <CountUp key={`hires-${hires.length}`} start={0} end={hires.length} duration={2} enableScrollSpy scrollSpyOnce />
                         </div>
                     </div>
 
@@ -319,7 +257,7 @@ export default function AdminDashBoard() {
                                 return (
                                     <div className="w-[40%] flex justify-center items-center lg:gap-2 lg:p-2">
                                         <img
-                                            src={Man}   // or any image url
+                                            src={Man}
                                             alt="profile"
                                             className="w-[50px] aspect-square rounded-full object-cover"
                                         />
@@ -365,9 +303,9 @@ export default function AdminDashBoard() {
                                             <td class="border border-gray-300 px-6 py-3">{user.phoneNumber}</td>
                                             <td className="border border-gray-300 px-6 py-3">
                                                 {Boolean(user.isBlocked) ? (
-                                                    <span className="text-red-600 font-semibold">Blocked</span>
+                                                    <span className="bg-red-100 text-red-700 font-semibold">Blocked</span>
                                                 ) : (
-                                                    <span className="text-green-600 font-semibold">Active</span>
+                                                    <span className="bg-green-100 text-green-700 font-semibold">Active</span>
                                                 )}
 
 
@@ -376,7 +314,7 @@ export default function AdminDashBoard() {
                                             <td class="border border-gray-300 px-6 py-3"><div className="flex items-center gap-3">
                                                 <button
                                                     onClick={() => handleToggleBlock(user.id)}
-                                                    className={`px-3 py-1 rounded-lg border ${user.isBlocked ? "bg-green-500 text-white" : "bg-red-500 text-white"}hover:opacity-80`}
+                                                    className={`px-3 py-1 rounded-lg border ${user.isBlocked ? "bg-green-100 text-green-700 text-white" : "bg-red-100 text-red-700 text-white"}hover:opacity-80`}
                                                 >
                                                     {user.isBlocked ? "Approve" : "Block"}
                                                 </button>
@@ -386,9 +324,13 @@ export default function AdminDashBoard() {
                                                 >
                                                     Download PDF
                                                 </button>
-                                             
+
                                                 <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/workerRegistrationDetails/${user.id}`)}>
                                                     Review Details
+                                                </button>
+
+                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/WorkerProgress/${user.id}`)}>
+                                                    Progress
                                                 </button>
                                             </div></td>
 
@@ -401,7 +343,7 @@ export default function AdminDashBoard() {
                         </table>
                         {/* Mobile Cards */}
                         <div className="md:hidden flex flex-col gap-4">
-                            {users.map((user) => (
+                            {workers.map((user) => (
                                 <div className="border border-gray-300 bg-white rounded-lg p-4 shadow-sm">
                                     <p><span className="font-semibold">Id:</span> {user.Id}</p>
                                     <p><span className="font-semibold">Client:</span> {user.Client}</p>
@@ -447,7 +389,7 @@ export default function AdminDashBoard() {
                                     <div className="flex justify-between items-center">
                                         <div className="flex items-center justify-between ">
                                             <img
-                                                //src={Man}   // or any image url
+
                                                 src={comment.user?.imageUrl || Man}
                                                 alt="profile"
                                                 className="w-[50px] aspect-square rounded-full object-cover"
@@ -471,11 +413,18 @@ export default function AdminDashBoard() {
                                     <div className="flex items-center py-4 text-lg">
 
                                         <h1 className="text-slate-500 px-2">{comment.subject}</h1>
+
                                     </div>
-                                    <div>
-                                        <p>{comment.message}
+                                    <div className="flex items-center ">
+                                        <p className="px-2">{comment.message}
                                         </p>
                                     </div>
+                                    <div className="flex py-4 text-lg w-full">
+                                        <h1 className="text-slate-500 px-2 w-full text-right">
+                                            {formatDate(comment.createdAt)}
+                                        </h1>
+                                    </div>
+
                                 </div>
 
                             )

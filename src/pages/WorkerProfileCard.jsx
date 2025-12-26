@@ -22,16 +22,16 @@ export default function WorkerProfileCard() {
   };
 
   async function getWorker() {
-  try {
-    const response = await axios.get(
-      `http://localhost:8081/worker/id/${workerId}`, 
-      config
-    );
-    setWorker(response.data);
-  } catch (error) {
-    console.log("Error loading worker:", error);
+    try {
+      const response = await axios.get(
+        `http://localhost:8081/worker/id/${workerId}`,
+        config
+      );
+      setWorker(response.data);
+    } catch (error) {
+      console.log("Error loading worker:", error);
+    }
   }
-}
 
 
   useEffect(() => {
@@ -80,133 +80,308 @@ export default function WorkerProfileCard() {
   }
 
   return (
-    <>
-      <Navbar />
-      <div className="mt-20 flex justify-center items-center min-h-screen font-outfit relative overflow-hidden">
-        <div className="shadow-2xl w-[85%] h-auto flex flex-col gap-3.5 rounded-2xl mt-6 bg-white/10 backdrop-blur-xl">
+    // <>
+    //   <Navbar />
+    //   <div className="mt-20 flex justify-center items-center min-h-screen font-outfit relative overflow-hidden">
+    //     <div className="shadow-2xl w-[85%] h-auto flex flex-col gap-3.5 rounded-2xl mt-6 bg-white/10 backdrop-blur-xl">
 
-          {/* PROFILE SECTION */}
-          <div className="h-[40vh] flex flex-row space-x-25 p-6">
-            <div className="w-1/4 flex justify-center items-center">
-              <div className="w-62 h-62 rounded-full overflow-hidden border-4 border-primary shadow-lg">
-                <img src={ worker.user?.imageUrl || MM} className="w-full h-full object-cover" alt="profile" />
-              </div> 
+    //       {/* PROFILE SECTION */}
+    //       <div className="h-[40vh] flex flex-row space-x-25 p-6">
+    //         <div className="w-1/4 flex justify-center items-center">
+    //           <div className="w-62 h-62 rounded-full overflow-hidden border-4 border-primary shadow-lg">
+    //             <img src={ worker.user?.imageUrl || MM} className="w-full h-full object-cover" alt="profile" />
+    //           </div> 
+    //         </div>
+
+    //         <div className="w-3/4 flex flex-col space-y-5 p-6">
+    //           <p className="text-4xl font-bold">{worker.fullName}</p>
+    //           <p className="font-bold text-primary text-xl">{worker.jobRole}</p>
+    //           <div className="flex items-center space-x-1.5">
+    //             <IoLocationSharp className="text-2xl" />
+    //             <p className="text-lg font-medium">{worker.address}</p>
+    //           </div>
+    //           <div className="flex flex-row space-x-1 items-center">
+    //             {[...Array(5)].map((_, i) => (
+    //               <FaStar key={i} className="text-yellow-500 text-xl" />
+    //             ))}
+    //             <p className="px-1.5 text-lg flex items-center">
+    //               <span className="font-bold">5.0</span>
+    //               <span className="text-gray-600 ml-1">(75 Reviews)</span>
+    //             </p>
+    //           </div>
+    //           <button className="px-6 py-3 text-lg font-semibold bg-primary text-white rounded shadow-md hover:bg-accent hover:scale-105 transition-all duration-300 w-1/3" onClick={() => navigate(`/hire/${worker.id}`)}>
+    //             Hire Now
+    //           </button>
+    //         </div>
+    //       </div>
+
+    //       {/* WORKING AREA / DAYS / CERTIFICATIONS / EXPERIENCE */}
+    //       <div className="border-solid flex flex-row">
+
+    //         {/* LEFT SIDE */}
+    //         <div className="w-[30%] flex flex-col gap-4 p-6">
+
+    //           {/* WORKING AREA */}
+    //           <div>
+    //             <h3 className="text-xl font-bold text-primary">WORKING AREA</h3>
+    //             <ul className="list-disc pl-5 mt-2 text-lg">
+    //               <li>{worker.preferredServiceLocation}</li>
+    //             </ul>
+    //           </div>
+
+    //           {/* WORKING DAYS */}
+    //           <div>
+    //             <h3 className="text-xl font-bold text-primary">WORKING DAYS</h3>
+    //             <ul className="list-disc pl-5 mt-2 text-lg">
+    //               {getWorkingDays(worker).map((day, i) => (
+    //                 <li key={i}>
+    //                   {day} ({worker.preferredStartTime} - {worker.preferredEndTime})
+    //                 </li>
+    //               ))}
+    //             </ul>
+    //           </div>
+
+    //           {/* CERTIFICATIONS */}
+    //           <div>
+    //             <h3 className="text-xl font-bold text-primary">CERTIFICATIONS</h3>
+    //             <ul className="list-disc pl-5 mt-2 text-lg">
+    //               {worker.certificates?.map((c, i) => (
+    //                 <li key={i}>
+    //                   <b>{c.certificateName}</b> <br />
+    //                   {c.issuingBody}
+    //                 </li>
+    //               ))}
+    //             </ul>
+    //           </div>
+    //         </div>
+
+    //         {/* RIGHT SIDE: EXPERIENCE + RATINGS */}
+    //         <div className="w-[70%] flex flex-col gap-6 p-6">
+
+    //           {/* EXPERIENCE */}
+    //           <div>
+    //             <h3 className="text-xl font-bold text-primary">EXPERIENCE</h3>
+    //             <ul className="list-disc pl-5 mt-2 text-lg">
+    //               {worker.jobExperiences?.map((exp, i) => (
+    //                 <li key={i}>
+    //                   <b>Job Title:</b> {exp.jobTitle} <br />
+    //                   <b>Company:</b> {exp.companyName} <br />
+    //                   <b>Years:</b> {exp.years}
+    //                 </li>
+    //               ))}
+    //             </ul>
+    //           </div>
+
+    //           {/* USER RATINGS */}
+    //           <div>
+    //             <h3 className="text-xl font-bold text-primary">USER RATINGS</h3>
+    //             {userRate.map((user) => (
+    //               <div key={user.id} className="mt-4 border-b pb-2">
+    //                 <div className="flex items-center gap-3">
+    //                   <FaUserCircle className="text-4xl" />
+    //                   <p className="text-lg font-semibold">{user.name}</p>
+    //                   <p className="text-sm text-gray-600">{user.date}</p>
+    //                 </div>
+    //                 <div className="flex mt-1">
+    //                   {[...Array(user.rating)].map((_, i) => (
+    //                     <FaStar key={i} className="text-yellow-500 text-xl" />
+    //                   ))}
+    //                 </div>
+    //                 <p className="mt-1 text-lg">{user.message}</p>
+    //               </div>
+    //             ))}
+    //           </div>
+
+    //           {/* FEEDBACK BUTTON */}
+    //           <div className="mt-4">
+    //             <button
+    //               onClick={() => navigate("/feedback", { state: worker })}
+    //               className="px-3 py-2 text-lg font-semibold bg-primary text-white rounded-2xl shadow-md hover:bg-accent hover:scale-105 transition-all duration-300"
+    //             >
+    //               Add Feedback
+    //             </button>
+    //           </div>
+    //         </div>
+
+    //       </div>
+    //     </div>
+    //   </div>
+    //   <Footer />
+    // </>
+
+   <>
+  <Navbar />
+
+  <div className="mt-24 min-h-screen font-outfit py-12">
+    <div className="max-w-6xl mx-auto px-4">
+
+      {/* GRID */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 min-h-[calc(100vh-6rem)]">
+
+        {/* LEFT PROFILE CARD (STICKY) */}
+        <div className="bg-white shadow-2xl rounded-2xl p-6 border border-gray-200 
+                        self-start md:sticky md:top-28 
+                        ">
+
+          <div className="flex flex-col items-center text-center">
+
+            {/* PROFILE IMAGE */}
+            <div className="w-40 h-40 rounded-full overflow-hidden border-4 border-primary shadow-lg">
+              <img
+                src={worker.user?.imageUrl || MM}
+                className="w-full h-full object-cover"
+                alt="profile"
+              />
             </div>
 
-            <div className="w-3/4 flex flex-col space-y-5 p-6">
-              <p className="text-4xl font-bold">{worker.fullName}</p>
-              <p className="font-bold text-primary text-xl">{worker.jobRole}</p>
-              <div className="flex items-center space-x-1.5">
-                <IoLocationSharp className="text-2xl" />
-                <p className="text-lg font-medium">{worker.address}</p>
-              </div>
-              <div className="flex flex-row space-x-1 items-center">
-                {[...Array(5)].map((_, i) => (
-                  <FaStar key={i} className="text-yellow-500 text-xl" />
-                ))}
-                <p className="px-1.5 text-lg flex items-center">
-                  <span className="font-bold">5.0</span>
-                  <span className="text-gray-600 ml-1">(75 Reviews)</span>
-                </p>
-              </div>
-              <button className="px-6 py-3 text-lg font-semibold bg-primary text-white rounded shadow-md hover:bg-accent hover:scale-105 transition-all duration-300 w-1/3" onClick={() => navigate(`/hire/${worker.id}`)}>
-                Hire Now
-              </button>
-            </div>
-          </div>
+            {/* NAME & ROLE */}
+            <h2 className="mt-4 text-2xl font-bold text-gray-900">
+              {worker.fullName}
+            </h2>
+            <p className="text-primary font-semibold text-lg">
+              {worker.jobRole}
+            </p>
 
-          {/* WORKING AREA / DAYS / CERTIFICATIONS / EXPERIENCE */}
-          <div className="border-solid flex flex-row">
-
-            {/* LEFT SIDE */}
-            <div className="w-[30%] flex flex-col gap-4 p-6">
-
-              {/* WORKING AREA */}
-              <div>
-                <h3 className="text-xl font-bold text-primary">WORKING AREA</h3>
-                <ul className="list-disc pl-5 mt-2 text-lg">
-                  <li>{worker.preferredServiceLocation}</li>
-                </ul>
-              </div>
-
-              {/* WORKING DAYS */}
-              <div>
-                <h3 className="text-xl font-bold text-primary">WORKING DAYS</h3>
-                <ul className="list-disc pl-5 mt-2 text-lg">
-                  {getWorkingDays(worker).map((day, i) => (
-                    <li key={i}>
-                      {day} ({worker.preferredStartTime} - {worker.preferredEndTime})
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              {/* CERTIFICATIONS */}
-              <div>
-                <h3 className="text-xl font-bold text-primary">CERTIFICATIONS</h3>
-                <ul className="list-disc pl-5 mt-2 text-lg">
-                  {worker.certificates?.map((c, i) => (
-                    <li key={i}>
-                      <b>{c.certificateName}</b> <br />
-                      {c.issuingBody}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            {/* LOCATION */}
+            <div className="flex items-center justify-center mt-2 text-gray-600">
+              <IoLocationSharp className="mr-1 text-xl" />
+              <span>{worker.address}</span>
             </div>
 
-            {/* RIGHT SIDE: EXPERIENCE + RATINGS */}
-            <div className="w-[70%] flex flex-col gap-6 p-6">
+            {/* RATINGS */}
+            <div className="flex items-center mt-3">
+              {[...Array(5)].map((_, i) => (
+                <FaStar key={i} className="text-yellow-500" />
+              ))}
+              <span className="ml-2 text-gray-500">(75 Reviews)</span>
+            </div>
 
-              {/* EXPERIENCE */}
-              <div>
-                <h3 className="text-xl font-bold text-primary">EXPERIENCE</h3>
-                <ul className="list-disc pl-5 mt-2 text-lg">
-                  {worker.jobExperiences?.map((exp, i) => (
-                    <li key={i}>
-                      <b>Job Title:</b> {exp.jobTitle} <br />
-                      <b>Company:</b> {exp.companyName} <br />
-                      <b>Years:</b> {exp.years}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            {/* HIRE BUTTON */}
+            <button
+              onClick={() => navigate(`/hire/${worker.id}`)}
+              className="mt-6 px-6 py-2 bg-primary text-white rounded-lg 
+                         font-semibold hover:bg-accent transition"
+            >
+              Hire Now
+            </button>
 
-              {/* USER RATINGS */}
-              <div>
-                <h3 className="text-xl font-bold text-primary">USER RATINGS</h3>
-                {userRate.map((user) => (
-                  <div key={user.id} className="mt-4 border-b pb-2">
-                    <div className="flex items-center gap-3">
-                      <FaUserCircle className="text-4xl" />
-                      <p className="text-lg font-semibold">{user.name}</p>
-                      <p className="text-sm text-gray-600">{user.date}</p>
-                    </div>
-                    <div className="flex mt-1">
-                      {[...Array(user.rating)].map((_, i) => (
-                        <FaStar key={i} className="text-yellow-500 text-xl" />
-                      ))}
-                    </div>
-                    <p className="mt-1 text-lg">{user.message}</p>
-                  </div>
-                ))}
-              </div>
-
-              {/* FEEDBACK BUTTON */}
-              <div className="mt-4">
-                <button
-                  onClick={() => navigate("/feedback", { state: worker })}
-                  className="px-3 py-2 text-lg font-semibold bg-primary text-white rounded-2xl shadow-md hover:bg-accent hover:scale-105 transition-all duration-300"
-                >
-                  Add Feedback
-                </button>
-              </div>
+           
+            {/* WORKING AREA */}
+            <div className="mt-6 bg-white shadow-lg rounded-xl p-5 border border-gray-200">
+              <h3 className="text-lg font-bold border-b pb-1 border-primary">
+                Working Area
+              </h3>
+              <p className="mt-2 text-gray-700">
+                {worker.preferredServiceLocation}
+              </p>
             </div>
 
           </div>
         </div>
+
+        {/* RIGHT CONTENT (SCROLLABLE) */}
+        <div
+          className="md:col-span-2 space-y-6 
+                     md:max-h-[calc(100vh-7rem)] 
+                     md:overflow-y-auto pr-2"
+        >
+
+          {/* WORKING DAYS */}
+          <div className="bg-white shadow-lg rounded-xl p-5 border border-gray-200">
+            <h3 className="text-lg font-bold border-b pb-1 border-primary">
+              Working Schedule
+            </h3>
+            <ul className="list-disc ml-5 mt-2 text-gray-700">
+              {getWorkingDays(worker).map((day, i) => (
+                <li key={i}>
+                  {day} — {worker.preferredStartTime} to {worker.preferredEndTime}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* CERTIFICATIONS */}
+          <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
+            <h3 className="text-xl font-bold border-b pb-2 border-primary">
+              Certifications
+            </h3>
+            <ul className="space-y-3 mt-3">
+              {worker.certificates?.map((c, i) => (
+                <li
+                  key={i}
+                  className="p-3 bg-gray-50 rounded-lg border border-gray-200"
+                >
+                  <p className="font-semibold">{c.certificateName}</p>
+                  <p className="text-sm text-gray-500">{c.issuingBody}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* EXPERIENCE */}
+          <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
+            <h3 className="text-xl font-bold border-b pb-2 border-primary">
+              Job Experience
+            </h3>
+            <ul className="space-y-3 mt-3">
+              {worker.jobExperiences?.map((exp, i) => (
+                <li
+                  key={i}
+                  className="p-3 bg-gray-50 rounded-lg border border-gray-200"
+                >
+                  <p><b>Job Title:</b> {exp.jobTitle}</p>
+                  <p><b>Company:</b> {exp.companyName}</p>
+                  <p><b>Years:</b> {exp.years}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* USER RATINGS */}
+          <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
+            <h3 className="text-xl font-bold border-b pb-2 border-primary">
+              User Ratings
+            </h3>
+
+            {userRate.map((user) => (
+              <div key={user.id} className="mt-4 border-b pb-4 last:border-none">
+                <div className="flex items-center gap-3">
+                  <FaUserCircle className="text-3xl text-gray-600" />
+                  <div>
+                    <p className="font-semibold">{user.name}</p>
+                    <p className="text-sm text-gray-500">{user.date}</p>
+                  </div>
+                </div>
+
+                <div className="flex mt-1">
+                  {[...Array(user.rating)].map((_, i) => (
+                    <FaStar key={i} className="text-yellow-500" />
+                  ))}
+                </div>
+
+                <p className="mt-2 text-gray-700">{user.message}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* FEEDBACK BUTTON */}
+          <div className="flex justify-end">
+            <button
+              onClick={() => navigate("/feedback", { state: worker })}
+              className="px-5 py-2 bg-primary text-white rounded-lg hover:bg-accent transition"
+            >
+              Add Feedback
+            </button>
+          </div>
+
+        </div>
       </div>
-      <Footer />
-    </>
+    </div>
+  </div>
+
+  <Footer />
+</>
+
+
   );
 }
