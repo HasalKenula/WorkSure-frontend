@@ -93,6 +93,7 @@ export default function AdminDashBoard() {
     const [workers, setWorkers] = useState([]);
     const [user, setUsers] = useState([]);
     const [hires, setHires] = useState([]);
+
     async function loadWorkerDetails() {
         try {
             const workers = await axios.get("http://localhost:8081/worker", config);
@@ -169,7 +170,6 @@ export default function AdminDashBoard() {
             return;
         }
 
-
         const link = document.createElement("a");
         link.href = pdfUrl;
         link.download = `${fullName}_document.pdf`;
@@ -184,6 +184,15 @@ export default function AdminDashBoard() {
         return new Date(dateString).toLocaleDateString();
     }
 
+    //searching part
+    const [jobRoles, setJobRoles] = useState([]);
+    const [employees, setEmployees] = useState([]);
+    const [selectedRole, setSelectedRole] = useState(null);
+
+    //fetch job roles 
+    useEffect(() => {
+        axios.get("http://localhost:8081/worker/job-roles").then(res => setJobRoles(res.data));
+    }, []);
 
     return (
         <div>
@@ -192,7 +201,7 @@ export default function AdminDashBoard() {
                 <div className="px-6">
                     <h1 className="text-2xl font-bold ">Admin DashBoard</h1>
                 </div>
-                <div className=" w-full mx-auto flex flex-col lg:flex-row text-slate-400 lg:flex-row items-center justify-center gap-6 p-6 lg:pt-0">
+                <div className=" w-full mx-auto flex flex-col lg:flex-row text-slate-400  items-center justify-center gap-6 p-6 lg:pt-0">
 
                     <div className="bg-white  w-full lg:w-[25%] flex-1 flex flex-col items-center shadow-xl gap-6 border border-slate-200 py-8 px-8  justify-between">
                         <div className="flex items-center justify-center ">
@@ -239,7 +248,7 @@ export default function AdminDashBoard() {
                             <div className="w-full flex flex-col justify-between items-center px-4 text-lg">
                                 {roles.map((role) => {
                                     return (
-                                        <div className="w-full flex flex justify-between items-center px-4 text-lg">
+                                        <div className="w-full flex justify-between items-center px-4 text-lg">
                                             <h1 className="mx-4">{role.job}</h1>
                                             <h1 className="mx-4">{role.amount}</h1>
                                         </div>
