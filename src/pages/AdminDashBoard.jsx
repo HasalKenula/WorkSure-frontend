@@ -188,15 +188,20 @@ export default function AdminDashBoard() {
     const [jobRoles, setJobRoles] = useState([]);
     const [employees, setEmployees] = useState([]);
     const [selectedRole, setSelectedRole] = useState(null);
+    const [searchText, setSearchText] = useState("");
+    const [allJobRoles, setAllJobRoles] = useState([]);
 
     //fetch job roles 
     useEffect(() => {
-        axios.get("http://localhost:8081/worker/job-roles",{
-                headers: {
-                    Authorization: `Bearer ${jwtToken}`
-                }
-            }).then(res => setJobRoles(res.data));
-    }, []);
+        if (isAuthenticated) {
+            axios
+            .get("http://localhost:8081/worker/job-roles", config)
+            .then(res => {
+                setAllJobRoles(res.data);
+                setJobRoles(res.data); // initially show all
+            });
+        }
+    }, [isAuthenticated]);
 
     //
     const selectRole = (jobRole) => {
@@ -208,6 +213,34 @@ export default function AdminDashBoard() {
             }
         }).then(res => setEmployees(res.data));
     };
+
+    const capitalizeFirst = (text) => {
+        if (!text) return "";
+        return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+    };
+
+    const handleSearch = (text) => {
+        setSearchText(text);
+
+        if (!text.trim()) {
+            setJobRoles(allJobRoles);
+            return;
+        }
+
+        const filtered = allJobRoles.filter(role =>
+            role.jobRole.toLowerCase().includes(text.toLowerCase())
+        );
+
+        setJobRoles(filtered);
+    };
+
+    useEffect(() => {
+        if (jobRoles.length > 0 && !selectedRole) {
+            selectRole(jobRoles[0].jobRole);
+        }
+    }, [jobRoles]);
+
+
 
     return (
         <div>
@@ -257,7 +290,12 @@ export default function AdminDashBoard() {
                 <div className="w-full mx-auto flex flex-col  text-slate-400 lg:flex-row items-center justify-center gap-6 p-6">
                     <div className="bg-white  w-full lg:flex-2 flex flex-col items-center justify-center pb-4 shadow-lg border rounded-lg border-slate-200">
                         <div className="w-full p-4">
-                            <input type="text" placeholder="Search by service name" className="w-full border px-2 py-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" />
+                            <input 
+                                type="text" 
+                                placeholder="Search by service name" 
+                                className="w-full border px-2 py-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                value={searchText}
+                                onChange={(e) => handleSearch(e.target.value)} />
                         </div>
                         <div className="w-full  flex flex-col items-center justify-center">
                             <div className="w-full flex flex-col justify-between items-center px-4 text-lg">
@@ -275,7 +313,7 @@ export default function AdminDashBoard() {
                                                     }`}
                                                 onClick={() => selectRole(role.jobRole)}
                                             >
-                                                <span>{role.jobRole.toLowerCase()}</span>
+                                                <span>{capitalizeFirst(role.jobRole)}</span>
                                                 <span>{role.count}</span>
                                             </div>)}
                                         )
@@ -285,7 +323,7 @@ export default function AdminDashBoard() {
                     </div>
                     <div className="bg-white w-full lg:flex-3 flex flex-col py-4 shadow-lg border rounded-lg border-slate-200">
                         <div className="px-6">
-                            <h1 className="text-xl font-bold text-center lg:text-center">{selectedRole?.toLowerCase()}</h1>
+                            <h1 className="text-xl font-bold text-center lg:text-center">{capitalizeFirst(selectedRole)}s</h1>
                         </div>
                         <div className="w-full flex flex-col lg:flex-row justify-center items-center lg:flex-wrap gap-4">
                             {employees.map((emp) => {
@@ -296,7 +334,6 @@ export default function AdminDashBoard() {
                                             alt="profile"
                                             className="w-[50px] aspect-square rounded-full object-cover"
                                         />
-
                                         <h1 className="font-bold text-xl">{emp.fullName}</h1>
                                     </div>
                                 )
