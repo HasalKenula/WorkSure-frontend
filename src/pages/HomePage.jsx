@@ -141,7 +141,7 @@ export default function HomePage() {
                                 <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
 
-                             <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
                                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><GiVacuumCleaner size={36} className="text-amber-500" /></div>
                                 <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Cleaners</h1>
                                 <p className="mt-1 text-sm text-slate-500"> 450 Verified Professionals</p>
@@ -149,11 +149,14 @@ export default function HomePage() {
                                 <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
 
-                            <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4"><GiAutoRepair color="#f59e0b" size={40} /></div>
-                                <h1 className="font-bold text-xl">Equipment Repair</h1>
-                                <h3>450 professionals</h3>
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
+                                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><GiAutoRepair size={36} className="text-amber-500" /></div>
+                                <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">AEquipment Repair</h1>
+                                <p className="mt-1 text-sm text-slate-500"> 450 Verified Professionals</p>
+                                <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
+                                <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
+
                             <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
                                 <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4"><MdMiscellaneousServices color="#f59e0b" size={40} /></div>
                                 <h1 className="font-bold text-xl">General Services</h1>
