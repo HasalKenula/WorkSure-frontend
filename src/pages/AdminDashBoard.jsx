@@ -191,8 +191,23 @@ export default function AdminDashBoard() {
 
     //fetch job roles 
     useEffect(() => {
-        axios.get("http://localhost:8081/worker/job-roles").then(res => setJobRoles(res.data));
+        axios.get("http://localhost:8081/worker/job-roles",{
+                headers: {
+                    Authorization: `Bearer ${jwtToken}`
+                }
+            }).then(res => setJobRoles(res.data));
     }, []);
+
+    //
+    const selectRole = (jobRole) => {
+        setSelectedRole(jobRole);
+        axios.get("http://localhost:8081/worker/searchbylocandskill", {
+            params: { jobRole },
+            headers: {
+                Authorization: `Bearer ${jwtToken}`
+            }
+        }).then(res => setEmployees(res.data));
+    };
 
     return (
         <div>
@@ -246,32 +261,43 @@ export default function AdminDashBoard() {
                         </div>
                         <div className="w-full  flex flex-col items-center justify-center">
                             <div className="w-full flex flex-col justify-between items-center px-4 text-lg">
-                                {roles.map((role) => {
-                                    return (
-                                        <div className="w-full flex justify-between items-center px-4 text-lg">
-                                            <h1 className="mx-4">{role.job}</h1>
-                                            <h1 className="mx-4">{role.amount}</h1>
-                                        </div>
-                                    )
-                                })}
+                                
+                                {
+                                    jobRoles.map(
+                                        role => {
+                                            return(
+                                            <div 
+                                                key={role.jobRole}
+                                                className={`w-full flex justify-between items-center px-4 py-3 cursor-pointer rounded-lg text-gray-600
+                                                    ${selectedRole === role.jobRole
+                                                        ? "bg-primary text-white"
+                                                        : "hover:bg-gray-100"
+                                                    }`}
+                                                onClick={() => selectRole(role.jobRole)}
+                                            >
+                                                <span>{role.jobRole.toLowerCase()}</span>
+                                                <span>{role.count}</span>
+                                            </div>)}
+                                        )
+                                }
                             </div>
                         </div>
                     </div>
                     <div className="bg-white w-full lg:flex-3 flex flex-col py-4 shadow-lg border rounded-lg border-slate-200">
                         <div className="px-6">
-                            <h1 className="text-xl font-bold text-center lg:text-center">Plumbers</h1>
+                            <h1 className="text-xl font-bold text-center lg:text-center">{selectedRole?.toLowerCase()}</h1>
                         </div>
                         <div className="w-full flex flex-col lg:flex-row justify-center items-center lg:flex-wrap gap-4">
-                            {details.map((detail) => {
+                            {employees.map((emp) => {
                                 return (
-                                    <div className="w-[40%] flex justify-center items-center lg:gap-2 lg:p-2">
+                                    <div key={emp.id} className="w-[40%] flex justify-center items-center lg:gap-2 lg:p-2">
                                         <img
                                             src={Man}
                                             alt="profile"
                                             className="w-[50px] aspect-square rounded-full object-cover"
                                         />
 
-                                        <h1 className="font-bold text-xl">{detail.name}</h1>
+                                        <h1 className="font-bold text-xl">{emp.fullName}</h1>
                                     </div>
                                 )
                             })}
