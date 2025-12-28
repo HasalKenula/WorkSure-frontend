@@ -10,11 +10,35 @@ export default function ChatMessages({ messages, isTyping, onQuickSend }) {
   }, [messages, isTyping]);
 
   return (
-    <div className="chatbot-body" ref={containerRef}>
+    <div
+      ref={containerRef}
+      className="
+        flex-1 overflow-y-auto p-3
+        bg-gray-50 dark:bg-gray-800
+        space-y-3
+      "
+    >
       {messages.map((msg, index) => (
         <div
           key={index}
-          className={`chat-message ${msg.sender}`}
+          className={
+            msg.sender === "user"
+              ? `
+                ml-auto max-w-[75%]
+                bg-[#f59e0b] text-white
+                px-4 py-2 text-sm
+                rounded-2xl rounded-br-none
+                shadow
+              `
+              : `
+                max-w-[75%]
+                bg-white dark:bg-gray-700
+                text-gray-800 dark:text-gray-100
+                px-4 py-2 text-sm
+                rounded-2xl rounded-bl-none
+                shadow
+              `
+          }
         >
           {msg.text}
         </div>
@@ -22,35 +46,62 @@ export default function ChatMessages({ messages, isTyping, onQuickSend }) {
 
       {/* ⏳ TYPING INDICATOR */}
       {isTyping && (
-        <div className="chat-message bot typing">
-          WorkSure Assistant is typing<span className="dots">...</span>
+        <div
+          className="
+            max-w-[75%]
+            bg-white dark:bg-gray-700
+            text-gray-800 dark:text-gray-100
+            px-4 py-2 text-sm
+            rounded-2xl rounded-bl-none
+            shadow flex items-center gap-1
+          "
+        >
+          WorkSure Assistant is typing
+          <span className="animate-pulse">.</span>
+          <span className="animate-pulse delay-150">.</span>
+          <span className="animate-pulse delay-300">.</span>
         </div>
       )}
 
-{/* ✅ QUICK ACTION BUTTONS */}
-{!isTyping && (
-  <div className="quick-actions">
-    <button onClick={() => onQuickSend("I need an electrician")}>
-      ⚡️ Electrician
-    </button>
+      {/* ✅ QUICK ACTION BUTTONS */}
+      {!isTyping && (
+        <div className="flex flex-wrap gap-2 pt-2">
+          <button
+            onClick={() => onQuickSend("I need an electrician")}
+            className="px-3 py-1 rounded-full bg-[#f59e0b]/20 text-[#f59e0b] text-sm hover:bg-[#f59e0b]/30"
+          >
+            ⚡️ Electrician
+          </button>
 
-    <button onClick={() => onQuickSend("I need a plumber")}>
-      🚰 Plumber
-    </button>
+          <button
+            onClick={() => onQuickSend("I need a plumber")}
+            className="px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-sm hover:bg-blue-200"
+          >
+            🚰 Plumber
+          </button>
 
-    <button onClick={() => onQuickSend("I need a carpenter")}>
-      🪚 Carpenter
-    </button>
+          <button
+            onClick={() => onQuickSend("I need a carpenter")}
+            className="px-3 py-1 rounded-full bg-yellow-100 text-yellow-700 text-sm hover:bg-yellow-200"
+          >
+            🪚 Carpenter
+          </button>
 
-    <button onClick={() => onQuickSend("I need a painter")}>
-      🎨 Painter
-    </button>
+          <button
+            onClick={() => onQuickSend("I need a painter")}
+            className="px-3 py-1 rounded-full bg-purple-100 text-purple-700 text-sm hover:bg-purple-200"
+          >
+            🎨 Painter
+          </button>
 
-    <button onClick={() => onQuickSend("I need a mason")}>
-      🧱 Mason
-    </button>
-  </div>
-)}
+          <button
+            onClick={() => onQuickSend("I need a mason")}
+            className="px-3 py-1 rounded-full bg-gray-200 text-gray-700 text-sm hover:bg-gray-300"
+          >
+            🧱 Mason
+          </button>
+        </div>
+      )}
     </div>
   );
 }

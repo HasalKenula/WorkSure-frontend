@@ -18,7 +18,6 @@ export default function ChatWindow({ onClose }) {
     if (!text.trim() || isTyping) return;
 
     const newMessages = [...messages, { sender: "user", text }];
-
     setMessages(newMessages);
     setIsTyping(true);
 
@@ -29,7 +28,6 @@ export default function ChatWindow({ onClose }) {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      // ⏳ small delay for realism
       setTimeout(() => {
         setMessages([
           ...newMessages,
@@ -54,21 +52,43 @@ export default function ChatWindow({ onClose }) {
   }
 
   return (
-    <div className="chatbot-window">
-      <div className="chatbot-header">
-        <div className="chatbot-title">
-          <img src={chatbotIcon} alt="Chatbot" className="chatbot-icon" />
+    <div
+      className="
+        fixed bottom-24 right-6
+        w-[380px] h-[520px]
+        bg-white dark:bg-gray-900
+        rounded-2xl shadow-2xl
+        flex flex-col overflow-hidden
+        animate-slideUp
+      "
+    >
+      {/* Header */}
+      <div
+        className="flex items-center justify-between px-4 py-3 text-white"
+        style={{ backgroundColor: "#f59e0b" }}
+      >
+        <div className="flex items-center gap-2 font-semibold">
+          <img
+            src={chatbotIcon}
+            alt="Chatbot"
+            className="w-8 h-8 rounded-full object-cover"
+          />
           <span>WorkSure Assistant</span>
         </div>
-        <button onClick={onClose}>✕</button>
+
+        <button onClick={onClose} className="text-xl hover:opacity-80">
+          ✕
+        </button>
       </div>
 
+      {/* Messages */}
       <ChatMessages
         messages={messages}
         isTyping={isTyping}
         onQuickSend={sendMessage}
       />
 
+      {/* Input */}
       <ChatInput sendMessage={sendMessage} isTyping={isTyping} />
     </div>
   );

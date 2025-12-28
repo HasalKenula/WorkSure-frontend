@@ -24,7 +24,7 @@ export default function ChatInput({ sendMessage, isTyping }) {
   }, [isTyping]);
 
   return (
-    <div className="chatbot-input">
+    <div className="flex items-center p-2 border-t border-gray-300 bg-white">
       <input
         ref={inputRef}
         type="text"
@@ -37,10 +37,15 @@ export default function ChatInput({ sendMessage, isTyping }) {
             handleSend();
           }
         }}
+        className="flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
       />
 
       {/* SEND BUTTON */}
-      <button onClick={handleSend} disabled={isTyping}>
+      <button
+        onClick={handleSend}
+        disabled={isTyping}
+        className="ml-2 px-3 py-2 bg-cyan-500 text-white rounded hover:bg-cyan-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+      >
         ➤
       </button>
 
@@ -51,7 +56,7 @@ export default function ChatInput({ sendMessage, isTyping }) {
           inputRef.current?.focus();
         }}
         disabled={isTyping}
-        style={{ marginLeft: "6px" }}
+        className="ml-2 px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
       >
         ✕
       </button>
