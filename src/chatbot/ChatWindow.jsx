@@ -24,7 +24,7 @@ export default function ChatWindow({ onClose }) {
 
     try {
       const response = await axios.post(
-        "http://localhost:8080/api/chat",
+        "http://localhost:8081/api/chat",
         { message: text },
         { headers: { "Content-Type": "application/json" } }
       );
