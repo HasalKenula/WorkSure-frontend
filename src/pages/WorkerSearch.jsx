@@ -258,7 +258,7 @@ export default function WorkersPage() {
 
                 <div className="flex justify-center gap-1 mt-2 text-yellow-500">
                   <div className="App">
-                    {/*<StarRating itemId={worker.id} />*/}
+                    {/*<StarRating itemId={1} />*/}
                     <StarRating itemId={worker.id} />
                   </div>
                 </div>
