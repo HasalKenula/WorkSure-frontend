@@ -93,6 +93,7 @@ export default function AdminDashBoard() {
     const [workers, setWorkers] = useState([]);
     const [user, setUsers] = useState([]);
     const [hires, setHires] = useState([]);
+
     async function loadWorkerDetails() {
         try {
             const workers = await axios.get("http://localhost:8081/worker", config);
@@ -169,7 +170,6 @@ export default function AdminDashBoard() {
             return;
         }
 
-
         const link = document.createElement("a");
         link.href = pdfUrl;
         link.download = `${fullName}_document.pdf`;
@@ -184,6 +184,63 @@ export default function AdminDashBoard() {
         return new Date(dateString).toLocaleDateString();
     }
 
+    //searching part
+    const [jobRoles, setJobRoles] = useState([]);
+    const [employees, setEmployees] = useState([]);
+    const [selectedRole, setSelectedRole] = useState(null);
+    const [searchText, setSearchText] = useState("");
+    const [allJobRoles, setAllJobRoles] = useState([]);
+
+    //fetch job roles 
+    useEffect(() => {
+        if (isAuthenticated) {
+            axios
+            .get("http://localhost:8081/worker/job-roles", config)
+            .then(res => {
+                setAllJobRoles(res.data);
+                setJobRoles(res.data); // initially show all
+            });
+        }
+    }, [isAuthenticated]);
+
+    //
+    const selectRole = (jobRole) => {
+        setSelectedRole(jobRole);
+        axios.get("http://localhost:8081/worker/searchbylocandskill", {
+            params: { jobRole },
+            headers: {
+                Authorization: `Bearer ${jwtToken}`
+            }
+        }).then(res => setEmployees(res.data));
+    };
+
+    const capitalizeFirst = (text) => {
+        if (!text) return "";
+        return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+    };
+
+    const handleSearch = (text) => {
+        setSearchText(text);
+
+        if (!text.trim()) {
+            setJobRoles(allJobRoles);
+            return;
+        }
+
+        const filtered = allJobRoles.filter(role =>
+            role.jobRole.toLowerCase().includes(text.toLowerCase())
+        );
+
+        setJobRoles(filtered);
+    };
+
+    useEffect(() => {
+        if (jobRoles.length > 0 && !selectedRole) {
+            selectRole(jobRoles[0].jobRole);
+        }
+    }, [jobRoles]);
+
+
 
     return (
         <div>
@@ -192,7 +249,7 @@ export default function AdminDashBoard() {
                 <div className="px-6">
                     <h1 className="text-2xl font-bold ">Admin DashBoard</h1>
                 </div>
-                <div className=" w-full mx-auto flex flex-col lg:flex-row text-slate-400 lg:flex-row items-center justify-center gap-6 p-6 lg:pt-0">
+                <div className=" w-full mx-auto flex flex-col lg:flex-row text-slate-400  items-center justify-center gap-6 p-6 lg:pt-0">
 
                     <div className="bg-white  w-full lg:w-[25%] flex-1 flex flex-col items-center shadow-xl gap-6 border border-slate-200 py-8 px-8  justify-between">
                         <div className="flex items-center justify-center ">
@@ -233,36 +290,51 @@ export default function AdminDashBoard() {
                 <div className="w-full mx-auto flex flex-col  text-slate-400 lg:flex-row items-center justify-center gap-6 p-6">
                     <div className="bg-white  w-full lg:flex-2 flex flex-col items-center justify-center pb-4 shadow-lg border rounded-lg border-slate-200">
                         <div className="w-full p-4">
-                            <input type="text" placeholder="Search by service name" className="w-full border px-2 py-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" />
+                            <input 
+                                type="text" 
+                                placeholder="Search by service name" 
+                                className="w-full border px-2 py-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                value={searchText}
+                                onChange={(e) => handleSearch(e.target.value)} />
                         </div>
                         <div className="w-full  flex flex-col items-center justify-center">
                             <div className="w-full flex flex-col justify-between items-center px-4 text-lg">
-                                {roles.map((role) => {
-                                    return (
-                                        <div className="w-full flex flex justify-between items-center px-4 text-lg">
-                                            <h1 className="mx-4">{role.job}</h1>
-                                            <h1 className="mx-4">{role.amount}</h1>
-                                        </div>
-                                    )
-                                })}
+                                
+                                {
+                                    jobRoles.map(
+                                        role => {
+                                            return(
+                                            <div 
+                                                key={role.jobRole}
+                                                className={`w-full flex justify-between items-center px-4 py-3 cursor-pointer rounded-lg text-gray-600
+                                                    ${selectedRole === role.jobRole
+                                                        ? "bg-primary text-white"
+                                                        : "hover:bg-gray-100"
+                                                    }`}
+                                                onClick={() => selectRole(role.jobRole)}
+                                            >
+                                                <span>{capitalizeFirst(role.jobRole)}</span>
+                                                <span>{role.count}</span>
+                                            </div>)}
+                                        )
+                                }
                             </div>
                         </div>
                     </div>
                     <div className="bg-white w-full lg:flex-3 flex flex-col py-4 shadow-lg border rounded-lg border-slate-200">
                         <div className="px-6">
-                            <h1 className="text-xl font-bold text-center lg:text-center">Plumbers</h1>
+                            <h1 className="text-xl font-bold text-center lg:text-center">{capitalizeFirst(selectedRole)}s</h1>
                         </div>
                         <div className="w-full flex flex-col lg:flex-row justify-center items-center lg:flex-wrap gap-4">
-                            {details.map((detail) => {
+                            {employees.map((emp) => {
                                 return (
-                                    <div className="w-[40%] flex justify-center items-center lg:gap-2 lg:p-2">
+                                    <div key={emp.id} className="w-[40%] flex justify-center items-center lg:gap-2 lg:p-2">
                                         <img
                                             src={Man}
                                             alt="profile"
                                             className="w-[50px] aspect-square rounded-full object-cover"
                                         />
-
-                                        <h1 className="font-bold text-xl">{detail.name}</h1>
+                                        <h1 className="font-bold text-xl">{emp.fullName}</h1>
                                     </div>
                                 )
                             })}
