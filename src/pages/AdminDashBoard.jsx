@@ -12,68 +12,70 @@ import { LiaUserSecretSolid } from "react-icons/lia";
 import { useNavigate } from "react-router-dom";
 export default function AdminDashBoard() {
     const { isAuthenticated, jwtToken } = useAuth();
-    const navigate = useNavigate();
-    const roles = [
-        {
-            job: "plumber",
-            amount: 12
-        },
-        {
-            job: "plumber",
-            amount: 12
-        },
-        {
-            job: "plumber",
-            amount: 12
-        },
-        {
-            job: "plumber",
-            amount: 12
-        },
-        {
-            job: "plumber",
-            amount: 12
-        },
-        {
-            job: "plumber",
-            amount: 12
-        },
-        {
-            job: "plumber",
-            amount: 12
-        },
-        {
-            job: "plumber",
-            amount: 12
-        },
-    ]
+   const [payments, setPayments] = useState({});
 
-    const details = [
-        {
-            name: "Kamal Perera"
-        },
-        {
-            name: "Kamal Perera"
-        },
-        {
-            name: "Kamal Perera"
-        },
-        {
-            name: "Kamal Perera"
-        },
-        {
-            name: "Kamal Perera"
-        },
-        {
-            name: "Kamal Perera"
-        },
-        {
-            name: "Kamal Perera"
-        },
-        {
-            name: "Kamal Perera"
-        },
-    ]
+    const navigate = useNavigate();
+    // const roles = [
+    //     {
+    //         job: "plumber",
+    //         amount: 12
+    //     },
+    //     {
+    //         job: "plumber",
+    //         amount: 12
+    //     },
+    //     {
+    //         job: "plumber",
+    //         amount: 12
+    //     },
+    //     {
+    //         job: "plumber",
+    //         amount: 12
+    //     },
+    //     {
+    //         job: "plumber",
+    //         amount: 12
+    //     },
+    //     {
+    //         job: "plumber",
+    //         amount: 12
+    //     },
+    //     {
+    //         job: "plumber",
+    //         amount: 12
+    //     },
+    //     {
+    //         job: "plumber",
+    //         amount: 12
+    //     },
+    // ]
+
+    // const details = [
+    //     {
+    //         name: "Kamal Perera"
+    //     },
+    //     {
+    //         name: "Kamal Perera"
+    //     },
+    //     {
+    //         name: "Kamal Perera"
+    //     },
+    //     {
+    //         name: "Kamal Perera"
+    //     },
+    //     {
+    //         name: "Kamal Perera"
+    //     },
+    //     {
+    //         name: "Kamal Perera"
+    //     },
+    //     {
+    //         name: "Kamal Perera"
+    //     },
+    //     {
+    //         name: "Kamal Perera"
+    //     },
+    // ]
 
 
     const [contact, setContact] = useState([]);
@@ -135,6 +137,27 @@ export default function AdminDashBoard() {
         }
     }
 
+  async function loadPayments() {
+    try {
+        const res = await axios.get(
+            "http://localhost:8081/payment",
+            config
+        );
+
+        const paymentMap = {};
+        res.data.forEach(p => {
+            if (p.user && p.user.id) {
+                paymentMap[p.user.id] = p; 
+            }
+        });
+
+        setPayments(paymentMap);
+
+    } catch (error) {
+        console.error("Failed to load payments", error);
+    }
+}
+
 
     useEffect(function () {
         if (isAuthenticated) {
@@ -142,6 +165,7 @@ export default function AdminDashBoard() {
             loadWorkerDetails();
             loadUserDetails();
             loadHireDetails();
+          loadPayments();
         }
     }, [isAuthenticated])
 
@@ -358,7 +382,7 @@ export default function AdminDashBoard() {
                                 <tr>
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Id</th>
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Worker Name</th>
-                                    <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Email</th>
+                                    <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Payment</th>
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Contact Numaber</th>
                                     <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Status</th>
                                     <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Action</th>
@@ -371,7 +395,7 @@ export default function AdminDashBoard() {
                                         <tr class="hover:bg-gray-50">
                                             <td class="border  border-gray-300 px-6 py-3">{user.id}</td>
                                             <td class="border  border-gray-300 px-6 py-3">{user.fullName}</td>
-                                            <td class="border border-gray-300 px-6 py-3">{user.email}</td>
+                                            <td class="border border-gray-300 px-6 py-3">   {payments[user.user?.id] ? "Paid" : "Not yet"}</td>
                                             <td class="border border-gray-300 px-6 py-3">{user.phoneNumber}</td>
                                             <td className="border border-gray-300 px-6 py-3">
                                                 {Boolean(user.isBlocked) ? (

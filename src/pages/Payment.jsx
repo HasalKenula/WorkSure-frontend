@@ -1,9 +1,74 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineCreditCard, AiOutlineWallet } from "react-icons/ai";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+import toast from "react-hot-toast";
 export default function SecurePayment() {
+  const navigate=useNavigate();
   const location = useLocation();
   const { planName, planPrice } = location.state || { planName: "N/A", planPrice: 0 };
+  const { jwtToken, isAuthenticated } = useAuth();
+  const [fullname, setFullname] = useState("");
+  const [email, setEmail] = useState("");
+  const [address, setAddress] = useState("")
+  const [userId, setUserId] = useState(null);
+  const config = {
+    headers: {
+      Authorization: `Bearer ${jwtToken}`
+    }
+  }
+  useEffect(() => {
+    if (!jwtToken) return;
+
+    axios
+      .get("http://localhost:8081/user", config)
+      .then((res) => {
+
+        setUserId(res.data.id);
+        setFullname(res.data.name);
+        setEmail(res.data.email);
+        setAddress(res.data.address);
+
+      })
+      .catch((error) => {
+        console.error("Failed to load user:", error);
+
+      });
+  }, [jwtToken]);
+
+  async function createPayment() {
+    try {
+      await axios.post("http://localhost:8081/payment", {
+        name:fullname,
+        email,
+        address,
+        amount: Math.round(planPrice * 1.08), 
+        planName,
+        userId: userId
+
+      }, config);
+      toast.success("submited your payment");
+      setFullname("");
+      setEmail("");
+      setAddress("");
+      navigate("/");
+    } catch (error) {
+      toast.error("cannot submited your payment")
+    }
+  }
+
+  function handleFullname(event) {
+    setFullname(event.target.value);
+  }
+
+  function handleEmail(event) {
+    setEmail(event.target.value);
+  }
+
+  function handleAddress(event) {
+    setAddress(event.target.value);
+  }
   return (
     <div className="max-w-[1400px] mx-auto p-8 bg-gray-50 min-h-screen">
 
@@ -27,6 +92,8 @@ export default function SecurePayment() {
           <label className="block mt-4 text-sm font-medium text-gray-600">Full Name</label>
           <input
             type="text"
+            value={fullname}
+            onChange={handleFullname}
             placeholder="hasalkenula"
             className="w-full p-3 mt-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition"
           />
@@ -34,6 +101,8 @@ export default function SecurePayment() {
           <label className="block mt-4 text-sm font-medium text-gray-600">Billing Address</label>
           <input
             type="text"
+            value={address}
+            onChange={handleAddress}
             placeholder="23, Janaraja mawatha , Mathara"
             className="w-full p-3 mt-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition"
           />
@@ -41,6 +110,8 @@ export default function SecurePayment() {
           <label className="block mt-4 text-sm font-medium text-gray-600">Email Address</label>
           <input
             type="email"
+            value={email}
+            onChange={handleEmail}
             placeholder="hasalkenula@gmail.com"
             className="w-full p-3 mt-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition"
           />
@@ -110,9 +181,13 @@ export default function SecurePayment() {
             I have read and agree to the website Terms and Conditions
           </label>
 
-          <button className="w-full bg-blue-600 hover:bg-yellow-500 text-white py-4 rounded-xl font-semibold transition-colors">
+          <button
+            onClick={createPayment}
+            className="w-full bg-blue-600 hover:bg-yellow-500 text-white py-4 rounded-xl font-semibold transition-colors"
+          >
             Confirm Payment
           </button>
+
 
           <p className="text-xs text-gray-500 mt-4">
             Your personal data will be used to process your order, support your
