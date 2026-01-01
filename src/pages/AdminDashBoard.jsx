@@ -10,9 +10,10 @@ import CountUp from "react-countup";
 import { SlUserFollow } from "react-icons/sl";
 import { LiaUserSecretSolid } from "react-icons/lia";
 import { useNavigate } from "react-router-dom";
+import PaymentDetailsModal from "../components/PaymentDetailsModal";
 export default function AdminDashBoard() {
     const { isAuthenticated, jwtToken } = useAuth();
-   const [payments, setPayments] = useState({});
+    const [payments, setPayments] = useState({});
 
     const navigate = useNavigate();
     // const roles = [
@@ -137,26 +138,26 @@ export default function AdminDashBoard() {
         }
     }
 
-  async function loadPayments() {
-    try {
-        const res = await axios.get(
-            "http://localhost:8081/payment",
-            config
-        );
+    async function loadPayments() {
+        try {
+            const res = await axios.get(
+                "http://localhost:8081/payment",
+                config
+            );
 
-        const paymentMap = {};
-        res.data.forEach(p => {
-            if (p.user && p.user.id) {
-                paymentMap[p.user.id] = p; 
-            }
-        });
+            const paymentMap = {};
+            res.data.forEach(p => {
+                if (p.user && p.user.id) {
+                    paymentMap[p.user.id] = p;
+                }
+            });
 
-        setPayments(paymentMap);
+            setPayments(paymentMap);
 
-    } catch (error) {
-        console.error("Failed to load payments", error);
+        } catch (error) {
+            console.error("Failed to load payments", error);
+        }
     }
-}
 
 
     useEffect(function () {
@@ -165,7 +166,7 @@ export default function AdminDashBoard() {
             loadWorkerDetails();
             loadUserDetails();
             loadHireDetails();
-          loadPayments();
+            loadPayments();
         }
     }, [isAuthenticated])
 
@@ -219,11 +220,11 @@ export default function AdminDashBoard() {
     useEffect(() => {
         if (isAuthenticated) {
             axios
-            .get("http://localhost:8081/worker/job-roles", config)
-            .then(res => {
-                setAllJobRoles(res.data);
-                setJobRoles(res.data); // initially show all
-            });
+                .get("http://localhost:8081/worker/job-roles", config)
+                .then(res => {
+                    setAllJobRoles(res.data);
+                    setJobRoles(res.data); // initially show all
+                });
         }
     }, [isAuthenticated]);
 
@@ -294,7 +295,7 @@ export default function AdminDashBoard() {
                             <h1>Total Number of Works</h1>
                         </div>
                         <div className="text-5xl font-bold">
-                            <CountUp   key={`workers-${workers.length}`} start={0} end={workers.length} duration={2} enableScrollSpy scrollSpyOnce />
+                            <CountUp key={`workers-${workers.length}`} start={0} end={workers.length} duration={2} enableScrollSpy scrollSpyOnce />
                         </div>
                     </div>
                     <div className="bg-white w-full lg:w-[25%] flex-1 flex flex-col items-center gap-6 shadow-xl border border-slate-200 border py-8 px-8  justify-between">
@@ -314,33 +315,34 @@ export default function AdminDashBoard() {
                 <div className="w-full mx-auto flex flex-col  text-slate-400 lg:flex-row items-center justify-center gap-6 p-6">
                     <div className="bg-white  w-full lg:flex-2 flex flex-col items-center justify-center pb-4 shadow-lg border rounded-lg border-slate-200">
                         <div className="w-full p-4">
-                            <input 
-                                type="text" 
-                                placeholder="Search by service name" 
+                            <input
+                                type="text"
+                                placeholder="Search by service name"
                                 className="w-full border px-2 py-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
                                 value={searchText}
                                 onChange={(e) => handleSearch(e.target.value)} />
                         </div>
                         <div className="w-full  flex flex-col items-center justify-center">
                             <div className="w-full flex flex-col justify-between items-center px-4 text-lg">
-                                
+
                                 {
                                     jobRoles.map(
                                         role => {
-                                            return(
-                                            <div 
-                                                key={role.jobRole}
-                                                className={`w-full flex justify-between items-center px-4 py-3 cursor-pointer rounded-lg text-gray-600
+                                            return (
+                                                <div
+                                                    key={role.jobRole}
+                                                    className={`w-full flex justify-between items-center px-4 py-3 cursor-pointer rounded-lg text-gray-600
                                                     ${selectedRole === role.jobRole
-                                                        ? "bg-primary text-white"
-                                                        : "hover:bg-gray-100"
-                                                    }`}
-                                                onClick={() => selectRole(role.jobRole)}
-                                            >
-                                                <span>{capitalizeFirst(role.jobRole)}</span>
-                                                <span>{role.count}</span>
-                                            </div>)}
-                                        )
+                                                            ? "bg-primary text-white"
+                                                            : "hover:bg-gray-100"
+                                                        }`}
+                                                    onClick={() => selectRole(role.jobRole)}
+                                                >
+                                                    <span>{capitalizeFirst(role.jobRole)}</span>
+                                                    <span>{role.count}</span>
+                                                </div>)
+                                        }
+                                    )
                                 }
                             </div>
                         </div>
@@ -428,6 +430,13 @@ export default function AdminDashBoard() {
                                                 <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/WorkerProgress/${user.id}`)}>
                                                     Progress
                                                 </button>
+
+                                                <PaymentDetailsModal
+                                                    userId={user.user?.id}
+                                                    triggerButtonText="Payment Details"
+                                                    buttonClass="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white"
+                                                />
+
                                             </div></td>
 
                                         </tr>
