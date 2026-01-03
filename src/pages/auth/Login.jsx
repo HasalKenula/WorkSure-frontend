@@ -31,7 +31,7 @@ function Login() {
             const response = await axios.post("http://localhost:8081/auth/login", data);
             login(response.data);
             toast.success("Loging successful!");
-            navigate("/");
+            navigate("/auth");
         } catch (error) {
             setError("There was an error logging in");
             toast.error("here was an error logging in!");
