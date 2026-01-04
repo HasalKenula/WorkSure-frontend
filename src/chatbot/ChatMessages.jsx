@@ -3,7 +3,7 @@ import { useEffect, useRef } from "react";
 export default function ChatMessages({ messages, isTyping, onQuickSend }) {
   const containerRef = useRef(null);
 
-  // ✅ AUTO SCROLL
+  
   useEffect(() => {
     containerRef.current.scrollTop =
       containerRef.current.scrollHeight;
@@ -40,11 +40,12 @@ export default function ChatMessages({ messages, isTyping, onQuickSend }) {
               `
           }
         >
-          {msg.text}
+          <p className="whitespace-pre-line">
+            {msg.text}
+          </p>
         </div>
       ))}
 
-      {/* ⏳ TYPING INDICATOR */}
       {isTyping && (
         <div
           className="
@@ -56,14 +57,13 @@ export default function ChatMessages({ messages, isTyping, onQuickSend }) {
             shadow flex items-center gap-1
           "
         >
-          WorkSure Assistant is typing
+          typing
           <span className="animate-pulse">.</span>
           <span className="animate-pulse delay-150">.</span>
           <span className="animate-pulse delay-300">.</span>
         </div>
       )}
 
-      {/* ✅ QUICK ACTION BUTTONS */}
       {!isTyping && (
         <div className="flex flex-wrap gap-2 pt-2">
           <button
@@ -94,12 +94,6 @@ export default function ChatMessages({ messages, isTyping, onQuickSend }) {
             🎨 Painter
           </button>
 
-          <button
-            onClick={() => onQuickSend("I need a mason")}
-            className="px-3 py-1 rounded-full bg-gray-200 text-gray-700 text-sm hover:bg-gray-300"
-          >
-            🧱 Mason
-          </button>
         </div>
       )}
     </div>

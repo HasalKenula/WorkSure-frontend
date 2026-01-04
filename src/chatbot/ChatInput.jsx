@@ -10,13 +10,13 @@ export default function ChatInput({ sendMessage, isTyping }) {
     sendMessage(text);
     setText("");
 
-    // ✅ Keep cursor after sending
+    
     setTimeout(() => {
       inputRef.current?.focus();
     }, 0);
   }
 
-  // ✅ Auto focus when bot finishes typing
+  
   useEffect(() => {
     if (!isTyping) {
       inputRef.current?.focus();
@@ -37,16 +37,16 @@ export default function ChatInput({ sendMessage, isTyping }) {
             handleSend();
           }
         }}
-        className="flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-cyan-400 disabled:bg-gray-100 disabled:cursor-not-allowed"
+        className="flex-1 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-bg-[#f59e0b] disabled:bg-gray-100 disabled:cursor-not-allowed"
       />
 
       {/* SEND BUTTON */}
       <button
         onClick={handleSend}
         disabled={isTyping}
-        className="ml-2 px-3 py-2 bg-cyan-500 text-white rounded hover:bg-cyan-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
+        className="ml-2 px-3 py-2 bg-[#f59e0b] text-white rounded hover:bg-[#f59e0b] disabled:bg-gray-300 disabled:cursor-not-allowed"
       >
-        ➤
+        Send
       </button>
 
       {/* CLEAR BUTTON */}
@@ -58,7 +58,7 @@ export default function ChatInput({ sendMessage, isTyping }) {
         disabled={isTyping}
         className="ml-2 px-3 py-2 bg-red-500 text-white rounded hover:bg-red-600 disabled:bg-gray-300 disabled:cursor-not-allowed"
       >
-        ✕
+        Clear
       </button>
     </div>
   );

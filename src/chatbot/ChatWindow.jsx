@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
@@ -8,11 +8,17 @@ export default function ChatWindow({ onClose }) {
   const [messages, setMessages] = useState([
     {
       sender: "bot",
-      text: "Hi 👋 I’m WorkSure Assistant. How can I help you today?",
+      text: "Hi! I’m WorkSure Agent. How can I help you today?",
     },
   ]);
 
   const [isTyping, setIsTyping] = useState(false);
+
+  
+  useEffect(() => {
+    axios.post("http://localhost:8081/api/chat/reset").catch(() => {
+    });
+  }, []);
 
   async function sendMessage(text) {
     if (!text.trim() || isTyping) return;
@@ -62,7 +68,7 @@ export default function ChatWindow({ onClose }) {
         animate-slideUp
       "
     >
-      {/* Header */}
+      
       <div
         className="flex items-center justify-between px-4 py-3 text-white"
         style={{ backgroundColor: "#f59e0b" }}
@@ -73,7 +79,7 @@ export default function ChatWindow({ onClose }) {
             alt="Chatbot"
             className="w-8 h-8 rounded-full object-cover"
           />
-          <span>WorkSure Assistant</span>
+          <span>WorkSure Agent</span>
         </div>
 
         <button onClick={onClose} className="text-xl hover:opacity-80">
@@ -81,14 +87,14 @@ export default function ChatWindow({ onClose }) {
         </button>
       </div>
 
-      {/* Messages */}
+      
       <ChatMessages
         messages={messages}
         isTyping={isTyping}
         onQuickSend={sendMessage}
       />
 
-      {/* Input */}
+      
       <ChatInput sendMessage={sendMessage} isTyping={isTyping} />
     </div>
   );
