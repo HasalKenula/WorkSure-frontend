@@ -1,224 +1,3 @@
-// import { useEffect, useState } from "react";
-// import Modal from "react-modal";
-// import axios from "axios";
-// import toast from "react-hot-toast";
-// import { useAuth } from "../context/AuthContext";
-
-// Modal.setAppElement("#root");
-
-// /* ----------------- Helper Functions ----------------- */
-
-// function getPlanDurationInMonths(planName) {
-//   switch (planName?.toLowerCase()) {
-//     case "go":
-//       return 3;
-//     case "pro":
-//       return 6;
-//     case "plus":
-//       return 12;
-//     default:
-//       return 0;
-//   }
-// }
-
-// function calculateExpiry(createdAt, planName) {
-//   const startDate = new Date(createdAt);
-//   const months = getPlanDurationInMonths(planName);
-
-//   const expiryDate = new Date(startDate);
-//   expiryDate.setMonth(expiryDate.getMonth() + months);
-
-//   const today = new Date();
-//   const diffTime = expiryDate - today;
-//   const remainingDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-
-//   return {
-//     expiryDate,
-//     remainingDays,
-//     isExpired: remainingDays < 0,
-//   };
-// }
-
-// /* ----------------- Component ----------------- */
-
-// export default function PaymentDetailsModal({
-//   userId,
-//   triggerButtonText = "Payment Details",
-//   buttonClass = "",
-// }) {
-//   const { jwtToken } = useAuth();
-
-//   const [isModalOpen, setIsModalOpen] = useState(false);
-//   const [payment, setPayment] = useState(null);
-//   const [loading, setLoading] = useState(false);
-
-//   const openModal = () => {
-//     if (!userId) {
-//       toast.error("User ID not found");
-//       return;
-//     }
-//     setIsModalOpen(true);
-//   };
-
-//   const closeModal = () => setIsModalOpen(false);
-
-//   const config = {
-//     headers: {
-//       Authorization: `Bearer ${jwtToken}`,
-//     },
-//   };
-
-//   useEffect(() => {
-//     if (!isModalOpen || !userId) return;
-
-//     setLoading(true);
-//     axios
-//       .get(`http://localhost:8081/payment/${userId}`, config)
-//       .then((res) => setPayment(res.data))
-//       .catch(() => {
-//         toast.error("Payment details not found");
-//         setPayment(null);
-//       })
-//       .finally(() => setLoading(false));
-//   }, [isModalOpen, userId]);
-
-//   return (
-//     <>
-//       {/* Trigger Button */}
-//       <button onClick={openModal} className={buttonClass}>
-//         {triggerButtonText}
-//       </button>
-
-//       {/* Modal */}
-//       <Modal
-//         isOpen={isModalOpen}
-//         onRequestClose={closeModal}
-//         contentLabel="Payment Details"
-//         className="bg-white p-0 rounded-2xl shadow-2xl w-[480px] mx-auto mt-32 relative z-50 overflow-hidden"
-//         overlayClassName="fixed inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-start z-40"
-//       >
-//         {/* Header */}
-//         <div className="bg-primary to-blue-600 p-5">
-//           <h2 className="text-xl font-bold text-white">
-//             Payment Details
-//           </h2>
-//           <p className="text-sm text-white/80">
-//             Worker subscription & billing information
-//           </p>
-//         </div>
-
-//         {/* Body */}
-//         <div className="p-6">
-//           {loading && (
-//             <p className="text-sm text-gray-500">
-//               Loading payment details...
-//             </p>
-//           )}
-
-//           {!loading && !payment && (
-//             <p className="text-sm text-red-500">
-//               No payment record found for this user.
-//             </p>
-//           )}
-
-//           {!loading && payment && (() => {
-//             const { expiryDate, remainingDays, isExpired } =
-//               calculateExpiry(payment.createdAt, payment.planName);
-
-//             return (
-//               <div className="space-y-4">
-
-//                 {/* Main Info */}
-//                 <div className="bg-gray-50 rounded-xl p-4 border">
-//                   <div className="grid grid-cols-2 gap-4 text-sm">
-//                     <div>
-//                       <p className="text-gray-500">Name</p>
-//                       <p className="font-semibold">{payment.name}</p>
-//                     </div>
-
-//                     <div>
-//                       <p className="text-gray-500">Email</p>
-//                       <p className="font-semibold">{payment.email}</p>
-//                     </div>
-
-//                     <div>
-//                       <p className="text-gray-500">Plan</p>
-//                       <span
-//                         className={`inline-block mt-1 px-3 py-1 text-xs font-semibold rounded-full
-//                         ${
-//                           isExpired
-//                             ? "bg-red-100 text-red-700"
-//                             : "bg-green-100 text-green-700"
-//                         }`}
-//                       >
-//                         {payment.planName.toUpperCase()}
-//                       </span>
-//                     </div>
-
-//                     <div>
-//                       <p className="text-gray-500">Amount</p>
-//                       <p className="font-semibold text-primary">
-//                         LKR {payment.amount}
-//                       </p>
-//                     </div>
-//                   </div>
-//                 </div>
-
-//                 {/* Subscription Info */}
-//                 <div className="bg-white border rounded-xl p-4 text-sm space-y-2">
-//                   <div className="flex justify-between">
-//                     <span className="text-gray-500">Paid On</span>
-//                     <span className="font-medium">
-//                       {new Date(payment.createdAt).toLocaleDateString()}
-//                     </span>
-//                   </div>
-
-//                   <div className="flex justify-between">
-//                     <span className="text-gray-500">Expires On</span>
-//                     <span className="font-medium">
-//                       {expiryDate.toLocaleDateString()}
-//                     </span>
-//                   </div>
-
-//                   <div className="flex justify-between">
-//                     <span className="text-gray-500">Remaining</span>
-//                     <span
-//                       className={`font-semibold ${
-//                         isExpired ? "text-red-600" : "text-green-600"
-//                       }`}
-//                     >
-//                       {isExpired
-//                         ? `Expired ${Math.abs(remainingDays)} days ago`
-//                         : `${remainingDays} days left`}
-//                     </span>
-//                   </div>
-//                 </div>
-
-//                 {/* Address */}
-//                 <div className="bg-white border rounded-xl p-4 text-sm">
-//                   <p className="text-gray-500 mb-1">Address</p>
-//                   <p className="font-medium">{payment.address}</p>
-//                 </div>
-//               </div>
-//             );
-//           })()}
-
-//           {/* Footer */}
-//           <div className="mt-6 flex justify-end">
-//             <button
-//               onClick={closeModal}
-//               className="px-6 py-2 rounded-lg bg-gray-200 hover:bg-gray-300 font-medium transition"
-//             >
-//               Close
-//             </button>
-//           </div>
-//         </div>
-//       </Modal>
-//     </>
-//   );
-// }
-
-
 import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import axios from "axios";
@@ -294,21 +73,21 @@ function calculateExpiry(createdAt, planName) {
 const planConfig = {
     go: {
         name: "GO",
-        color: "bg-blue-500",
-        gradient: "from-blue-500 to-cyan-400",
-        textColor: "text-blue-600",
-        bgColor: "bg-blue-50",
-        borderColor: "border-blue-100",
+        color: "bg-amber-500",
+        gradient: "from-amber-500 to-orange-400",
+        textColor: "text-amber-600",
+        bgColor: "bg-amber-50",
+        borderColor: "border-amber-100",
         duration: "3 Months",
         price: "LKR 2,999"
     },
     pro: {
         name: "PRO",
-        color: "bg-purple-500",
-        gradient: "from-purple-500 to-pink-400",
-        textColor: "text-purple-600",
-        bgColor: "bg-purple-50",
-        borderColor: "border-purple-100",
+        color: "bg-amber-500",
+        gradient: "from-amber-500 to-orange-400",
+        textColor: "text-amber-600",
+        bgColor: "bg-amber-50",
+        borderColor: "border-amber-100",
         duration: "6 Months",
         price: "LKR 5,499"
     },

@@ -71,6 +71,31 @@ export default function MoneyTransferPage() {
             });
     }, [jwtToken]);
 
+    const [user, setUser] = useState({
+        name: "",
+        email: "",
+        contact: "",
+        address: "",
+        imageUrl: "",
+    });
+
+
+    useEffect(() => {
+        if (!jwtToken) return;
+
+        axios
+            .get("http://localhost:8081/user", {
+                headers: { Authorization: `Bearer ${jwtToken}` },
+            })
+            .then((res) => {
+                setUser(res.data);
+
+            })
+            .catch(() => setLoading(false));
+    }, [jwtToken]);
+
+
+
     // Mock worker data (replace with API call)
     //   const [workers] = useState([
     //     { id: "WRK001", name: "John Doe", email: "john@example.com", bank: "Commercial Bank", account: "1234567890" },
@@ -99,7 +124,7 @@ export default function MoneyTransferPage() {
     const handleWorkerSelect = (worker) => {
         setFormData((prev) => ({
             ...prev,
-            workerId: worker.id,
+            workerId: worker.worker.id,
             workerName: worker.fullName,
             workerEmail: worker.email,
         }));
@@ -115,41 +140,174 @@ export default function MoneyTransferPage() {
     };
 
     // Validate form
-    const validateForm = () => {
-        if (!formData.amount || parseFloat(formData.amount) <= 0) {
-            toast.error("Please enter a valid amount");
-            return false;
-        }
-        if (!formData.workerId) {
-            toast.error("Please select a worker");
-            return false;
-        }
-        if (!formData.paymentMethod) {
-            toast.error("Please select a payment method");
-            return false;
-        }
-        return true;
-    };
+    // const validateForm = () => {
+    //     if (!formData.amount || parseFloat(formData.amount) <= 0) {
+    //         toast.error("Please enter a valid amount");
+    //         return false;
+    //     }
+    //     if (!formData.workerId) {
+    //         toast.error("Please select a worker");
+    //         return false;
+    //     }
+    //     if (!formData.paymentMethod) {
+    //         toast.error("Please select a payment method");
+    //         return false;
+    //     }
+    //     return true;
+    // };
 
     // Handle payment submission - MOCKED VERSION (no backend needed)
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     if (!validateForm()) return;
+
+    //     setLoading(true);
+    //     try {
+    //         // Mock API call (remove when you have real backend)
+    //         await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API delay
+    //         await axios.post("http://localhost:8081/transfer", {
+    //             transactionId: transactionId,
+    //             paymentMethod: formData.paymentMethod,
+    //             fullName: formData.workerName,
+    //             amount: formData.amount,
+    //             createdAt: Date.now,
+    //             userId: user?.id,
+    //             workerId: formData.workerId,
+    //         }, config)
+
+    //         toast.success("Payment transferred successfully! (Demo Mode)");
+    //         setShowConfirmation(true);
+    //         setStep(3);
+    //     } catch (error) {
+    //         toast.error("Payment failed. Please try again.");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+    // const handleSubmit = async (e) => {
+    //     e.preventDefault();
+    //     if (!validateForm()) return;
+
+    //     setLoading(true);
+
+    //     const transactionId = `TX${Date.now()}`;
+
+    //     try {
+    //         await axios.post("http://localhost:8081/transfer", {
+    //             transactionId,
+    //             paymentMethod: formData.paymentMethod,
+    //             fullName: formData.workerName,
+    //             amount: parseFloat(formData.amount),
+    //             createdAt: new Date().toISOString(),
+    //             userId: user?.id,
+    //             workerId: formData.workerId,
+    //         }, config);
+
+    //         toast.success("Payment transferred successfully! (Demo Mode)");
+    //         setShowConfirmation(true);
+    //         setStep(3);
+    //     } catch (error) {
+    //         console.error(error);
+    //         toast.error("Payment failed. Please try again.");
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // };
+
+   const validateForm = () => {
+    if (!formData.amount || parseFloat(formData.amount) <= 0) {
+        toast.error("Please enter a valid amount");
+        return false;
+    }
+
+    if (!formData.workerId) {
+        toast.error("Please select a worker");
+        return false;
+    }
+
+    if (!formData.paymentMethod) {
+        toast.error("Please select a payment method");
+        return false;
+    }
+
+    // 🔹 Card validation
+    if (formData.paymentMethod === "card") {
+        if (
+            !formData.cardNumber ||
+            !formData.cardHolder ||
+            !formData.expiryDate ||
+            !formData.cvv
+        ) {
+            toast.error("Please fill all card details");
+            return false;
+        }
+    }
+
+    // 🔹 Bank transfer validation
+    if (formData.paymentMethod === "bank") {
+        if (
+            !formData.bankName ||
+            !formData.bankAccountNumber ||
+            !formData.branch
+        ) {
+            toast.error("Please fill all bank transfer details");
+            return false;
+        }
+    }
+
+    // 🔹 Digital wallet validation
+    if (formData.paymentMethod === "digital") {
+        toast.error("Please complete the digital wallet payment");
+        return false;
+    }
+
+    // 🔹 Scheduled transfer validation
+    if (formData.transferType === "scheduled" && !formData.scheduleDate) {
+        toast.error("Please select a schedule date");
+        return false;
+    }
+
+    return true;
+};
+
+
+
+    const [transaction, setTransaction] = useState(null);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!validateForm()) return;
 
         setLoading(true);
-        try {
-            // Mock API call (remove when you have real backend)
-            await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API delay
 
-            toast.success("Payment transferred successfully! (Demo Mode)");
+        const transactionId = `TX${Date.now()}`; // frontend ID (can be overridden by backend)
+
+        try {
+            const res = await axios.post("http://localhost:8081/transfer", {
+                transactionId,
+                paymentMethod: formData.paymentMethod,
+                fullName: formData.workerName,
+                amount: parseFloat(formData.amount),
+                //  createdAt: new Date().toISOString(),
+                userId: user?.id,
+                workerId: formData.workerId,
+            }, config);
+
+            // save backend response
+            setTransaction(res.data); // assuming backend returns { transactionId, createdAt, ... }
+
+            toast.success("Payment transferred successfully!");
             setShowConfirmation(true);
             setStep(3);
         } catch (error) {
+            console.error(error);
             toast.error("Payment failed. Please try again.");
         } finally {
             setLoading(false);
         }
     };
+
 
     // Reset form
     const handleReset = () => {
@@ -202,6 +360,8 @@ export default function MoneyTransferPage() {
         return v;
     };
 
+
+
     return (
         // <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-50 p-4 md:p-8">
         <div className="min-h-screen p-4 md:p-8">
@@ -224,8 +384,8 @@ export default function MoneyTransferPage() {
                             <div key={stepNum} className="flex items-center">
                                 <div
                                     className={`w-10 h-10 rounded-full flex items-center justify-center text-lg font-bold ${step >= stepNum
-                                            ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-lg"
-                                            : "bg-amber-100 text-amber-600"
+                                        ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-lg"
+                                        : "bg-amber-100 text-amber-600"
                                         }`}
                                 >
                                     {step > stepNum ? <FaCheckCircle /> : stepNum}
@@ -233,8 +393,8 @@ export default function MoneyTransferPage() {
                                 {stepNum < 3 && (
                                     <div
                                         className={`w-16 md:w-24 h-1 ${step > stepNum
-                                                ? "bg-gradient-to-r from-amber-500 to-yellow-500"
-                                                : "bg-amber-200"
+                                            ? "bg-gradient-to-r from-amber-500 to-yellow-500"
+                                            : "bg-amber-200"
                                             }`}
                                     />
                                 )}
@@ -296,8 +456,8 @@ export default function MoneyTransferPage() {
                                                 key={worker.id}
                                                 onClick={() => handleWorkerSelect(worker)}
                                                 className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 ${formData.workerId === worker.id
-                                                        ? "border-amber-500 bg-gradient-to-r from-amber-50 to-yellow-50 shadow-lg transform scale-[1.02]"
-                                                        : "border-amber-100 hover:border-amber-300 hover:shadow-md"
+                                                    ? "border-amber-500 bg-gradient-to-r from-amber-50 to-yellow-50 shadow-lg transform scale-[1.02]"
+                                                    : "border-amber-100 hover:border-amber-300 hover:shadow-md"
                                                     }`}
                                             >
                                                 <div className="flex items-center justify-between mb-2">
@@ -359,8 +519,8 @@ export default function MoneyTransferPage() {
                                                     key={method.id}
                                                     onClick={() => handleMethodSelect(method.id)}
                                                     className={`p-4 rounded-xl border-2 cursor-pointer transition-all duration-300 ${selectedMethod === method.id
-                                                            ? `border-amber-500 bg-gradient-to-r ${method.color} text-white shadow-lg transform scale-[1.02]`
-                                                            : "border-amber-100 hover:border-amber-300 hover:shadow-md"
+                                                        ? `border-amber-500 bg-gradient-to-r ${method.color} text-white shadow-lg transform scale-[1.02]`
+                                                        : "border-amber-100 hover:border-amber-300 hover:shadow-md"
                                                         }`}
                                                 >
                                                     <Icon className="text-3xl mb-3" />
@@ -541,8 +701,8 @@ export default function MoneyTransferPage() {
                                                 setFormData((prev) => ({ ...prev, transferType: "instant" }))
                                             }
                                             className={`px-6 py-3 rounded-xl font-medium transition-all ${formData.transferType === "instant"
-                                                    ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-lg"
-                                                    : "bg-amber-100 text-amber-800 hover:bg-amber-200"
+                                                ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-lg"
+                                                : "bg-amber-100 text-amber-800 hover:bg-amber-200"
                                                 }`}
                                         >
                                             Instant Transfer
@@ -553,8 +713,8 @@ export default function MoneyTransferPage() {
                                                 setFormData((prev) => ({ ...prev, transferType: "scheduled" }))
                                             }
                                             className={`px-6 py-3 rounded-xl font-medium transition-all ${formData.transferType === "scheduled"
-                                                    ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-lg"
-                                                    : "bg-amber-100 text-amber-800 hover:bg-amber-200"
+                                                ? "bg-gradient-to-r from-amber-500 to-yellow-500 text-white shadow-lg"
+                                                : "bg-amber-100 text-amber-800 hover:bg-amber-200"
                                                 }`}
                                         >
                                             <FaCalendarAlt className="inline-block mr-2" />
@@ -643,12 +803,14 @@ export default function MoneyTransferPage() {
                                     <div className="grid grid-cols-2 gap-4 text-left">
                                         <div>
                                             <p className="text-amber-600 text-sm">Transaction ID</p>
-                                            <p className="font-bold text-amber-900">TX{Date.now()}</p>
+                                            {/* <p className="font-bold text-amber-900">TX{Date.now()}</p> */}
+                                            {transaction?.transactionId || "TX0000"}
                                         </div>
                                         <div>
                                             <p className="text-amber-600 text-sm">Date & Time</p>
                                             <p className="font-bold text-amber-900">
                                                 {new Date().toLocaleString()}
+                                                {/* {transaction ? new Date(transaction.createdAt).toLocaleString() : new Date().toLocaleString()} */}
                                             </p>
                                         </div>
                                         <div>

@@ -229,7 +229,7 @@ export default function WorkerProgress() {
               { title: "Ongoing", value: ongoing, icon: <FaSpinner style={{ color: "#7c3aed" }} /> },
               { title: "Completed", value: completed, icon: <FaTasks style={{ color: "#059669" }} /> },
               { title: "Total Requests", value: total, icon: <FaListAlt style={{ color: "#4338ca" }} /> },
-              { title: "Total Salary", value: total, icon: <FaMoneyBillWave style={{ color: "#0f766e" }} /> },
+              { title: "Total Salary", value: "0", icon: <FaMoneyBillWave style={{ color: "#0f766e" }} /> },
             ].map((item, i) => (
               <div
                 key={i}
