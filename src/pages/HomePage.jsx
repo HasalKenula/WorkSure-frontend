@@ -238,28 +238,31 @@ export default function HomePage() {
                 {/*<PremiumHeroSection/>*/}
                 <HowItWorksSection/>
 
-                < LogoAnimation />
+                {/*< LogoAnimation />*/}
 
-                <section className="w-full bg-primary py-20 flex items-center justify-center">
-                    <div className="text-center px-4">
-                        <h1 className="text-3xl md:text-4xl font-bold text-white mb-8">
-                            Ready to Simplify Your Service Search?
-                        </h1>
+                <section className="relative w-full py-24 flex items-center justify-center bg-[#FFF8ED] overflow-hidden">
 
-                        {/* BUTTONS ROW */}
-                        <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+                 {/* Soft Decorative Elements */}
+                    <div className="absolute top-12 left-12 w-40 h-40 bg-yellow-300/30 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-12 right-12 w-56 h-56 bg-yellow-400/20 rounded-full blur-3xl"></div>
 
-                            <button className="bg-black text-white font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-gray-900 transition">
-                                Join WorkSure Today!
-                            </button>
+                    <div className="relative z-10 text-center px-6 max-w-3xl">
+        
+                    <h1 className="text-4xl md:text-5xl font-extrabold text-black leading-tight mb-6"> Ready to Simplify Your  <span className="block text-yellow-500"> Service Search?</span></h1>
 
-                            <button className="bg-white text-black font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-gray-100 transition">
-                                Learn More
-                            </button>
+                    <p className="text-black/70 text-lg md:text-xl mb-10">Find reliable professionals, book with confidence, and get things done without stress.</p>
 
-                        </div>
-                    </div>
-                </section>
+                {/* BUTTONS */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+
+                <button className="bg-black text-white font-semibold px-10 py-4 rounded-full shadow-lg transition transform hover:scale-105 hover:bg-gray-900">Join WorkSure Today</button>
+                <button className="bg-yellow-400 text-black font-semibold px-10 py-4 rounded-full shadow-lg transition transform hover:scale-105 hover:bg-yellow-500">Learn More</button>
+            </div>
+        </div>
+    </section>
+
+
+                {/*<PremiumHeroSection/>*/}
                 <Footer/>
 
             </>)}
