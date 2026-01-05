@@ -2,10 +2,10 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import about from "../assets/aboutUS.jpg";
 import Mission from "../assets/mission.jpg"; // example 2nd image
-import worker from "../assets/worker.png"; // example 3rd image
+import service from "../assets/service.jpg" // example 3rd image
 
-export default function AboutUsTopSection() {
-  const images = [about, Mission, worker];
+export default function PremiumHero() {
+  const images = [about, Mission, service];
   const [current, setCurrent] = useState(0);
 
   // Simple slideshow every 5 seconds
