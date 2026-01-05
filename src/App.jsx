@@ -30,6 +30,10 @@ import WorkerView from './pages/WorkerView'
 import { Toaster } from 'react-hot-toast'
 import WorkerProfileCard from './pages/WorkerProfileCard'
 import ChatbotWidget from "./chatbot/ChatbotWidget";
+import WorkerProgress from './pages/WorkerProgress'
+import PlanUpgradePage from './pages/PlanUpgradePage'
+import MoneyTransferPage from './pages/MoneyTransferPage'
+import WorkerBankDetailsPage from './pages/WorkerBankDetailsPage'
 
 
 function App() {
@@ -56,6 +60,7 @@ function AppWithChatbot() {
       <Routes>
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/register" element={<Register />} />
+
         <Route element={<ProtectedRoute />}>
           <Route path="/*" element={<HomePage />} />
           <Route path="/about" element={<AboutUs />} />
@@ -78,6 +83,10 @@ function AppWithChatbot() {
           <Route path="/workerProfileUpdate" element={<WorkerProfileUpdate />} />
           <Route path="/workerView/:userId" element={<WorkerView />} />
           <Route path="/workerCard/:workerId" element={<WorkerProfileCard />} />
+          <Route path="/WorkerProgress/:workerId" element={<WorkerProgress />} />
+          <Route path="/planUpgradePage" element={<PlanUpgradePage />} />
+          <Route path="/transfer" element={<MoneyTransferPage />} />
+          <Route path="/bank" element={<WorkerBankDetailsPage />} />
         </Route>
       </Routes>
 

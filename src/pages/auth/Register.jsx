@@ -64,8 +64,11 @@ function Register() {
 
             setSuccess("User registered successfully!");
             setError("");
+            // toast.success("Registration successful!");
+            // setTimeout(() => navigate("/auth/login"), 1000);
             toast.success("Registration successful!");
-            setTimeout(() => navigate("/auth/login"), 1000);
+            navigate("/auth/login");
+
 
         } catch (error) {
             if (error.response?.status === 400) {

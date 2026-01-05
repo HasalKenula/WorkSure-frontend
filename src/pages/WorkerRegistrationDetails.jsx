@@ -231,7 +231,7 @@ const WorkerRegistrationDetails = () => {
                     <div className="flex gap-4 mt-8 justify-end">
                         <button type='button'
                             onClick={() => handleToggleBlock(workers.id)}
-                            className={`px-3 py-1 rounded-lg border ${workers.isBlocked ? "bg-green-500 text-white" : "bg-red-500 text-white"}hover:opacity-80`}
+                            className={`px-3 py-1 rounded-lg border ${workers.isBlocked ? "bg-green-100 text-green-700 text-white" : "bg-red-100 text-red-700 text-white"}hover:opacity-80`}
                         >
                             {workers.isBlocked ? "Approve" : "Block"}
                         </button>

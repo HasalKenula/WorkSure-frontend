@@ -10,118 +10,73 @@ import CountUp from "react-countup";
 import { SlUserFollow } from "react-icons/sl";
 import { LiaUserSecretSolid } from "react-icons/lia";
 import { useNavigate } from "react-router-dom";
+import PaymentDetailsModal from "../components/PaymentDetailsModal";
 export default function AdminDashBoard() {
     const { isAuthenticated, jwtToken } = useAuth();
-     const navigate = useNavigate();
-    const roles = [
-        {
-            job: "plumber",
-            amount: 12
-        },
-        {
-            job: "plumber",
-            amount: 12
-        },
-        {
-            job: "plumber",
-            amount: 12
-        },
-        {
-            job: "plumber",
-            amount: 12
-        },
-        {
-            job: "plumber",
-            amount: 12
-        },
-        {
-            job: "plumber",
-            amount: 12
-        },
-        {
-            job: "plumber",
-            amount: 12
-        },
-        {
-            job: "plumber",
-            amount: 12
-        },
-    ]
+    const [payments, setPayments] = useState({});
 
-    const details = [
-        {
-            name: "Kamal Perera"
-        },
-        {
-            name: "Kamal Perera"
-        },
-        {
-            name: "Kamal Perera"
-        },
-        {
-            name: "Kamal Perera"
-        },
-        {
-            name: "Kamal Perera"
-        },
-        {
-            name: "Kamal Perera"
-        },
-        {
-            name: "Kamal Perera"
-        },
-        {
-            name: "Kamal Perera"
-        },
-    ]
+    const navigate = useNavigate();
+    // const roles = [
+    //     {
+    //         job: "plumber",
+    //         amount: 12
+    //     },
+    //     {
+    //         job: "plumber",
+    //         amount: 12
+    //     },
+    //     {
+    //         job: "plumber",
+    //         amount: 12
+    //     },
+    //     {
+    //         job: "plumber",
+    //         amount: 12
+    //     },
+    //     {
+    //         job: "plumber",
+    //         amount: 12
+    //     },
+    //     {
+    //         job: "plumber",
+    //         amount: 12
+    //     },
+    //     {
+    //         job: "plumber",
+    //         amount: 12
+    //     },
+    //     {
+    //         job: "plumber",
+    //         amount: 12
+    //     },
+    // ]
 
-    const users = [
-
-        {
-            Id: "001",
-            Client: "Sunil",
-            Date: "2025-11-04",
-            Time: "09:00 AM",
-            Action: "Completed"
-        },
-        {
-            Id: "002",
-            Client: "Kamal",
-            Date: "2025-11-05",
-            Time: "09:00 AM",
-            Action: "On Going"
-        },
-        {
-            Id: "003",
-            Client: "Nadeesha",
-            Date: "2025-11-06",
-            Time: "09:00 AM",
-            Action: "Pending"
-        },
-        {
-            Id: "003",
-            Client: "Nadeesha",
-            Date: "2025-11-06",
-            Time: "09:00 AM",
-            Action: "Pending"
-        },
-        {
-            Id: "003",
-            Client: "Nadeesha",
-            Date: "2025-11-06",
-            Time: "09:00 AM",
-            Action: "Pending"
-        },
-        {
-            Id: "003",
-            Client: "Nadeesha",
-            Date: "2025-11-06",
-            Time: "09:00 AM",
-            Action: "Pending"
-        },
-
-    ]
-
+    // const details = [
+    //     {
+    //         name: "Kamal Perera"
+    //     },
+    //     {
+    //         name: "Kamal Perera"
+    //     },
+    //     {
+    //         name: "Kamal Perera"
+    //     },
+    //     {
+    //         name: "Kamal Perera"
+    //     },
+    //     {
+    //         name: "Kamal Perera"
+    //     },
+    //     {
+    //         name: "Kamal Perera"
+    //     },
+    //     {
+    //         name: "Kamal Perera"
+    //     },
+    //     {
+    //         name: "Kamal Perera"
+    //     },
+    // ]
 
 
     const [contact, setContact] = useState([]);
@@ -139,6 +94,9 @@ export default function AdminDashBoard() {
     }
 
     const [workers, setWorkers] = useState([]);
+    const [user, setUsers] = useState([]);
+    const [hires, setHires] = useState([]);
+
     async function loadWorkerDetails() {
         try {
             const workers = await axios.get("http://localhost:8081/worker", config);
@@ -146,6 +104,26 @@ export default function AdminDashBoard() {
             toast.success("workers are loaded successfully");
         } catch (error) {
             toast.error("have error here not loaded workers");
+        }
+    }
+
+    async function loadUserDetails() {
+        try {
+            const user = await axios.get("http://localhost:8081/user/count", config);
+            setUsers(user.data);
+
+        } catch (error) {
+            toast.error("have error here not loaded users");
+        }
+    }
+
+    async function loadHireDetails() {
+        try {
+            const hires = await axios.get("http://localhost:8081/hire", config);
+            setHires(hires.data);
+
+        } catch (error) {
+            toast.error("have error here not loaded hires");
         }
     }
 
@@ -160,11 +138,35 @@ export default function AdminDashBoard() {
         }
     }
 
+    async function loadPayments() {
+        try {
+            const res = await axios.get(
+                "http://localhost:8081/payment",
+                config
+            );
+
+            const paymentMap = {};
+            res.data.forEach(p => {
+                if (p.user && p.user.id) {
+                    paymentMap[p.user.id] = p;
+                }
+            });
+
+            setPayments(paymentMap);
+
+        } catch (error) {
+            console.error("Failed to load payments", error);
+        }
+    }
+
 
     useEffect(function () {
         if (isAuthenticated) {
             loadContact();
             loadWorkerDetails();
+            loadUserDetails();
+            loadHireDetails();
+            loadPayments();
         }
     }, [isAuthenticated])
 
@@ -187,64 +189,82 @@ export default function AdminDashBoard() {
     }
 
 
-    const workerReviews = [
-        {
-            id: 1,
-            name: "John Doe",
-            label: new Date().toLocaleDateString(),
-            profileColor: "bg-red-300",
-            contact: "0712234567",
-
-            review:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-        },
-        {
-            id: 2,
-            name: "Michael Silva",
-            label: new Date().toLocaleDateString(),
-            profileColor: "bg-blue-300",
-            contact: "0712234567",
-
-            review:
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer non sem vel odio tempor viverra."
-        },
-        {
-            id: 3,
-            name: "Kamal Perera",
-            label: new Date().toLocaleDateString(),
-            profileColor: "bg-green-300",
-            contact: "0712234567",
-
-            review:
-                "Praesent aliquet, leo non facilisis malesuada, velit lorem malesuada orci, et facilisis neque odio at sapien."
-        },
-        {
-            id: 4,
-            name: "Amal Perera",
-            label: new Date().toLocaleDateString(),
-            profileColor: "bg-green-300",
-            contact: "0712234567",
-
-            review:
-                "Praesent aliquet, leo non facilisis malesuada, velit lorem malesuada orci, et facilisis neque odio at sapien."
-        }
-    ];
-
     function handleDownloadPDF(pdfUrl, fullName) {
         if (!pdfUrl) {
             toast.error("No PDF uploaded for this worker.");
             return;
         }
 
-        // Create a temporary link element
         const link = document.createElement("a");
         link.href = pdfUrl;
-        link.download = `${fullName}_document.pdf`; // File name for download
+        link.download = `${fullName}_document.pdf`;
         link.target = "_blank";
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
     }
+
+    function formatDate(dateString) {
+        if (!dateString) return "";
+        return new Date(dateString).toLocaleDateString();
+    }
+
+    //searching part
+    const [jobRoles, setJobRoles] = useState([]);
+    const [employees, setEmployees] = useState([]);
+    const [selectedRole, setSelectedRole] = useState(null);
+    const [searchText, setSearchText] = useState("");
+    const [allJobRoles, setAllJobRoles] = useState([]);
+
+    //fetch job roles 
+    useEffect(() => {
+        if (isAuthenticated) {
+            axios
+                .get("http://localhost:8081/worker/job-roles", config)
+                .then(res => {
+                    setAllJobRoles(res.data);
+                    setJobRoles(res.data); // initially show all
+                });
+        }
+    }, [isAuthenticated]);
+
+    //
+    const selectRole = (jobRole) => {
+        setSelectedRole(jobRole);
+        axios.get("http://localhost:8081/worker/searchbylocandskill", {
+            params: { jobRole },
+            headers: {
+                Authorization: `Bearer ${jwtToken}`
+            }
+        }).then(res => setEmployees(res.data));
+    };
+
+    const capitalizeFirst = (text) => {
+        if (!text) return "";
+        return text.charAt(0).toUpperCase() + text.slice(1).toLowerCase();
+    };
+
+    const handleSearch = (text) => {
+        setSearchText(text);
+
+        if (!text.trim()) {
+            setJobRoles(allJobRoles);
+            return;
+        }
+
+        const filtered = allJobRoles.filter(role =>
+            role.jobRole.toLowerCase().includes(text.toLowerCase())
+        );
+
+        setJobRoles(filtered);
+    };
+
+    useEffect(() => {
+        if (jobRoles.length > 0 && !selectedRole) {
+            selectRole(jobRoles[0].jobRole);
+        }
+    }, [jobRoles]);
+
 
 
     return (
@@ -254,7 +274,7 @@ export default function AdminDashBoard() {
                 <div className="px-6">
                     <h1 className="text-2xl font-bold ">Admin DashBoard</h1>
                 </div>
-                <div className=" w-full mx-auto flex flex-col lg:flex-row text-slate-400 lg:flex-row items-center justify-center gap-6 p-6 lg:pt-0">
+                <div className=" w-full mx-auto flex flex-col lg:flex-row text-slate-400  items-center justify-center gap-6 p-6 lg:pt-0">
 
                     <div className="bg-white  w-full lg:w-[25%] flex-1 flex flex-col items-center shadow-xl gap-6 border border-slate-200 py-8 px-8  justify-between">
                         <div className="flex items-center justify-center ">
@@ -264,7 +284,7 @@ export default function AdminDashBoard() {
                             <h1>Total Number of Users</h1>
                         </div>
                         <div className="text-5xl font-bold">
-                            <CountUp start={0} end={300} duration={2} enableScrollSpy scrollSpyOnce />
+                            <CountUp key={`users-${user.length}`} start={0} end={user.length} duration={2} enableScrollSpy scrollSpyOnce />
                         </div>
                     </div>
                     <div className="bg-white w-full lg:w-[25%] flex-1 flex flex-col items-center gap-6  shadow-xl border border-slate-200 border py-8 px-8  justify-between">
@@ -275,7 +295,7 @@ export default function AdminDashBoard() {
                             <h1>Total Number of Works</h1>
                         </div>
                         <div className="text-5xl font-bold">
-                            <CountUp start={0} end={20} duration={2} enableScrollSpy scrollSpyOnce />
+                            <CountUp key={`workers-${workers.length}`} start={0} end={workers.length} duration={2} enableScrollSpy scrollSpyOnce />
                         </div>
                     </div>
                     <div className="bg-white w-full lg:w-[25%] flex-1 flex flex-col items-center gap-6 shadow-xl border border-slate-200 border py-8 px-8  justify-between">
@@ -283,10 +303,10 @@ export default function AdminDashBoard() {
                             <RiPassPendingLine color="#f59e0b" size={80} />
                         </div>
                         <div className="text-xl font-bold text-slate-500">
-                            <h1>Number of Pending Request</h1>
+                            <h1>Number of All Request</h1>
                         </div>
                         <div className="text-5xl font-bold">
-                            <CountUp start={0} end={20} duration={2} enableScrollSpy scrollSpyOnce />
+                            <CountUp key={`hires-${hires.length}`} start={0} end={hires.length} duration={2} enableScrollSpy scrollSpyOnce />
                         </div>
                     </div>
 
@@ -295,36 +315,53 @@ export default function AdminDashBoard() {
                 <div className="w-full mx-auto flex flex-col  text-slate-400 lg:flex-row items-center justify-center gap-6 p-6">
                     <div className="bg-white  w-full lg:flex-2 flex flex-col items-center justify-center pb-4 shadow-lg border rounded-lg border-slate-200">
                         <div className="w-full p-4">
-                            <input type="text" placeholder="Search by service name" className="w-full border px-2 py-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary" />
+                            <input
+                                type="text"
+                                placeholder="Search by service name"
+                                className="w-full border px-2 py-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                                value={searchText}
+                                onChange={(e) => handleSearch(e.target.value)} />
                         </div>
                         <div className="w-full  flex flex-col items-center justify-center">
                             <div className="w-full flex flex-col justify-between items-center px-4 text-lg">
-                                {roles.map((role) => {
-                                    return (
-                                        <div className="w-full flex flex justify-between items-center px-4 text-lg">
-                                            <h1 className="mx-4">{role.job}</h1>
-                                            <h1 className="mx-4">{role.amount}</h1>
-                                        </div>
+
+                                {
+                                    jobRoles.map(
+                                        role => {
+                                            return (
+                                                <div
+                                                    key={role.jobRole}
+                                                    className={`w-full flex justify-between items-center px-4 py-3 cursor-pointer rounded-lg text-gray-600
+                                                    ${selectedRole === role.jobRole
+                                                            ? "bg-primary text-white"
+                                                            : "hover:bg-gray-100"
+                                                        }`}
+                                                    onClick={() => selectRole(role.jobRole)}
+                                                >
+                                                    <span>{capitalizeFirst(role.jobRole)}</span>
+                                                    <span>{role.count}</span>
+                                                </div>)
+                                        }
                                     )
-                                })}
+                                }
                             </div>
                         </div>
                     </div>
                     <div className="bg-white w-full lg:flex-3 flex flex-col py-4 shadow-lg border rounded-lg border-slate-200">
                         <div className="px-6">
-                            <h1 className="text-xl font-bold text-center lg:text-center">Plumbers</h1>
+                            <h1 className="text-xl font-bold text-center lg:text-center">{capitalizeFirst(selectedRole)}s</h1>
                         </div>
                         <div className="w-full flex flex-col lg:flex-row justify-center items-center lg:flex-wrap gap-4">
-                            {details.map((detail) => {
+                            {employees.map((emp) => {
                                 return (
-                                    <div className="w-[40%] flex justify-center items-center lg:gap-2 lg:p-2">
+                                    <div key={emp.id} className="w-[40%] flex justify-center items-center lg:gap-2 lg:p-2">
                                         <img
-                                            src={Man}   // or any image url
+                                            // src={Man}
+                                            src={emp.user?.imageUrl || Man}
                                             alt="profile"
                                             className="w-[50px] aspect-square rounded-full object-cover"
                                         />
-
-                                        <h1 className="font-bold text-xl">{detail.name}</h1>
+                                        <h1 className="font-bold text-xl">{emp.fullName}</h1>
                                     </div>
                                 )
                             })}
@@ -348,7 +385,7 @@ export default function AdminDashBoard() {
                                 <tr>
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Id</th>
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Worker Name</th>
-                                    <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Email</th>
+                                    <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Payment</th>
                                     <th class="border px-6 py-3  border-gray-300 text-left font-semibold">Contact Numaber</th>
                                     <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Status</th>
                                     <th class="border px-6 py-3 border-gray-300 text-left font-semibold">Action</th>
@@ -361,13 +398,13 @@ export default function AdminDashBoard() {
                                         <tr class="hover:bg-gray-50">
                                             <td class="border  border-gray-300 px-6 py-3">{user.id}</td>
                                             <td class="border  border-gray-300 px-6 py-3">{user.fullName}</td>
-                                            <td class="border border-gray-300 px-6 py-3">{user.email}</td>
+                                            <td class="border border-gray-300 px-6 py-3">   {payments[user.user?.id] ? "Paid" : "Not yet"}</td>
                                             <td class="border border-gray-300 px-6 py-3">{user.phoneNumber}</td>
                                             <td className="border border-gray-300 px-6 py-3">
                                                 {Boolean(user.isBlocked) ? (
-                                                    <span className="text-red-600 font-semibold">Blocked</span>
+                                                    <span className="bg-red-100 text-red-700 font-semibold">Blocked</span>
                                                 ) : (
-                                                    <span className="text-green-600 font-semibold">Active</span>
+                                                    <span className="bg-green-100 text-green-700 font-semibold">Active</span>
                                                 )}
 
 
@@ -376,7 +413,7 @@ export default function AdminDashBoard() {
                                             <td class="border border-gray-300 px-6 py-3"><div className="flex items-center gap-3">
                                                 <button
                                                     onClick={() => handleToggleBlock(user.id)}
-                                                    className={`px-3 py-1 rounded-lg border ${user.isBlocked ? "bg-green-500 text-white" : "bg-red-500 text-white"}hover:opacity-80`}
+                                                    className={`px-3 py-1 rounded-lg border ${user.isBlocked ? "bg-green-100 text-green-700 text-white" : "bg-red-100 text-red-700 text-white"}hover:opacity-80`}
                                                 >
                                                     {user.isBlocked ? "Approve" : "Block"}
                                                 </button>
@@ -386,10 +423,21 @@ export default function AdminDashBoard() {
                                                 >
                                                     Download PDF
                                                 </button>
-                                             
+
                                                 <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/workerRegistrationDetails/${user.id}`)}>
                                                     Review Details
                                                 </button>
+
+                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/WorkerProgress/${user.id}`)}>
+                                                    Progress
+                                                </button>
+
+                                                <PaymentDetailsModal
+                                                    userId={user.user?.id}
+                                                    triggerButtonText="Payment Details"
+                                                    buttonClass="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white"
+                                                />
+
                                             </div></td>
 
                                         </tr>
@@ -401,7 +449,7 @@ export default function AdminDashBoard() {
                         </table>
                         {/* Mobile Cards */}
                         <div className="md:hidden flex flex-col gap-4">
-                            {users.map((user) => (
+                            {workers.map((user) => (
                                 <div className="border border-gray-300 bg-white rounded-lg p-4 shadow-sm">
                                     <p><span className="font-semibold">Id:</span> {user.Id}</p>
                                     <p><span className="font-semibold">Client:</span> {user.Client}</p>
@@ -447,7 +495,7 @@ export default function AdminDashBoard() {
                                     <div className="flex justify-between items-center">
                                         <div className="flex items-center justify-between ">
                                             <img
-                                                //src={Man}   // or any image url
+
                                                 src={comment.user?.imageUrl || Man}
                                                 alt="profile"
                                                 className="w-[50px] aspect-square rounded-full object-cover"
@@ -471,11 +519,18 @@ export default function AdminDashBoard() {
                                     <div className="flex items-center py-4 text-lg">
 
                                         <h1 className="text-slate-500 px-2">{comment.subject}</h1>
+
                                     </div>
-                                    <div>
-                                        <p>{comment.message}
+                                    <div className="flex items-center ">
+                                        <p className="px-2">{comment.message}
                                         </p>
                                     </div>
+                                    <div className="flex py-4 text-lg w-full">
+                                        <h1 className="text-slate-500 px-2 w-full text-right">
+                                            {formatDate(comment.createdAt)}
+                                        </h1>
+                                    </div>
+
                                 </div>
 
                             )
