@@ -31,6 +31,8 @@ import { Toaster } from 'react-hot-toast'
 import WorkerProfileCard from './pages/WorkerProfileCard'
 import WorkerProgress from './pages/WorkerProgress'
 import PlanUpgradePage from './pages/PlanUpgradePage'
+import MoneyTransferPage from './pages/MoneyTransferPage'
+import WorkerBankDetailsPage from './pages/WorkerBankDetailsPage'
 
 
 function App() {
@@ -43,10 +45,14 @@ function App() {
         <Routes>
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/register" element={<Register />} />
+          <Route path='/*' element={<HomePage />} />
+          <Route path='/about' element={<AboutUs />} />
+          <Route path='/contact' element={<ContactPage />} />
+
           <Route element={<ProtectedRoute />}>
-            <Route path='/*' element={<HomePage />} />
+            {/* <Route path='/*' element={<HomePage />} />
             <Route path='/about' element={<AboutUs />} />
-            <Route path='/contact' element={<ContactPage />} />
+            <Route path='/contact' element={<ContactPage />} /> */}
             <Route path='/payment' element={<Payment />} />
             <Route path='/feedback' element={<UserFeedback />} />
             <Route path='/login' element={<UserLogin />} />
@@ -67,7 +73,8 @@ function App() {
             <Route path='/workerCard/:workerId' element={<WorkerProfileCard />} />
             <Route path='/WorkerProgress/:workerId' element={<WorkerProgress />} />
             <Route path='/planUpgradePage' element={<PlanUpgradePage />} />
-
+            <Route path='/transfer' element={<MoneyTransferPage />} />
+              <Route path='/bank' element={<WorkerBankDetailsPage />} />
           </Route>
 
 

@@ -18,6 +18,7 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
     const [userId, setUserId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [worker, setWorker] = useState(null);
+    const [payment, setPayment] = useState(null);
 
     const config = {
         headers: {
@@ -50,24 +51,39 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
         }
     }
 
+    async function getPayment() {
+        try {
+            const response = await axios.get(`http://localhost:8081/payment/${userId}`, config);
+            setPayment(response.data);
+        } catch (error) {
+            console.log("Error loading paymentDetails:", error);
+            setPayment(null);
+        }
+    }
+
+
     useEffect(() => {
         if (isAuthenticated && userId) {
             getWorkers();
+            getPayment();
         }
     }, [isAuthenticated, userId]);
 
 
     const handleRegisterClick = () => {
-        if (worker) {
+        if (worker && payment) {
             toast.error("You are already registered as a worker.");
-        } else {
+        } else if (worker) {
+            navigate("/planUpgradePage");
+        }
+        else {
             navigate("/workerRegistration");
         }
     };
 
 
     const handleProfileClick = () => {
-        if (!worker) {
+        if (!worker && !payment) {
             toast.error("Please register first to view your profile.");
             return;
         }
@@ -81,7 +97,7 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
     };
 
     const handleProfileUpdateClick = () => {
-        if (!worker) {
+        if (!worker && !payment) {
             toast.error("Please register first to view your profile.");
             return;
         }
@@ -92,6 +108,20 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
         }
 
         navigate("/workerProfileUpdate");
+    };
+
+    const handleBankDetails = () => {
+        if (!worker && !payment) {
+            toast.error("Please register first.");
+            return;
+        }
+
+        if (worker.isBlocked) {
+            toast.error("Your account is blocked. You cannot add the payment details.");
+            return;
+        }
+
+        navigate("/bank");
     };
 
 
@@ -134,6 +164,13 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
                         className="px-4 py-2 bg-yellow-500 text-white rounded-lg"
                     >
                         Worker Profile Update
+                    </button>
+
+                     <button
+                        onClick={handleBankDetails}
+                        className="px-4 py-2 bg-red-500 text-white rounded-lg"
+                    >
+                        Worker Payment Details
                     </button>
                 </div>
 
