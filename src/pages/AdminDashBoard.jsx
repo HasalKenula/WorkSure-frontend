@@ -11,6 +11,9 @@ import { SlUserFollow } from "react-icons/sl";
 import { LiaUserSecretSolid } from "react-icons/lia";
 import { useNavigate } from "react-router-dom";
 import PaymentDetailsModal from "../components/PaymentDetailsModal";
+import { FiMoreVertical } from "react-icons/fi";
+
+
 export default function AdminDashBoard() {
     const { isAuthenticated, jwtToken } = useAuth();
     const [payments, setPayments] = useState({});
@@ -78,6 +81,11 @@ export default function AdminDashBoard() {
     //     },
     // ]
 
+    const [openMenuId, setOpenMenuId] = useState(null);
+
+    const toggleMenu = (id) => {
+        setOpenMenuId(prev => (prev === id ? null : id));
+    };
 
     const [contact, setContact] = useState([]);
     const config = {
@@ -410,35 +418,128 @@ export default function AdminDashBoard() {
 
                                             </td>
 
-                                            <td class="border border-gray-300 px-6 py-3"><div className="flex items-center gap-3">
-                                                <button
-                                                    onClick={() => handleToggleBlock(user.id)}
-                                                    className={`px-3 py-1 rounded-lg border ${user.isBlocked ? "bg-green-100 text-green-700 text-white" : "bg-red-100 text-red-700 text-white"}hover:opacity-80`}
-                                                >
-                                                    {user.isBlocked ? "Approve" : "Block"}
-                                                </button>
-                                                <button
-                                                    className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white"
-                                                    onClick={() => handleDownloadPDF(user.pdfUrl, user.fullName)}
-                                                >
-                                                    Download PDF
-                                                </button>
+                                            <td class="border border-gray-300 px-6 py-3 relative">
+                                                <div className="flex items-center gap-2">
+                                                    {/* primary action */}
+                                                    <button
+                                                        onClick={() => handleToggleBlock(user.id)}
+                                                        className={`px-3 py-1 rounded-lg border ${user.isBlocked ? "bg-green-100 text-green-700 text-white" : "bg-red-100 text-red-700 text-white"}hover:opacity-80`}
+                                                    >
+                                                        {user.isBlocked ? "Approve" : "Block"}
+                                                    </button>
 
-                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/workerRegistrationDetails/${user.id}`)}>
-                                                    Review Details
-                                                </button>
+                                                    {/* more menu btn */}
+                                                    {/* <button
+                                                        onClick={() => toggleMenu(user.id)}
+                                                        className="p-2 rounded-lg hover:bg-gray-100 hover:"
+                                                        >
+                                                        <FiMoreVertical size={18} />
+                                                    </button> */}
 
-                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/WorkerProgress/${user.id}`)}>
-                                                    Progress
-                                                </button>
+                                                    
+                                                    <div className="relative group">
+                                                        <button 
+                                                            className="p-2 rounded-lg hover:bg-gray-100"
+                                                            onClick={() => toggleMenu(user.id)}
+                                                        >
+                                                            <FiMoreVertical size={18} />
+                                                        </button>
 
-                                                <PaymentDetailsModal
-                                                    userId={user.user?.id}
-                                                    triggerButtonText="Payment Details"
-                                                    buttonClass="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white"
-                                                />
+                                                    {/* Tooltip */}
+                                                    <span className="
+                                                        absolute -top-8 left-1/2 -translate-x-1/2
+                                                        bg-gray-800 text-white text-xs
+                                                        px-2 py-1 rounded
+                                                        opacity-0 group-hover:opacity-100
+                                                        transition duration-200
+                                                        whitespace-nowrap
+                                                    ">
+                                                        More
+                                                    </span>
+                                                    </div>
 
-                                            </div></td>
+
+                                                    {/* <button
+                                                        className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white"
+                                                        onClick={() => handleDownloadPDF(user.pdfUrl, user.fullName)}
+                                                    >
+                                                        Download PDF
+                                                    </button> */}
+
+                                                    {/* <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/workerRegistrationDetails/${user.id}`)}>
+                                                        Review Details
+                                                    </button> */}
+
+                                                    {/* <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/WorkerProgress/${user.id}`)}>
+                                                        Progress
+                                                    </button> */}
+
+                                                    {/* <PaymentDetailsModal
+                                                        userId={user.user?.id}
+                                                        triggerButtonText="Payment Details"
+                                                        buttonClass="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white"
+                                                    /> */}
+
+                                                </div>
+
+                                                {/* dropdown menu */}
+                                                {openMenuId === user.id && (
+                                                    <div className="absolute right-6 top-14 z-50 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
+                                                        <button
+                                                            onClick={() => {
+                                                            navigate(`/WorkerProgress/${user.id}`);
+                                                            setOpenMenuId(null);
+                                                            }}
+                                                            className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                                                        >
+                                                            Progress
+                                                        </button>
+
+                                                        <button
+                                                            onClick={() => {
+                                                            handleDownloadPDF(user.pdfUrl, user.fullName);
+                                                            setOpenMenuId(null);
+                                                            }}
+                                                            className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                                                        >
+                                                            Download PDF
+                                                        </button>
+
+                                                        <button
+                                                            className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                                                            onClick={() => navigate(`/workerRegistrationDetails/${user.id}`)}
+                                                        >
+                                                            Review Details
+                                                        </button>
+
+                                                        <PaymentDetailsModal
+                                                            userId={user.user?.id}
+                                                            triggerButtonText="Payment Details"
+                                                            buttonClass="w-full text-left px-4 py-2 hover:bg-gray-100"
+                                                        />
+
+      
+
+      {/* <button
+        onClick={() => {
+          handleToggleBlock(user.id);
+          setOpenMenuId(null);
+        }}
+        className={`w-full text-left px-4 py-2 font-semibold
+          ${user.isBlocked
+            ? "text-green-600 hover:bg-green-50"
+            : "text-red-600 hover:bg-red-50"
+          }`}
+      >
+        {user.isBlocked ? "Approve Worker" : "Block Worker"}
+      </button> */}
+    </div>
+  )}
+                                            
+                                            
+                                            </td>
+
+
 
                                         </tr>
                                     )
