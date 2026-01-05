@@ -12,6 +12,8 @@ import { LiaUserSecretSolid } from "react-icons/lia";
 import { useNavigate } from "react-router-dom";
 import PaymentDetailsModal from "../components/PaymentDetailsModal";
 import { FiMoreVertical } from "react-icons/fi";
+import { FiTrendingUp, FiDownload, FiEye, FiCreditCard } from "react-icons/fi";
+
 
 
 export default function AdminDashBoard() {
@@ -410,9 +412,9 @@ export default function AdminDashBoard() {
                                             <td class="border border-gray-300 px-6 py-3">{user.phoneNumber}</td>
                                             <td className="border border-gray-300 px-6 py-3">
                                                 {Boolean(user.isBlocked) ? (
-                                                    <span className="bg-red-100 text-red-700 font-semibold">Blocked</span>
+                                                    <span className="bg-red-100 text-red-700 font-semibold px-3 py-1 rounded-full">Blocked</span>
                                                 ) : (
-                                                    <span className="bg-green-100 text-green-700 font-semibold">Active</span>
+                                                    <span className="bg-green-100 text-green-700 font-semibold px-3 py-1 rounded-full">Active</span>
                                                 )}
 
 
@@ -421,12 +423,28 @@ export default function AdminDashBoard() {
                                             <td class="border border-gray-300 px-6 py-3 relative">
                                                 <div className="flex items-center gap-2">
                                                     {/* primary action */}
-                                                    <button
+                                                    {/* <button
                                                         onClick={() => handleToggleBlock(user.id)}
                                                         className={`px-3 py-1 rounded-lg border ${user.isBlocked ? "bg-green-100 text-green-700 text-white" : "bg-red-100 text-red-700 text-white"}hover:opacity-80`}
                                                     >
-                                                        {user.isBlocked ? "Approve" : "Block"}
-                                                    </button>
+                                                        {user.isBlocked ? "Approve Worker" : "Block Worker"}
+                                                    </button> */}
+
+                                                    <button
+        onClick={() => {
+          handleToggleBlock(user.id);
+          setOpenMenuId(null);
+        }}
+        className={`w-full text-left px-4 py-2 font-semibold
+          ${user.isBlocked
+            ? "text-green-600 hover:bg-green-50"
+            : "text-red-600 hover:bg-red-50"
+          }`}
+      >
+        {user.isBlocked ? "Approve Worker" : "Block Worker"}
+      </button>
+
+
 
                                                     {/* more menu btn */}
                                                     {/* <button
@@ -454,7 +472,7 @@ export default function AdminDashBoard() {
                                                         transition duration-200
                                                         whitespace-nowrap
                                                     ">
-                                                        More
+                                                        {openMenuId === user.id ? "Show less" : "Show more"}
                                                     </span>
                                                     </div>
 
@@ -490,9 +508,10 @@ export default function AdminDashBoard() {
                                                             navigate(`/WorkerProgress/${user.id}`);
                                                             setOpenMenuId(null);
                                                             }}
-                                                            className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                                                            className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100"
                                                         >
-                                                            Progress
+                                                            <FiTrendingUp className="text-gray-600" />
+                                                            <span>Progress</span>
                                                         </button>
 
                                                         <button
@@ -500,22 +519,29 @@ export default function AdminDashBoard() {
                                                             handleDownloadPDF(user.pdfUrl, user.fullName);
                                                             setOpenMenuId(null);
                                                             }}
-                                                            className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                                                            className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100"
                                                         >
-                                                            Download PDF
+                                                            <FiDownload className="text-gray-600" />
+                                                            <span>Download PDF</span>
                                                         </button>
 
                                                         <button
-                                                            className="w-full text-left px-4 py-2 hover:bg-gray-100"
+                                                            className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100"
                                                             onClick={() => navigate(`/workerRegistrationDetails/${user.id}`)}
                                                         >
-                                                            Review Details
+                                                            <FiEye className="text-gray-600" />
+                                                            <span>Review Details</span>
                                                         </button>
 
                                                         <PaymentDetailsModal
                                                             userId={user.user?.id}
-                                                            triggerButtonText="Payment Details"
-                                                            buttonClass="w-full text-left px-4 py-2 hover:bg-gray-100"
+                                                            triggerButtonText={
+                                                                <div className="flex items-center gap-3">
+                                                                <FiCreditCard className="text-gray-600" />
+                                                                <span>Payment Details</span>
+                                                                </div>
+                                                            }
+                                                            buttonClass="w-full flex items-center px-4 py-2 hover:bg-gray-100"
                                                         />
 
       
