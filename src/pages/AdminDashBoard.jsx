@@ -356,7 +356,8 @@ export default function AdminDashBoard() {
                                 return (
                                     <div key={emp.id} className="w-[40%] flex justify-center items-center lg:gap-2 lg:p-2">
                                         <img
-                                            src={Man}
+                                            // src={Man}
+                                            src={emp.user?.imageUrl || Man}
                                             alt="profile"
                                             className="w-[50px] aspect-square rounded-full object-cover"
                                         />

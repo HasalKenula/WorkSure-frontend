@@ -110,6 +110,20 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
         navigate("/workerProfileUpdate");
     };
 
+    const handleBankDetails = () => {
+        if (!worker && !payment) {
+            toast.error("Please register first.");
+            return;
+        }
+
+        if (worker.isBlocked) {
+            toast.error("Your account is blocked. You cannot add the payment details.");
+            return;
+        }
+
+        navigate("/bank");
+    };
+
 
     return (
         <div>
@@ -150,6 +164,13 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
                         className="px-4 py-2 bg-yellow-500 text-white rounded-lg"
                     >
                         Worker Profile Update
+                    </button>
+
+                     <button
+                        onClick={handleBankDetails}
+                        className="px-4 py-2 bg-red-500 text-white rounded-lg"
+                    >
+                        Worker Payment Details
                     </button>
                 </div>
 
