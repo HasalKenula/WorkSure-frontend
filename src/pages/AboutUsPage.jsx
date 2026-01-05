@@ -12,27 +12,16 @@ import { FaCode, FaRegCreditCard, FaRegUser } from "react-icons/fa";
 import { BsSuitcaseLg } from "react-icons/bs";
 import about from "../assets/aboutUS.jpg"
 import worker from "../assets/worker.png"
+import AboutUsTopSection from "../components/AboutUsTopSection";
 
 export default function AboutUs() {
   return (
     <div>
 
       <Navbar />
+      <AboutUsTopSection/>
 
       <div className="text-black  min-h-screen w-full p-5 mt-20">
-        <div className="w-full relative flex flex-col gap-4 items-center justify-center h-[200px] bg-no-repeat bg-cover bg-center" style={{ backgroundImage: `url(${about})` }}>
-          {/* ----- Title & Intro ----- */}
-          <div className="absolute inset-0 bg-black/40"></div>
-          <h1 className="text-white relative text-center text-6xl font-bold mt-[30px]">
-            About <span className="text-[lch(74.93%_82.5_73.14)]">WorkSure</span><br />
-          </h1>
-
-          <p className="relative text-center text-xl mt-[50px] pb-12 text-white">
-            Connecting businesses with top-tier talent, WorkSure is revolutionizing project collaboration
-            <br />
-            and workforce management with innovative solutions.
-          </p>
-        </div>
 
         {/* ----- Mission Section ----- */}
         <div className="flex flex-wrap justify-center gap-30 mt-10">
