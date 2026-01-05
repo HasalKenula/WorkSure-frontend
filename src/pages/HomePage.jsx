@@ -14,6 +14,7 @@ import { useEffect, useState } from "react";
 import LogoAnimation from "../components/LogoAnimation";
 import Footer from "../components/Footer";
 import PremiumHeroSection from "../components/PremiumHeroSection";
+import HowItWorksSection from "../components/HowItWorksSection";
 export default function HomePage() {
     const { logout } = useAuth()
     const [loading, setLoading] = useState(true);
@@ -62,6 +63,7 @@ export default function HomePage() {
 
                     </div>
                 </section>
+                
 
                 <section className="w-full h-[1700px] md:h-[1100px]  flex items-center justify-center">
                     <div className=" mx-auto flex flex-col md:flex-col items-center p-6 gap-10 ">
@@ -205,7 +207,7 @@ export default function HomePage() {
                     </div>
                 </section>
 
-
+                {/*
                 <section>
                     <div className="w-full h-[1300px] md:h-[550px]  flex justify-center items-center ">
                         <div className="mx-auto flex flex-col items-center justify-center gap-10">
@@ -232,8 +234,9 @@ export default function HomePage() {
                             </div>
                         </div>
                     </div>
-                </section>
+                </section> */}
                 {/*<PremiumHeroSection/>*/}
+                <HowItWorksSection/>
 
                 < LogoAnimation />
 
