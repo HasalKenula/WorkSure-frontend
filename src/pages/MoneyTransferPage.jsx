@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
-// import { useAuth } from "../context/AuthContext";
 import { useAuth } from "../context/AuthContext";
 
 
@@ -22,7 +21,7 @@ import {
 } from "react-icons/fa";
 
 export default function MoneyTransferPage() {
-    //   const { jwtToken, user } = useAuth();
+
     const { jwtToken, isAuthenticated } = useAuth();
     const [loading, setLoading] = useState(false);
     const [step, setStep] = useState(1);
@@ -95,16 +94,6 @@ export default function MoneyTransferPage() {
     }, [jwtToken]);
 
 
-
-    // Mock worker data (replace with API call)
-    //   const [workers] = useState([
-    //     { id: "WRK001", name: "John Doe", email: "john@example.com", bank: "Commercial Bank", account: "1234567890" },
-    //     { id: "WRK002", name: "Jane Smith", email: "jane@example.com", bank: "Bank of Ceylon", account: "0987654321" },
-    //     { id: "WRK003", name: "Robert Johnson", email: "robert@example.com", bank: "Hatton National Bank", account: "5678901234" },
-    //     { id: "WRK004", name: "Sarah Wilson", email: "sarah@example.com", bank: "Sampath Bank", account: "4321098765" },
-    //   ]);
-
-    // Payment methods - updated icon from FaBank to FaBuilding
     const paymentMethods = [
         { id: "card", name: "Credit/Debit Card", icon: FaCreditCard, color: "from-amber-500 to-orange-500" },
         { id: "bank", name: "Bank Transfer", icon: FaBuilding, color: "from-yellow-500 to-amber-500" },
@@ -139,137 +128,62 @@ export default function MoneyTransferPage() {
         }));
     };
 
-    // Validate form
-    // const validateForm = () => {
-    //     if (!formData.amount || parseFloat(formData.amount) <= 0) {
-    //         toast.error("Please enter a valid amount");
-    //         return false;
-    //     }
-    //     if (!formData.workerId) {
-    //         toast.error("Please select a worker");
-    //         return false;
-    //     }
-    //     if (!formData.paymentMethod) {
-    //         toast.error("Please select a payment method");
-    //         return false;
-    //     }
-    //     return true;
-    // };
 
-    // Handle payment submission - MOCKED VERSION (no backend needed)
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     if (!validateForm()) return;
-
-    //     setLoading(true);
-    //     try {
-    //         // Mock API call (remove when you have real backend)
-    //         await new Promise(resolve => setTimeout(resolve, 1500)); // Simulate API delay
-    //         await axios.post("http://localhost:8081/transfer", {
-    //             transactionId: transactionId,
-    //             paymentMethod: formData.paymentMethod,
-    //             fullName: formData.workerName,
-    //             amount: formData.amount,
-    //             createdAt: Date.now,
-    //             userId: user?.id,
-    //             workerId: formData.workerId,
-    //         }, config)
-
-    //         toast.success("Payment transferred successfully! (Demo Mode)");
-    //         setShowConfirmation(true);
-    //         setStep(3);
-    //     } catch (error) {
-    //         toast.error("Payment failed. Please try again.");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-    // const handleSubmit = async (e) => {
-    //     e.preventDefault();
-    //     if (!validateForm()) return;
-
-    //     setLoading(true);
-
-    //     const transactionId = `TX${Date.now()}`;
-
-    //     try {
-    //         await axios.post("http://localhost:8081/transfer", {
-    //             transactionId,
-    //             paymentMethod: formData.paymentMethod,
-    //             fullName: formData.workerName,
-    //             amount: parseFloat(formData.amount),
-    //             createdAt: new Date().toISOString(),
-    //             userId: user?.id,
-    //             workerId: formData.workerId,
-    //         }, config);
-
-    //         toast.success("Payment transferred successfully! (Demo Mode)");
-    //         setShowConfirmation(true);
-    //         setStep(3);
-    //     } catch (error) {
-    //         console.error(error);
-    //         toast.error("Payment failed. Please try again.");
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // };
-
-   const validateForm = () => {
-    if (!formData.amount || parseFloat(formData.amount) <= 0) {
-        toast.error("Please enter a valid amount");
-        return false;
-    }
-
-    if (!formData.workerId) {
-        toast.error("Please select a worker");
-        return false;
-    }
-
-    if (!formData.paymentMethod) {
-        toast.error("Please select a payment method");
-        return false;
-    }
-
-    // 🔹 Card validation
-    if (formData.paymentMethod === "card") {
-        if (
-            !formData.cardNumber ||
-            !formData.cardHolder ||
-            !formData.expiryDate ||
-            !formData.cvv
-        ) {
-            toast.error("Please fill all card details");
+    const validateForm = () => {
+        if (!formData.amount || parseFloat(formData.amount) <= 0) {
+            toast.error("Please enter a valid amount");
             return false;
         }
-    }
 
-    // 🔹 Bank transfer validation
-    if (formData.paymentMethod === "bank") {
-        if (
-            !formData.bankName ||
-            !formData.bankAccountNumber ||
-            !formData.branch
-        ) {
-            toast.error("Please fill all bank transfer details");
+        if (!formData.workerId) {
+            toast.error("Please select a worker");
             return false;
         }
-    }
 
-    // 🔹 Digital wallet validation
-    if (formData.paymentMethod === "digital") {
-        toast.error("Please complete the digital wallet payment");
-        return false;
-    }
+        if (!formData.paymentMethod) {
+            toast.error("Please select a payment method");
+            return false;
+        }
 
-    // 🔹 Scheduled transfer validation
-    if (formData.transferType === "scheduled" && !formData.scheduleDate) {
-        toast.error("Please select a schedule date");
-        return false;
-    }
+        // 🔹 Card validation
+        if (formData.paymentMethod === "card") {
+            if (
+                !formData.cardNumber ||
+                !formData.cardHolder ||
+                !formData.expiryDate ||
+                !formData.cvv
+            ) {
+                toast.error("Please fill all card details");
+                return false;
+            }
+        }
 
-    return true;
-};
+        // 🔹 Bank transfer validation
+        if (formData.paymentMethod === "bank") {
+            if (
+                !formData.bankName ||
+                !formData.bankAccountNumber ||
+                !formData.branch
+            ) {
+                toast.error("Please fill all bank transfer details");
+                return false;
+            }
+        }
+
+        // 🔹 Digital wallet validation
+        if (formData.paymentMethod === "digital") {
+            toast.error("Please complete the digital wallet payment");
+            return false;
+        }
+
+        // 🔹 Scheduled transfer validation
+        if (formData.transferType === "scheduled" && !formData.scheduleDate) {
+            toast.error("Please select a schedule date");
+            return false;
+        }
+
+        return true;
+    };
 
 
 
@@ -363,7 +277,7 @@ export default function MoneyTransferPage() {
 
 
     return (
-        // <div className="min-h-screen bg-gradient-to-br from-amber-50 to-yellow-50 p-4 md:p-8">
+
         <div className="min-h-screen p-4 md:p-8">
             <div className="max-w-6xl mx-auto">
                 {/* Header */}
