@@ -55,10 +55,12 @@ export default function HomePage() {
 
                             {/* Buttons - now BELOW the search input */}
                             <div className="flex gap-4 flex-wrap justify-center">
-                                <button className="bg-primary text-black font-semibold px-6 py-2 rounded-full hover:bg-yellow-500 transition">
+                                <button className="bg-primary text-black font-semibold px-6 py-2 rounded-full hover:bg-yellow-500 transition"
+                                onClick={() => navigate("/auth/register")}>
                                     Get Started - It's Free!
                                 </button>
-                                <button className="border border-yellow-400 text-yellow-400 font-semibold px-6 py-2 rounded-full hover:bg-yellow-50 transition">
+                                <button className="border border-yellow-400 text-yellow-400 font-semibold px-6 py-2 rounded-full hover:bg-yellow-50 transition"
+                                onClick={() => navigate("/auth/login")}>
                                     Already a Member? Sign In
                                 </button>
                             </div>
