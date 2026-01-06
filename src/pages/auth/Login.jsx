@@ -59,7 +59,7 @@ function Login() {
                     </div>
                     <div className="mb-4">
                         <label className="block mb-1">Password</label>
-                        <input type="password" onChange={function (event) {
+                        <input type="password" placeholder="Enter your password" onChange={function (event) {
                             setPassword(event.target.value);
                             setError("");
                         }} 
