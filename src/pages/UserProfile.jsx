@@ -99,7 +99,12 @@ export default function UserProfile() {
       <div className="mt-20 w-full flex justify-center items-center font-outfit px-4 pt-12">
         <div className="shadow-xl w-[80%] rounded-2xl p-6 ">
 
-          <h1 className="text-4xl font-bold mb-4 text-primary ">Your Profile</h1>
+          <h1 
+            // className="text-4xl font-bold mb-4 text-primary "
+            className="text-3xl md:text-4xl font-bold text-amber-900 mb-3 "
+          >
+            My Profile
+          </h1>
 
           <div className="flex flex-col lg:flex-row gap-10 ">
 

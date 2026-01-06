@@ -274,10 +274,10 @@ export default function WorkerDashBoard() {
         <div>
             <Navbar />
             <div className="w-full h-[1000px] lg:h-screen flex flex-col items-center justify-center  lg:pt-24 my-auto">
-                <div className="px-6">
-                    <h1 className="text-4xl font-bold">Admin DashBoard</h1>
+                <div className="px-6 mt-10 ">
+                    <h1 className="text-3xl md:text-4xl font-bold text-amber-900 ">Worker DashBoard</h1>
                 </div>
-                <div className="w-full mx-auto flex flex-col  text-slate-400 lg:flex-row items-center justify-center gap-6 p-6">
+                <div className="w-full mx-auto flex flex-col  text-slate-400 lg:flex-row items-center justify-center gap-6 p-6 mt-3">
 
                     <div className="flex-1 flex flex-col items-center justify-center gap-6 ">
                         <div className="w-[75%] flex-1 flex items-center shadow-xl gap-6 border border-slate-200 py-4 px-8  justify-between">

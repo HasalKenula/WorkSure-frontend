@@ -51,20 +51,31 @@ function Login() {
                         <input type="text" onChange={function (event) {
                             setUsername(event.target.value);
                             setError("");
-                        }} className="block w-full p-2 border border-gray-200 rounded-lg" placeholder="Enter your username" />
+                        }} 
+                        //className="block w-full p-2 border border-gray-200 rounded-lg" 
+                        className ="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
+                        placeholder="Enter your username" 
+                    />
                     </div>
                     <div className="mb-4">
                         <label className="block mb-1">Password</label>
                         <input type="password" onChange={function (event) {
                             setPassword(event.target.value);
                             setError("");
-                        }} className="block w-full p-2 border border-gray-200 rounded-lg" placeholder="Enter your password" />
+                        }} 
+                        //className="block w-full p-2 border border-gray-200 rounded-lg" placeholder="Enter your password" 
+                        className ="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
+                        />
                     </div>
 
                     {error && <div className="text-sm text-red-500">{error}</div>}
 
                     <div className="mt-8">
-                        <button type="submit" className="bg-primary text-white px-4 py-2 rounded-lg w-full hover:bg-white hover:text-primary border border-primary">Login</button>
+                        <button type="submit" 
+                            //className="bg-primary text-white px-4 py-2 rounded-lg w-full hover:bg-white hover:text-primary border border-primary"
+                            className="px-4 py-2 rounded-lg w-full font-semibold bg-gradient-to-r from-amber-500 to-yellow-500 hover:shadow-lg hover:scale-105 transition-all duration-300 text-white">
+                            Login
+                        </button>
                     </div>
                 </form>
 
