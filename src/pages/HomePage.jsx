@@ -15,7 +15,10 @@ import LogoAnimation from "../components/LogoAnimation";
 import Footer from "../components/Footer";
 import PremiumHeroSection from "../components/PremiumHeroSection";
 import HowItWorksSection from "../components/HowItWorksSection";
+import { useNavigate } from "react-router-dom";
+
 export default function HomePage() {
+    const navigate = useNavigate();
     const { logout } = useAuth()
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -72,82 +75,99 @@ export default function HomePage() {
                         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-10 w-full max-w-6xl">
 
 
-                           <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
+                           <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                                onClick={() => navigate("/workerDetails?skill=ELECTRICIAN")}
+                           >
+                                
                                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"> <MdElectricBolt size={36} className="text-amber-500" /></div>
-                                <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Electrician</h1>
-                                <p className="mt-1 text-sm text-slate-500"> 450 Verified Professionals</p>
+                                <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Electricians</h1>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
                                 <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
                                 <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
 
-                           <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
+                           <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                            onClick={() => navigate("/workerDetails?skill=PLUMBER")}
+                           >
                                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><MdOutlinePlumbing size={36} className="text-amber-500" /></div>
                                 <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Plumbers</h1>
-                                <p className="mt-1 text-sm text-slate-500"> 450 Verified Professionals</p>
+                                <p className="mt-1 text-sm text-slate-500"> Verified Professionals</p>
                                 <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
                                 <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
 
-                           <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
+                           <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                            onClick={() => navigate("/workerDetails?skill=CARPENTER")}
+                           >
                                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><IoIosHammer size={36} className="text-amber-500" /></div>
                                 <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Carpenters</h1>
-                                <p className="mt-1 text-sm text-slate-500"> 450 Verified Professionals</p>
+                                <p className="mt-1 text-sm text-slate-500"> Verified Professionals</p>
                                 <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
                                 <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
 
-                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                                onClick={() => navigate("/workerDetails?skill=PAINTER")}
+                            >
                                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><GiLargePaintBrush size={36} className="text-amber-500" /></div>
                                 <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Painters</h1>
-                                <p className="mt-1 text-sm text-slate-500"> 450 Verified Professionals</p>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
                                 <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
                                 <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
 
-                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                            onClick={() => navigate("/workerDetails?skill=MASON")}
+                            >
                                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><MdCarpenter size={36} className="text-amber-500" /></div>
                                 <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Masons</h1>
-                                <p className="mt-1 text-sm text-slate-500"> 450 Verified Professionals</p>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
                                 <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
                                 <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
 
-                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                            onClick={() => navigate("/workerDetails?skill=WELDERS")}>
                                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><GiFireTail size={36} className="text-amber-500" /></div>
                                 <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Welders</h1>
-                                <p className="mt-1 text-sm text-slate-500"> 450 Verified Professionals</p>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
                                 <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
                                 <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
 
-                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                                onClick={() => navigate("/workerDetails?skill=HVAC")}
+                            >
                                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><FaWind size={36} className="text-amber-500" /></div>
                                 <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">HVAC</h1>
-                                <p className="mt-1 text-sm text-slate-500"> 450 Verified Professionals</p>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
                                 <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
                                 <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
 
-                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                            onClick={() => navigate("/workerDetails?skill=LANDSCAPERS")}>
                                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><IoIosHome size={36} className="text-amber-500" /></div>
                                 <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Landscapers</h1>
-                                <p className="mt-1 text-sm text-slate-500"> 450 Verified Professionals</p>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
                                 <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
                                 <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
 
-                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                            onClick={() => navigate("/workerDetails?skill=CONTRACTORS")}>
                                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><FaBuilding size={36} className="text-amber-500" /></div>
                                 <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Contractors</h1>
-                                <p className="mt-1 text-sm text-slate-500"> 450 Verified Professionals</p>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
                                 <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
                                 <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
 
-                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                            onClick={() => navigate("/workerDetails?skill=CLEANER")}>
                                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><GiVacuumCleaner size={36} className="text-amber-500" /></div>
                                 <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Cleaners</h1>
-                                <p className="mt-1 text-sm text-slate-500"> 450 Verified Professionals</p>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
                                 <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
                                 <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
@@ -155,7 +175,7 @@ export default function HomePage() {
                             <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
                                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><GiAutoRepair size={36} className="text-amber-500" /></div>
                                 <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Aequipment Repair</h1>
-                                <p className="mt-1 text-sm text-slate-500"> 450 Verified Professionals</p>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
                                 <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
                                 <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
@@ -163,7 +183,7 @@ export default function HomePage() {
                             <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
                                 <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><MdMiscellaneousServices size={36} className="text-amber-500" /></div>
                                 <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">General Services</h1>
-                                <p className="mt-1 text-sm text-slate-500"> 450 Verified Professionals</p>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
                                 <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
                                 <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
