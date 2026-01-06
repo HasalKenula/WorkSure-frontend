@@ -131,7 +131,10 @@ export default function WorkerRegistration() {
     }
 
     function handleNIC(event) {
-        setNIC(event.target.value);
+        const value = event.target.value;
+        if (value.length <= 12) {
+            setNIC(value);
+        }
     }
 
     function handleAddress(event) {
@@ -318,7 +321,7 @@ export default function WorkerRegistration() {
                                     </option>
                                 ))}
                             </select>
-                            <input type="text" className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={NIC} onChange={handleNIC} placeholder="NIC No" />
+                            <input type="text" className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={NIC} onChange={handleNIC} placeholder="NIC No" maxLength={12}/>
                             <input type="text" className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={address} onChange={handleAddress} placeholder="Address" />
                         </div>
                     </section>
