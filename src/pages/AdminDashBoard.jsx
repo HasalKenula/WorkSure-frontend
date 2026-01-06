@@ -281,8 +281,8 @@ export default function AdminDashBoard() {
         <div>
             <Navbar />
             <div className="w-full flex flex-col pt-24 my-auto  ">
-                <div className="px-6">
-                    <h1 className="text-2xl font-bold ">Admin DashBoard</h1>
+                <div className="px-6 my-8">
+                    <h1 className="text-3xl md:text-4xl font-bold text-amber-900 mb-3 ">Admin DashBoard</h1>
                 </div>
                 <div className=" w-full mx-auto flex flex-col lg:flex-row text-slate-400  items-center justify-center gap-6 p-6 lg:pt-0">
 
@@ -322,8 +322,10 @@ export default function AdminDashBoard() {
 
                 </div>
 
-                <div className="w-full mx-auto flex flex-col  text-slate-400 lg:flex-row items-center justify-center gap-6 p-6">
-                    <div className="bg-white  w-full lg:flex-2 flex flex-col items-center justify-center pb-4 shadow-lg border rounded-lg border-slate-200">
+                {/*  */}
+                <div className="w-full h-[50vh] mx-auto flex flex-col  text-slate-400 lg:flex-row items-center justify-center gap-6 p-6">
+                    <div className="bg-white  w-full h-full lg:flex-2 flex flex-col items-center justify-center pb-4 shadow-lg border rounded-lg border-slate-200">
+                        {/* search fixed */}
                         <div className="w-full p-4">
                             <input
                                 type="text"
@@ -332,7 +334,9 @@ export default function AdminDashBoard() {
                                 value={searchText}
                                 onChange={(e) => handleSearch(e.target.value)} />
                         </div>
-                        <div className="w-full  flex flex-col items-center justify-center">
+
+                        {/* Scrollable list */}
+                        <div className="w-full  flex-1 overflow-y-auto flex-col items-center justify-center">
                             <div className="w-full flex flex-col justify-between items-center px-4 text-lg">
 
                                 {
@@ -357,11 +361,13 @@ export default function AdminDashBoard() {
                             </div>
                         </div>
                     </div>
-                    <div className="bg-white w-full lg:flex-3 flex flex-col py-4 shadow-lg border rounded-lg border-slate-200">
-                        <div className="px-6">
+                    <div className="bg-white w-full h-full lg:flex-3 flex flex-col py-4 shadow-lg border rounded-lg border-slate-200">
+                        {/* Title (fixed) */}
+                        <div className="px-6 py-4">
                             <h1 className="text-xl font-bold text-center lg:text-center">{capitalizeFirst(selectedRole)}s</h1>
                         </div>
-                        <div className="w-full flex flex-col lg:flex-row justify-center items-center lg:flex-wrap gap-4">
+                        {/* Scrollable employees */}
+                        {/* <div className="w-full  flex flex-col lg:flex-row justify-center items-center lg:flex-wrap gap-4">
                             {employees.map((emp) => {
                                 return (
                                     <div key={emp.id} className="w-[40%] flex justify-center items-center lg:gap-2 lg:p-2">
@@ -375,6 +381,24 @@ export default function AdminDashBoard() {
                                     </div>
                                 )
                             })}
+                        </div> */}
+                        <div className="w-full flex-1 overflow-y-auto px-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                {employees.map((emp) => (
+                                    <div
+                                        key={emp.id}
+                                        className="flex items-center gap-4 p-3  rounded-lg shadow-sm hover:shadow-primary"
+                                        onClick={() => navigate(`/workerCard/${emp.id}`)}
+                                    >
+                                        <img
+                                            src={emp.user?.imageUrl || Man}
+                                            alt="profile"
+                                            className="w-[50px] h-[50px] rounded-full object-cover"
+                                        />
+                                        <h1 className="font-bold text-lg">{emp.fullName}</h1>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
 
