@@ -9,6 +9,7 @@ import MM from "../assets/man.jpg";
 import { CiLocationOn } from "react-icons/ci";
 import { FaStar } from "react-icons/fa";
 import { motion } from "framer-motion";
+import { useSearchParams } from "react-router-dom";
 
 
 /* ================= SKELETON CARD ================= */
@@ -23,6 +24,9 @@ const SkeletonCard = () => (
 );
 
 export default function WorkersPage() {
+  const [searchParams] = useSearchParams();
+  const skillFromURL = searchParams.get("skill");
+
   const navigate = useNavigate();
   const { isAuthenticated, jwtToken } = useAuth();
 
@@ -50,9 +54,21 @@ export default function WorkersPage() {
     }
   }
 
+  // useEffect(() => {
+  //   if (isAuthenticated) loadWorkerDetails();
+  // }, [isAuthenticated]);
+
   useEffect(() => {
-    if (isAuthenticated) loadWorkerDetails();
-  }, [isAuthenticated]);
+  if (!isAuthenticated) return;
+
+  if (skillFromURL) {
+    setSelectedSkill(skillFromURL);
+    handleSkillLocFilter("", skillFromURL);
+  } else {
+    loadWorkerDetails();
+  }
+}, [isAuthenticated, skillFromURL]);
+
 
   /* ================= SEARCH BY NAME ================= */
   async function handleNameSearch() {
