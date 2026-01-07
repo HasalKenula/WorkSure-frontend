@@ -543,14 +543,16 @@ export default function WorkerRegistration() {
 
 
                     {/* Register Button */}
-                    <button type="button" onClick={handleSubmit} className="w-full bg-primary text-white rounded py-1 text-md font-semibold hover:outline-2 hover:outline-offset-1 hover:outline-primary">
+                    <button type="button" onClick={handleSubmit} 
+                    //className="w-full bg-primary text-white rounded py-1 text-md font-semibold hover:outline-2 hover:outline-offset-1 hover:outline-primary"
+                    className="w-full py-1 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-semibold rounded hover:shadow-lg hover:scale-103 transition-all duration-300 flex items-center gap-2 justify-center whitespace-nowrap text-md">
                         Register Account
                     </button>
                     {/* Manual Navigation Button */}
                     <button
                         type="button"
                         onClick={() => navigate("/planUpgradePage")}
-                        className="w-full mt-3 bg-gray-700 text-white rounded py-1 text-md font-semibold hover:bg-gray-800"
+                        className="w-full mt-0 bg-gray-700 text-white rounded py-1 text-md font-semibold hover:bg-gray-800"
                     >
                         Go to Payment 
                     </button>
