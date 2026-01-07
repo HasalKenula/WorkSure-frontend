@@ -45,8 +45,8 @@ export default function WorkersPage() {
   async function loadWorkerDetails() {
     try {
       setLoading(true);
-      // const res = await axios.get("http://localhost:8081/worker", config);
-      const res = await axios.get("http://localhost:8081/worker");
+      const res = await axios.get("http://localhost:8081/worker", config);
+      //const res = await axios.get("http://localhost:8081/worker");
       setWorkers(res.data);
     } catch {
       toast.error("Failed to load workers");
@@ -60,9 +60,9 @@ export default function WorkersPage() {
   // }, [isAuthenticated]);
 
 
-  useEffect(() => {
-     loadWorkerDetails();
-   }, []);
+  // useEffect(() => {
+  //    loadWorkerDetails();
+  //  }, []);
 
   useEffect(() => {
   if (!isAuthenticated) return;
