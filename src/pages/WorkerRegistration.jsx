@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import uploadFile from "../utils/meadiaUpload";
 import { useNavigate } from "react-router-dom";
+import { FiUpload } from "react-icons/fi";
 
 export default function WorkerRegistration() {
     const navigate = useNavigate();
@@ -493,6 +494,10 @@ export default function WorkerRegistration() {
                             onDragOver={handleDragOver}
                             onClick={handleBrowseClick}
                         >
+                            {/* Icon */}
+                            <div className="flex justify-center mb-2 text-primary text-3xl">
+                                <FiUpload />
+                            </div>
                             <p>Please upload your NIC copy, Gramaniladari Certificate, Police Report and other necessary documents.</p>
                             <p>Drag & drop your documents here, or click to upload.</p>
 
