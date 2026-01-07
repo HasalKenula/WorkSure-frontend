@@ -180,7 +180,20 @@ export default function WorkerHire() {
                 const formatted = format(date, "yyyy-MM-dd");
                 if (bookedDates.includes(formatted)) {
                   return (
-                    <div className="bg-red-200 w-8 h-8 rounded-full mx-auto"></div>
+                    // <div className="bg-red-200 w-8 h-8 rounded-full mx-auto"></div>
+
+                    <div className="relative group flex justify-center">
+  <div className="bg-red-200 w-8 h-8 rounded-full"></div>
+
+  {/* Tooltip */}
+  <div className="absolute bottom-full mb-2 hidden group-hover:block">
+    <div className="bg-black text-white text-xs px-3 py-1 rounded-lg shadow-lg whitespace-nowrap">
+      New job request is pending
+    </div>
+  </div>
+</div>
+
+                    
                   );
                 }
                 return null;
@@ -226,7 +239,7 @@ export default function WorkerHire() {
             <textarea onChange={(e) => setDescription(e.target.value)} value={description} rows={4} placeholder="Describe the job..." className="w-full mt-2 p-3 border border-gray-300 rounded-xl focus:outline-none" />
           </div>
           <div className="flex gap-4 mt-6">
-            <button onClick={createHire} className="flex-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white font-semibold p-3 rounded-2xl hover:scale-105 transition transform">
+            <button onClick={createHire} className="flex-1 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-bold rounded-xl hover:shadow-lg hover:scale-103 transition-all duration-300 flex items-center gap-2 justify-center whitespace-nowrap">
               Send Request
             </button>
             <button className="flex-1 border border-gray-300 p-3 rounded-2xl hover:bg-gray-100 transition">Cancel</button>
@@ -269,3 +282,4 @@ export default function WorkerHire() {
     </div>
   );
 }
+
