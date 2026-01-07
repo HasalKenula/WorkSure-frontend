@@ -321,7 +321,7 @@ export default function WorkerDashBoard() {
                                 <h1 className="text-slate-500">Total Earning</h1>
                             </div>
                             <div className="flex items-center justify-center text-5xl font-bold">
-                                <CountUp start={0} end={200000} duration={2.5} separator="," prefix="Rs. " enableScrollSpy scrollSpyOnce />
+                                <CountUp start={0} end={0} duration={2.5} separator="," prefix="Rs. " enableScrollSpy scrollSpyOnce />
                             </div>
                         </div>
                         <div className="w-[75%] flex-1 flex-col  shadow-xl items-center justify-center gap-6  border  border-slate-200 py-4 px-8">
@@ -337,10 +337,10 @@ export default function WorkerDashBoard() {
                                 <IoStarSharp />
                                 <IoStarSharp />
                                 <IoStarSharp />
-                                <CountUp start={0} end={5} duration={2} decimals={1} enableScrollSpy scrollSpyOnce />
+                                <CountUp start={0} end={0} duration={2} decimals={1} enableScrollSpy scrollSpyOnce />
                             </div>
                             <div className="flex items-center flex-col justify-center text-xl">
-                                <h1>(75 Reviews)</h1>
+                                <h1>(0 Reviews)</h1>
                                 <h1>{hire?.worker?.id}</h1>
                                 <h1>{hire?.user?.id}</h1>
                             </div>
