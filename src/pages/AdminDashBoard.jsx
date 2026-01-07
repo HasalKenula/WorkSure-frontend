@@ -302,7 +302,7 @@ export default function AdminDashBoard() {
                             <LiaUserSecretSolid color="#f59e0b" size={80} />
                         </div>
                         <div className="text-xl font-bold text-slate-500">
-                            <h1>Total Number of Works</h1>
+                            <h1>Total Number of Workers</h1>
                         </div>
                         <div className="text-5xl font-bold">
                             <CountUp key={`workers-${workers.length}`} start={0} end={workers.length} duration={2} enableScrollSpy scrollSpyOnce />
