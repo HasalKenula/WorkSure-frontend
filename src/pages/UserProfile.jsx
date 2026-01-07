@@ -466,9 +466,9 @@ export default function UserProfile() {
                     placeholder="10 digit mobile number"
                     className="w-full border border-gray-300 p-2 rounded focus:outline-primary"
                   />
-                  <p className="text-xs text-gray-500 mt-1">
+                  {/* <p className="text-xs text-gray-500 mt-1">
                     {user.contact.length}/10 digits
-                  </p>
+                  </p> */}
                 </div>
 
                 <RequiredInput
