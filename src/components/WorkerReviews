@@ -1,0 +1,26 @@
+import { useEffect, useState } from "react";
+import axios from "axios";
+
+export default function WorkerReviews({ workerId }) {
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    axios.get(`http://localhost:8080/rating/${workerId}`)
+      .then(res => setData(res.data));
+  }, [workerId]);
+
+  if (!data) return "Loading..."
+
+  return (
+    <div>
+      <h3>Average Rating: {data.average.toFixed(1)} ⭐</h3>
+      {data.ratings.map((r, i) => (
+        <div key={i}>
+          <p>{r.rating} ⭐</p>
+          <p>{r.feedback}</p>
+          <hr/>
+        </div>
+      ))}
+    </div>
+  );
+}
