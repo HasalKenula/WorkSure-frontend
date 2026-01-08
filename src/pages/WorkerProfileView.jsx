@@ -626,14 +626,14 @@ export default function WorkerProfileView() {
                                 ))}
                             </InfoCard>
 
-                            <button
+                            {/* <button
                                 onClick={() => navigate("/feedback")}
                                 //className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-accent transition"
                                 className=" px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-medium rounded-lg hover:shadow-lg hover:scale-102 transition-all duration-300 flex items-center gap-2 justify-center whitespace-nowrap"
 
                             >
                                 Add Feedback
-                            </button>
+                            </button> */}
                         </main>
                     </div>
                 </div>
