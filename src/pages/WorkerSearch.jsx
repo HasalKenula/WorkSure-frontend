@@ -10,6 +10,8 @@ import { CiLocationOn } from "react-icons/ci";
 import { FaStar } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useSearchParams } from "react-router-dom";
+import WorkerReviews from "../components/WorkerReviews.jsx";
+import WorkerRatingCard from "../components/WorkerRatingCard.jsx";
 
 
 /* ================= SKELETON CARD ================= */
@@ -282,6 +284,7 @@ export default function WorkersPage() {
                   <div className="App">
                     {/*<StarRating itemId={1} />*/}
                     {/*<StarRating itemId={worker.id} />*/}
+                    <WorkerRatingCard workerId={worker.id} />
                   </div>
                 </div>
 

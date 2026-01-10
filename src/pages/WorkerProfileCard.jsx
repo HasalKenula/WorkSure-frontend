@@ -7,6 +7,8 @@ import { FaStar, FaUserCircle } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import WorkerReviews from "../components/WorkerReviews";
+import WorkerRatingCard from "../components/WorkerRatingCard";
 
 export default function WorkerProfileCard() {
   const { jwtToken, isAuthenticated } = useAuth();
@@ -249,11 +251,19 @@ export default function WorkerProfileCard() {
             </div>
 
             {/* RATINGS */}
-            <div className="flex items-center mt-3">
+            {/* <div className="flex items-center mt-3">
               {[...Array(5)].map((_, i) => (
                 <FaStar key={i} className="text-yellow-500" />
               ))}
               <span className="ml-2 text-gray-500">(75 Reviews)</span>
+            </div> */}
+
+            <div className="flex justify-center gap-1 mt-2 text-yellow-500">
+              <div className="App">
+                {/*<StarRating itemId={1} />*/}
+                {/*<StarRating itemId={worker.id} />*/}
+                <WorkerRatingCard workerId={worker.id} />
+              </div>
             </div>
 
             {/* HIRE BUTTON */}
@@ -344,23 +354,24 @@ export default function WorkerProfileCard() {
             </h3>
 
             {userRate.map((user) => (
-              <div key={user.id} className="mt-4 border-b pb-4 last:border-none">
-                <div className="flex items-center gap-3">
-                  <FaUserCircle className="text-3xl text-gray-600" />
-                  <div>
-                    <p className="font-semibold">{user.name}</p>
-                    <p className="text-sm text-gray-500">{user.date}</p>
-                  </div>
-                </div>
+              // <div key={user.id} className="mt-4 border-b pb-4 last:border-none">
+              //   <div className="flex items-center gap-3">
+              //     <FaUserCircle className="text-3xl text-gray-600" />
+              //     <div>
+              //       <p className="font-semibold">{user.name}</p>
+              //       <p className="text-sm text-gray-500">{user.date}</p>
+              //     </div>
+              //   </div>
 
-                <div className="flex mt-1">
-                  {[...Array(user.rating)].map((_, i) => (
-                    <FaStar key={i} className="text-yellow-500" />
-                  ))}
-                </div>
+              //   <div className="flex mt-1">
+              //     {[...Array(user.rating)].map((_, i) => (
+              //       <FaStar key={i} className="text-yellow-500" />
+              //     ))}
+              //   </div>
 
-                <p className="mt-2 text-gray-700">{user.message}</p>
-              </div>
+              //   <p className="mt-2 text-gray-700">{user.message}</p>
+              // </div>
+              <WorkerReviews workerId={workerId} />
             ))}
           </div>
 
