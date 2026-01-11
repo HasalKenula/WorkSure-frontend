@@ -237,7 +237,7 @@ export default function WorkerBankDetailsPage() {
     } catch (error) {
       console.error("Error fetching bank details:", error);
       const errorMsg = error.response?.data?.message || error.response?.data || error.message;
-      toast.error(`Failed to load bank details: ${errorMsg}`);
+     // toast.error(`Failed to load bank details: ${errorMsg}`);
       setBankDetailsList([]);
       setFilteredBankDetails([]);
     } finally {

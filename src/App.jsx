@@ -35,6 +35,7 @@ import MoneyTransferPage from './pages/MoneyTransferPage'
 import WorkerBankDetailsPage from './pages/WorkerBankDetailsPage'
 
 
+
 function App() {
   const [count, setCount] = useState(0)
 
@@ -48,6 +49,7 @@ function App() {
           <Route path='/*' element={<HomePage />} />
           <Route path='/about' element={<AboutUs />} />
           <Route path='/contact' element={<ContactPage />} />
+          {/* <Route path='/workerDetails' element={<WorkerSearch />} /> */}
 
           <Route element={<ProtectedRoute />}>
             {/* <Route path='/*' element={<HomePage />} />

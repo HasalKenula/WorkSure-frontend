@@ -11,6 +11,11 @@ import { SlUserFollow } from "react-icons/sl";
 import { LiaUserSecretSolid } from "react-icons/lia";
 import { useNavigate } from "react-router-dom";
 import PaymentDetailsModal from "../components/PaymentDetailsModal";
+import { FiMoreVertical } from "react-icons/fi";
+import { FiTrendingUp, FiDownload, FiEye, FiCreditCard } from "react-icons/fi";
+
+
+
 export default function AdminDashBoard() {
     const { isAuthenticated, jwtToken } = useAuth();
     const [payments, setPayments] = useState({});
@@ -78,6 +83,11 @@ export default function AdminDashBoard() {
     //     },
     // ]
 
+    const [openMenuId, setOpenMenuId] = useState(null);
+
+    const toggleMenu = (id) => {
+        setOpenMenuId(prev => (prev === id ? null : id));
+    };
 
     const [contact, setContact] = useState([]);
     const config = {
@@ -271,8 +281,8 @@ export default function AdminDashBoard() {
         <div>
             <Navbar />
             <div className="w-full flex flex-col pt-24 my-auto  ">
-                <div className="px-6">
-                    <h1 className="text-2xl font-bold ">Admin DashBoard</h1>
+                <div className="px-6 my-8">
+                    <h1 className="text-3xl md:text-4xl font-bold text-amber-900 mb-3 ">Admin DashBoard</h1>
                 </div>
                 <div className=" w-full mx-auto flex flex-col lg:flex-row text-slate-400  items-center justify-center gap-6 p-6 lg:pt-0">
 
@@ -292,7 +302,7 @@ export default function AdminDashBoard() {
                             <LiaUserSecretSolid color="#f59e0b" size={80} />
                         </div>
                         <div className="text-xl font-bold text-slate-500">
-                            <h1>Total Number of Works</h1>
+                            <h1>Total Number of Workers</h1>
                         </div>
                         <div className="text-5xl font-bold">
                             <CountUp key={`workers-${workers.length}`} start={0} end={workers.length} duration={2} enableScrollSpy scrollSpyOnce />
@@ -312,8 +322,10 @@ export default function AdminDashBoard() {
 
                 </div>
 
-                <div className="w-full mx-auto flex flex-col  text-slate-400 lg:flex-row items-center justify-center gap-6 p-6">
-                    <div className="bg-white  w-full lg:flex-2 flex flex-col items-center justify-center pb-4 shadow-lg border rounded-lg border-slate-200">
+                {/*  */}
+                <div className="w-full h-[50vh] mx-auto flex flex-col  text-slate-400 lg:flex-row items-center justify-center gap-6 p-6">
+                    <div className="bg-white  w-full h-full lg:flex-2 flex flex-col items-center justify-center pb-4 shadow-lg border rounded-lg border-slate-200">
+                        {/* search fixed */}
                         <div className="w-full p-4">
                             <input
                                 type="text"
@@ -322,7 +334,9 @@ export default function AdminDashBoard() {
                                 value={searchText}
                                 onChange={(e) => handleSearch(e.target.value)} />
                         </div>
-                        <div className="w-full  flex flex-col items-center justify-center">
+
+                        {/* Scrollable list */}
+                        <div className="w-full  flex-1 overflow-y-auto flex-col items-center justify-center">
                             <div className="w-full flex flex-col justify-between items-center px-4 text-lg">
 
                                 {
@@ -347,11 +361,13 @@ export default function AdminDashBoard() {
                             </div>
                         </div>
                     </div>
-                    <div className="bg-white w-full lg:flex-3 flex flex-col py-4 shadow-lg border rounded-lg border-slate-200">
-                        <div className="px-6">
+                    <div className="bg-white w-full h-full lg:flex-3 flex flex-col py-4 shadow-lg border rounded-lg border-slate-200">
+                        {/* Title (fixed) */}
+                        <div className="px-6 py-4">
                             <h1 className="text-xl font-bold text-center lg:text-center">{capitalizeFirst(selectedRole)}s</h1>
                         </div>
-                        <div className="w-full flex flex-col lg:flex-row justify-center items-center lg:flex-wrap gap-4">
+                        {/* Scrollable employees */}
+                        {/* <div className="w-full  flex flex-col lg:flex-row justify-center items-center lg:flex-wrap gap-4">
                             {employees.map((emp) => {
                                 return (
                                     <div key={emp.id} className="w-[40%] flex justify-center items-center lg:gap-2 lg:p-2">
@@ -365,6 +381,24 @@ export default function AdminDashBoard() {
                                     </div>
                                 )
                             })}
+                        </div> */}
+                        <div className="w-full flex-1 overflow-y-auto px-6">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                                {employees.map((emp) => (
+                                    <div
+                                        key={emp.id}
+                                        className="flex items-center gap-4 p-3  rounded-lg shadow-sm hover:shadow-primary"
+                                        onClick={() => navigate(`/workerCard/${emp.id}`)}
+                                    >
+                                        <img
+                                            src={emp.user?.imageUrl || Man}
+                                            alt="profile"
+                                            className="w-[50px] h-[50px] rounded-full object-cover"
+                                        />
+                                        <h1 className="font-bold text-lg">{emp.fullName}</h1>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
 
@@ -402,43 +436,160 @@ export default function AdminDashBoard() {
                                             <td class="border border-gray-300 px-6 py-3">{user.phoneNumber}</td>
                                             <td className="border border-gray-300 px-6 py-3">
                                                 {Boolean(user.isBlocked) ? (
-                                                    <span className="bg-red-100 text-red-700 font-semibold">Blocked</span>
+                                                    <span className="bg-red-100 text-red-700 font-semibold px-3 py-1 rounded-full">Blocked</span>
                                                 ) : (
-                                                    <span className="bg-green-100 text-green-700 font-semibold">Active</span>
+                                                    <span className="bg-green-100 text-green-700 font-semibold px-3 py-1 rounded-full">Active</span>
                                                 )}
 
 
                                             </td>
 
-                                            <td class="border border-gray-300 px-6 py-3"><div className="flex items-center gap-3">
-                                                <button
-                                                    onClick={() => handleToggleBlock(user.id)}
-                                                    className={`px-3 py-1 rounded-lg border ${user.isBlocked ? "bg-green-100 text-green-700 text-white" : "bg-red-100 text-red-700 text-white"}hover:opacity-80`}
-                                                >
-                                                    {user.isBlocked ? "Approve" : "Block"}
-                                                </button>
-                                                <button
-                                                    className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white"
-                                                    onClick={() => handleDownloadPDF(user.pdfUrl, user.fullName)}
-                                                >
-                                                    Download PDF
-                                                </button>
+                                            <td class="border border-gray-300 px-6 py-3 relative">
+                                                <div className="flex items-center gap-2">
+                                                    {/* primary action */}
+                                                    {/* <button
+                                                        onClick={() => handleToggleBlock(user.id)}
+                                                        className={`px-3 py-1 rounded-lg border ${user.isBlocked ? "bg-green-100 text-green-700 text-white" : "bg-red-100 text-red-700 text-white"}hover:opacity-80`}
+                                                    >
+                                                        {user.isBlocked ? "Approve Worker" : "Block Worker"}
+                                                    </button> */}
 
-                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/workerRegistrationDetails/${user.id}`)}>
-                                                    Review Details
-                                                </button>
+                                                    <button
+        onClick={() => {
+          handleToggleBlock(user.id);
+          setOpenMenuId(null);
+        }}
+        className={`w-full text-left px-4 py-2 font-semibold
+          ${user.isBlocked
+            ? "text-green-600 hover:bg-green-50"
+            : "text-red-600 hover:bg-red-50"
+          }`}
+      >
+        {user.isBlocked ? "Approve Worker" : "Block Worker"}
+      </button>
 
-                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/WorkerProgress/${user.id}`)}>
-                                                    Progress
-                                                </button>
 
-                                                <PaymentDetailsModal
-                                                    userId={user.user?.id}
-                                                    triggerButtonText="Payment Details"
-                                                    buttonClass="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white"
-                                                />
 
-                                            </div></td>
+                                                    {/* more menu btn */}
+                                                    {/* <button
+                                                        onClick={() => toggleMenu(user.id)}
+                                                        className="p-2 rounded-lg hover:bg-gray-100 hover:"
+                                                        >
+                                                        <FiMoreVertical size={18} />
+                                                    </button> */}
+
+                                                    
+                                                    <div className="relative group">
+                                                        <button 
+                                                            className="p-2 rounded-lg hover:bg-gray-100"
+                                                            onClick={() => toggleMenu(user.id)}
+                                                        >
+                                                            <FiMoreVertical size={18} />
+                                                        </button>
+
+                                                    {/* Tooltip */}
+                                                    <span className="
+                                                        absolute -top-8 left-1/2 -translate-x-1/2
+                                                        bg-gray-800 text-white text-xs
+                                                        px-2 py-1 rounded
+                                                        opacity-0 group-hover:opacity-100
+                                                        transition duration-200
+                                                        whitespace-nowrap
+                                                    ">
+                                                        {openMenuId === user.id ? "Show less" : "Show more"}
+                                                    </span>
+                                                    </div>
+
+
+                                                    {/* <button
+                                                        className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white"
+                                                        onClick={() => handleDownloadPDF(user.pdfUrl, user.fullName)}
+                                                    >
+                                                        Download PDF
+                                                    </button> */}
+
+                                                    {/* <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/workerRegistrationDetails/${user.id}`)}>
+                                                        Review Details
+                                                    </button> */}
+
+                                                    {/* <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/WorkerProgress/${user.id}`)}>
+                                                        Progress
+                                                    </button> */}
+
+                                                    {/* <PaymentDetailsModal
+                                                        userId={user.user?.id}
+                                                        triggerButtonText="Payment Details"
+                                                        buttonClass="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white"
+                                                    /> */}
+
+                                                </div>
+
+                                                {/* dropdown menu */}
+                                                {openMenuId === user.id && (
+                                                    <div className="absolute right-6 top-14 z-50 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
+                                                        <button
+                                                            onClick={() => {
+                                                            navigate(`/WorkerProgress/${user.id}`);
+                                                            setOpenMenuId(null);
+                                                            }}
+                                                            className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100"
+                                                        >
+                                                            <FiTrendingUp className="text-gray-600" />
+                                                            <span>Progress</span>
+                                                        </button>
+
+                                                        <button
+                                                            onClick={() => {
+                                                            handleDownloadPDF(user.pdfUrl, user.fullName);
+                                                            setOpenMenuId(null);
+                                                            }}
+                                                            className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100"
+                                                        >
+                                                            <FiDownload className="text-gray-600" />
+                                                            <span>Download PDF</span>
+                                                        </button>
+
+                                                        <button
+                                                            className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100"
+                                                            onClick={() => navigate(`/workerRegistrationDetails/${user.id}`)}
+                                                        >
+                                                            <FiEye className="text-gray-600" />
+                                                            <span>Review Details</span>
+                                                        </button>
+
+                                                        <PaymentDetailsModal
+                                                            userId={user.user?.id}
+                                                            triggerButtonText={
+                                                                <div className="flex items-center gap-3">
+                                                                <FiCreditCard className="text-gray-600" />
+                                                                <span>Payment Details</span>
+                                                                </div>
+                                                            }
+                                                            buttonClass="w-full flex items-center px-4 py-2 hover:bg-gray-100"
+                                                        />
+
+      
+
+      {/* <button
+        onClick={() => {
+          handleToggleBlock(user.id);
+          setOpenMenuId(null);
+        }}
+        className={`w-full text-left px-4 py-2 font-semibold
+          ${user.isBlocked
+            ? "text-green-600 hover:bg-green-50"
+            : "text-red-600 hover:bg-red-50"
+          }`}
+      >
+        {user.isBlocked ? "Approve Worker" : "Block Worker"}
+      </button> */}
+    </div>
+  )}
+                                            
+                                            
+                                            </td>
+
+
 
                                         </tr>
                                     )
