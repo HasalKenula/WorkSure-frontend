@@ -154,7 +154,9 @@ export default function PlanUpgradePage(){
                    
 
                     <button
-                        className={`w-full py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${isSelected ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-blue-500 hover:bg-blue-600 text-white'}`}
+                    // px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-bold rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-2 justify-center whitespace-nowrap
+                        className={`w-full py-3 px-4 rounded-lg font-semibold transition-all duration-200 ${isSelected ? 'bg-gradient-to-r from-amber-500 to-yellow-500  text-white' : 
+                        'bg-gradient-to-r from-amber-500 to-yellow-500 hover:shadow-lg hover:scale-105 transition-all duration-300 text-white'}`}
                         onClick={() => handlePlanSelect(plan)}
                     >
                         {plan.cta}
@@ -174,8 +176,8 @@ export default function PlanUpgradePage(){
             <div className="max-w-7xl mx-auto">
                 {/* Header */}
                 <header className="text-center mb-12">
-                    <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-6">
-                        Upgrade your plan
+                    <h1 className="text-3xl md:text-4xl font-bold text-amber-900 mb-3 text-center6">
+                        Upgrade Your Plan
                     </h1>
 
 

@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import uploadFile from "../utils/meadiaUpload";
 import { useNavigate } from "react-router-dom";
+import { FiUpload } from "react-icons/fi";
 
 export default function WorkerRegistration() {
     const navigate = useNavigate();
@@ -131,7 +132,10 @@ export default function WorkerRegistration() {
     }
 
     function handleNIC(event) {
-        setNIC(event.target.value);
+        const value = event.target.value;
+        if (value.length <= 12) {
+            setNIC(value);
+        }
     }
 
     function handleAddress(event) {
@@ -318,7 +322,7 @@ export default function WorkerRegistration() {
                                     </option>
                                 ))}
                             </select>
-                            <input type="text" className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={NIC} onChange={handleNIC} placeholder="NIC No" />
+                            <input type="text" className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={NIC} onChange={handleNIC} placeholder="NIC No" maxLength={12}/>
                             <input type="text" className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={address} onChange={handleAddress} placeholder="Address" />
                         </div>
                     </section>
@@ -490,6 +494,10 @@ export default function WorkerRegistration() {
                             onDragOver={handleDragOver}
                             onClick={handleBrowseClick}
                         >
+                            {/* Icon */}
+                            <div className="flex justify-center mb-2 text-primary text-3xl">
+                                <FiUpload />
+                            </div>
                             <p>Please upload your NIC copy, Gramaniladari Certificate, Police Report and other necessary documents.</p>
                             <p>Drag & drop your documents here, or click to upload.</p>
 
@@ -535,14 +543,16 @@ export default function WorkerRegistration() {
 
 
                     {/* Register Button */}
-                    <button type="button" onClick={handleSubmit} className="w-full bg-primary text-white rounded py-1 text-md font-semibold hover:outline-2 hover:outline-offset-1 hover:outline-primary">
+                    <button type="button" onClick={handleSubmit} 
+                    //className="w-full bg-primary text-white rounded py-1 text-md font-semibold hover:outline-2 hover:outline-offset-1 hover:outline-primary"
+                    className="w-full py-1 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-semibold rounded hover:shadow-lg hover:scale-103 transition-all duration-300 flex items-center gap-2 justify-center whitespace-nowrap text-md">
                         Register Account
                     </button>
                     {/* Manual Navigation Button */}
                     <button
                         type="button"
                         onClick={() => navigate("/planUpgradePage")}
-                        className="w-full mt-3 bg-gray-700 text-white rounded py-1 text-md font-semibold hover:bg-gray-800"
+                        className="w-full mt-0 bg-gray-700 text-white rounded py-1 text-md font-semibold hover:bg-gray-800"
                     >
                         Go to Payment 
                     </button>

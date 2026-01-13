@@ -9,21 +9,22 @@ export default function LogoAnimation() {
     <div className="flex flex-col w-full h-[300px] overflow-hidden relative my-8">
       
       {/* Icons Row */}
-      <div className="ticker-icons flex absolute top-0 left-0 whitespace-nowrap">
+      <div className="ticker-icons flex absolute top-40 left-0 whitespace-nowrap">
         {[...Array(2)].map((_, i) => (
           <div key={i} className="flex gap-6">
-            <IoIosHammer color="#000000" size={100} />
-            <GiLargePaintBrush color="#000000" size={100} />
-            <MdCarpenter color="#000000" size={100} />
-            <GiAutoRepair color="#000000" size={100} />
-            <MdElectricBolt color="#000000" size={100} />
-            <MdOutlinePlumbing color="#000000" size={100} />
-            <GiVacuumCleaner color="#000000" size={100} />
-            <GiFireExtinguisher color="#000000" size={100} />
-            <IoIosConstruct color="#000000" size={100} />
-            <MdMiscellaneousServices color="#000000" size={100} />
-            <FaBuilding color="#000000" size={100} />
-            <FaWind color="#000000" size={100} />
+            <IoIosHammer color="#000000" size={60} />
+            <GiLargePaintBrush color="#000000" size={60} />
+            <MdCarpenter color="#000000" size={60} />
+            <GiAutoRepair color="#000000" size={60} />
+            <MdElectricBolt color="#000000" size={60} />
+            <MdOutlinePlumbing color="#000000" size={60} />
+            <GiVacuumCleaner color="#000000" size={60} />
+            <GiFireExtinguisher color="#000000" size={60} />
+            <IoIosConstruct color="#000000" size={60} />
+            <MdMiscellaneousServices color="#000000" size={60} />
+            <FaBuilding color="#000000" size={60} />
+            <FaWind color="#000000" size={60} />
+            
           </div>
         ))}
       </div>
@@ -31,7 +32,7 @@ export default function LogoAnimation() {
       {/* Text Row */}
       <div className="ticker-text flex absolute bottom-0 left-0 whitespace-nowrap">
         {[...Array(2)].map((_, i) => (
-          <div key={i} className="flex gap-12 text-8xl font-bold text-black">
+          <div key={i} className="flex gap-12 text-5xl font-bold text-black">
             <h1>Electrician</h1>
             <h1>Plumbers</h1>
             <h1>Capenters</h1>

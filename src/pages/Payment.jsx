@@ -4,6 +4,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { FaLock } from "react-icons/fa";
+
+
 export default function SecurePayment() {
   const navigate=useNavigate();
   const location = useLocation();
@@ -73,10 +76,11 @@ export default function SecurePayment() {
     <div className="max-w-[1400px] mx-auto p-8 bg-gray-50 min-h-screen">
 
       {/* Page Title */}
-      <h1 className="text-4xl md:text-5xl font-extrabold text-center text-gray-800 mb-2">
-        Secure Payment
+      <h1 className="text-3xl md:text-4xl font-bold text-amber-900 mb-3 text-center" >
+                  <FaLock className="inline-block mr-3 mb-1" />
+                  Secure Payment
       </h1>
-      <p className="text-center text-gray-600 mb-10 text-lg">
+      <p className="text-amber-700 text-lg text-center  mb-10 ">
         Finalize your payment for the <b>{planName}</b> plan.
       </p>
 
@@ -84,10 +88,10 @@ export default function SecurePayment() {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
 
         {/* Left – Payment Details */}
-        <div className="bg-white p-8 rounded-2xl shadow-lg">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">Payment Details</h2>
+        <div className="bg-white p-8 rounded-2xl shadow-lg border border-amber-100">
+          <h2 className="text-2xl font-bold mb-6 text-amber-900">Payment Details</h2>
 
-          <div className="font-semibold text-gray-700 mb-3">Billing Information</div>
+          <div className="font-semibold  mb-3 block  text-amber-700">Billing Information</div>
 
           <label className="block mt-4 text-sm font-medium text-gray-600">Full Name</label>
           <input
@@ -95,7 +99,8 @@ export default function SecurePayment() {
             value={fullname}
             onChange={handleFullname}
             placeholder="hasalkenula"
-            className="w-full p-3 mt-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition"
+            // className="w-full p-3 mt-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition"
+            className ="w-full p-3 mt-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
           />
 
           <label className="block mt-4 text-sm font-medium text-gray-600">Billing Address</label>
@@ -104,7 +109,7 @@ export default function SecurePayment() {
             value={address}
             onChange={handleAddress}
             placeholder="23, Janaraja mawatha , Mathara"
-            className="w-full p-3 mt-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition"
+            className="w-full p-3 mt-2 border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
           />
 
           <label className="block mt-4 text-sm font-medium text-gray-600">Email Address</label>
@@ -113,31 +118,35 @@ export default function SecurePayment() {
             value={email}
             onChange={handleEmail}
             placeholder="hasalkenula@gmail.com"
-            className="w-full p-3 mt-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition"
+            className="w-full p-3 mt-2 border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
           />
 
-          <div className="font-semibold text-gray-700 mt-6 mb-3">Choose Payment Method</div>
+          <div className="  mt-6 mb-3 font-semibold  block  text-amber-700">Choose Payment Method</div>
 
           {/* Card Box */}
-          <div className="bg-blue-50 border border-blue-200 p-5 rounded-xl mb-4">
-            <div className="flex items-center gap-2 text-blue-600 mb-3">
+          <div 
+          //  className="bg-blue-50 border border-blue-200 p-5 rounded-xl mb-4"
+          className="p-5 bg-amber-50   rounded-xl mb-4 focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
+          >
+            <div className="flex items-center gap-2 text-amber-800 mb-3">
               <AiOutlineCreditCard className="text-2xl" /> Credit / Debit Card
             </div>
             <input
               type="text"
               placeholder="XXXX XXXX XXXX XXXX"
-              className="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition"
+              // className="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition"
+              className="w-full p-3 bg-amber-50 border-2 border-amber-200 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
             />
             <div className="flex gap-3 mt-3">
               <input
                 type="text"
                 placeholder="MM/YY"
-                className="flex-1 p-3 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition"
+                className="flex-1 p-3 bg-amber-50 border-2 border-amber-200 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
               />
               <input
                 type="text"
                 placeholder="CVC"
-                className="flex-1 p-3 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition"
+                className="flex-1 p-3 bg-amber-50 border-2 border-amber-200 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
               />
             </div>
             <label className="flex items-center gap-2 mt-3 text-sm text-gray-600">
@@ -154,8 +163,8 @@ export default function SecurePayment() {
         </div>
 
         {/* Right – Order Summary */}
-        <div className="bg-white p-8 rounded-2xl shadow-lg flex flex-col justify-between">
-          <h2 className="text-2xl font-bold mb-6 text-gray-800">Order Summary</h2>
+        <div className="bg-white p-8 rounded-2xl shadow-lg flex flex-col justify-between border border-amber-100">
+          <h2 className="text-2xl font-bold mb-6 text-amber-900">Order Summary</h2>
 
           <div className="flex flex-col gap-4">
             <div className="flex justify-between text-gray-700">
@@ -171,7 +180,7 @@ export default function SecurePayment() {
 
           <hr className="my-4 border-gray-300" />
 
-          <div className="flex justify-between font-bold text-lg text-gray-800 mb-4">
+          <div className="flex justify-between font-bold text-lg text-amber-700 mb-4">
             <span>Total Amount:</span>
             <b>Rs. {(planPrice * 1.08).toFixed(2)}</b>
           </div>
@@ -183,7 +192,8 @@ export default function SecurePayment() {
 
           <button
             onClick={createPayment}
-            className="w-full bg-blue-600 hover:bg-yellow-500 text-white py-4 rounded-xl font-semibold transition-colors"
+            // className="w-full bg-blue-600 hover:bg-yellow-500 text-white py-4 rounded-xl font-semibold transition-colors"
+            className="px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-bold rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-2 justify-center whitespace-nowrap"
           >
             Confirm Payment
           </button>

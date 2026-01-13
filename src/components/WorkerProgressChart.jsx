@@ -14,13 +14,13 @@ export default function WorkerCharts({ hire, isPDF }) {
     const total = active + blocked;
 
     const COLORS = {
-        Active: "#22c55e",
+        Active: "#f59e0b",
         Blocked: "#ef4444",
-        Pending: "#eab308",
+        Pending: "#c2bfbc",
         Seen: "#3b82f6",
-        Ongoing: "#8b5cf6",
-        Completed: "#10b981",
-        Total: "#6366f1",
+        Ongoing: "#40de72",
+        Completed: "#4846c2",
+        Total: "#c2bfbc",
     };
 
     const pie1 = [

@@ -13,7 +13,12 @@ import LoadingAnimation from "../components/LoadingAnimation";
 import { useEffect, useState } from "react";
 import LogoAnimation from "../components/LogoAnimation";
 import Footer from "../components/Footer";
+import PremiumHeroSection from "../components/PremiumHeroSection";
+import HowItWorksSection from "../components/HowItWorksSection";
+import { useNavigate } from "react-router-dom";
+
 export default function HomePage() {
+    const navigate = useNavigate();
     const { logout } = useAuth()
     const [loading, setLoading] = useState(true);
     useEffect(() => {
@@ -50,10 +55,12 @@ export default function HomePage() {
 
                             {/* Buttons - now BELOW the search input */}
                             <div className="flex gap-4 flex-wrap justify-center">
-                                <button className="bg-primary text-black font-semibold px-6 py-2 rounded-full hover:bg-yellow-500 transition">
+                                <button className="bg-primary text-black font-semibold px-6 py-2 rounded-full hover:bg-yellow-500 transition"
+                                onClick={() => navigate("/auth/register")}>
                                     Get Started - It's Free!
                                 </button>
-                                <button className="border border-yellow-400 text-yellow-400 font-semibold px-6 py-2 rounded-full hover:bg-yellow-50 transition">
+                                <button className="border border-yellow-400 text-yellow-400 font-semibold px-6 py-2 rounded-full hover:bg-yellow-50 transition"
+                                onClick={() => navigate("/auth/login")}>
                                     Already a Member? Sign In
                                 </button>
                             </div>
@@ -61,71 +68,126 @@ export default function HomePage() {
 
                     </div>
                 </section>
+                
 
                 <section className="w-full h-[1700px] md:h-[1100px]  flex items-center justify-center">
                     <div className=" mx-auto flex flex-col md:flex-col items-center p-6 gap-10 ">
                         <h1 className="w-full text-center text-5xl font-bold">Browse All Services</h1>
                         <h3 className="w-full text-center text-xl"> Explore professional workers across multiple service categories</h3>
                         <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-10 w-full max-w-6xl">
-                            <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4"><MdElectricBolt color="#f59e0b" size={40} /></div>
-                                <h1 className="font-bold text-xl">Electrician</h1>
-                                <h3>450 professionals</h3>
+
+
+                           <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                                onClick={() => navigate("/workerDetails?skill=ELECTRICIAN")}
+                           >
+                                
+                                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"> <MdElectricBolt size={36} className="text-amber-500" /></div>
+                                <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Electricians</h1>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
+                                <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
+                                <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
-                            <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4"><MdOutlinePlumbing color="#f59e0b" size={40} /></div>
-                                <h1 className="font-bold text-xl">Plumbers</h1>
-                                <h3>450 professionals</h3>
+
+                           <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                            onClick={() => navigate("/workerDetails?skill=PLUMBER")}
+                           >
+                                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><MdOutlinePlumbing size={36} className="text-amber-500" /></div>
+                                <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Plumbers</h1>
+                                <p className="mt-1 text-sm text-slate-500"> Verified Professionals</p>
+                                <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
+                                <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
-                            <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4"><IoIosHammer color="#f59e0b" size={40} /></div>
-                                <h1 className="font-bold text-xl">Capenters</h1>
-                                <h3>450 professionals</h3>
+
+                           <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                            onClick={() => navigate("/workerDetails?skill=CARPENTER")}
+                           >
+                                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><IoIosHammer size={36} className="text-amber-500" /></div>
+                                <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Carpenters</h1>
+                                <p className="mt-1 text-sm text-slate-500"> Verified Professionals</p>
+                                <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
+                                <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
-                            <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4"><GiLargePaintBrush color="#f59e0b" size={40} /></div>
-                                <h1 className="font-bold text-xl">Painters</h1>
-                                <h3>450 professionals</h3>
+
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                                onClick={() => navigate("/workerDetails?skill=PAINTER")}
+                            >
+                                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><GiLargePaintBrush size={36} className="text-amber-500" /></div>
+                                <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Painters</h1>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
+                                <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
+                                <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
-                            <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4"><MdCarpenter color="#f59e0b" size={40} /></div>
-                                <h1 className="font-bold text-xl">Masons</h1>
-                                <h3>450 professionals</h3>
+
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                            onClick={() => navigate("/workerDetails?skill=MASON")}
+                            >
+                                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><MdCarpenter size={36} className="text-amber-500" /></div>
+                                <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Masons</h1>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
+                                <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
+                                <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
-                            <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4"><GiFireTail color="#f59e0b" size={40} /></div>
-                                <h1 className="font-bold text-xl">Welders</h1>
-                                <h3>450 professionals</h3>
+
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                            onClick={() => navigate("/workerDetails?skill=WELDERS")}>
+                                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><GiFireTail size={36} className="text-amber-500" /></div>
+                                <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Welders</h1>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
+                                <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
+                                <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
-                            <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4"><FaWind color="#f59e0b" size={40} /></div>
-                                <h1 className="font-bold text-xl">HVAC</h1>
-                                <h3>450 professionals</h3>
+
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                                onClick={() => navigate("/workerDetails?skill=HVAC")}
+                            >
+                                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><FaWind size={36} className="text-amber-500" /></div>
+                                <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">HVAC</h1>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
+                                <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
+                                <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
-                            <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4"><IoIosHome color="#f59e0b" size={40} /></div>
-                                <h1 className="font-bold text-xl">Landscapers</h1>
-                                <h3>450 professionals</h3>
+
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                            onClick={() => navigate("/workerDetails?skill=LANDSCAPERS")}>
+                                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><IoIosHome size={36} className="text-amber-500" /></div>
+                                <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Landscapers</h1>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
+                                <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
+                                <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
-                            <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4"><FaBuilding color="#f59e0b" size={40} /></div>
-                                <h1 className="font-bold text-xl">Contractors</h1>
-                                <h3>450 professionals</h3>
+
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                            onClick={() => navigate("/workerDetails?skill=CONTRACTORS")}>
+                                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><FaBuilding size={36} className="text-amber-500" /></div>
+                                <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Contractors</h1>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
+                                <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
+                                <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
-                            <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4"><GiVacuumCleaner color="#f59e0b" size={40} /></div>
-                                <h1 className="font-bold text-xl">Cleaners</h1>
-                                <h3>450 professionals</h3>
+
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]"
+                            onClick={() => navigate("/workerDetails?skill=CLEANER")}>
+                                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><GiVacuumCleaner size={36} className="text-amber-500" /></div>
+                                <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Cleaners</h1>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
+                                <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
+                                <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
-                            <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4"><GiAutoRepair color="#f59e0b" size={40} /></div>
-                                <h1 className="font-bold text-xl">Equipment Repair</h1>
-                                <h3>450 professionals</h3>
+
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
+                                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><GiAutoRepair size={36} className="text-amber-500" /></div>
+                                <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">Aequipment Repair</h1>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
+                                <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
+                                <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
-                            <div className="flex flex-col gap-2 rounded-xl  items-center justify-center aspect-square border-2 p-4 border-slate-300">
-                                <div className="bg-primary/20  flx items-center rounded-xl justify-center aspect-square border-0 p-4"><MdMiscellaneousServices color="#f59e0b" size={40} /></div>
-                                <h1 className="font-bold text-xl">General Services</h1>
-                                <h3>450 professionals</h3>
+
+                            <div className="group relative flex flex-col items-center justify-center gap-4 w-64 h-64 rounded-[32px] bg-white shadow-[0_20px_40px_rgba(0,0,0,0.08)] p-6 transition-all duration-300 hover:scale-[1.04] hover:shadow-[0_30px_60px_rgba(0,0,0,0.15)]">
+                                <div className="flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-br from-yellow-100 via-amber-100 to-yellow-200 shadow-inner transition-all duration-300 group-hover:scale-[1.1]"><MdMiscellaneousServices size={36} className="text-amber-500" /></div>
+                                <h1 className="mt-4 text-2xl font-bold text-slate-900 tracking-wide">General Services</h1>
+                                <p className="mt-1 text-sm text-slate-500">Verified Professionals</p>
+                                <div className="absolute -bottom-4 -right-4 w-24 h-24 rounded-full bg-amber-100/20 blur-3xl pointer-events-none" />
+                                <div className="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-yellow-100/15 blur-2xl pointer-events-none" />
                             </div>
                         </div>
                         <button type="button" className="hover:text-black hover:bg-white border-0 cursor-pointer text-2xl font-bold  bg-black text-white  py-2 px-4 rounded-lg">View All</button>
@@ -167,7 +229,7 @@ export default function HomePage() {
                     </div>
                 </section>
 
-
+                {/*
                 <section>
                     <div className="w-full h-[1300px] md:h-[550px]  flex justify-center items-center ">
                         <div className="mx-auto flex flex-col items-center justify-center gap-10">
@@ -194,30 +256,35 @@ export default function HomePage() {
                             </div>
                         </div>
                     </div>
-                </section>
+                </section> */}
+                {/*<PremiumHeroSection/>*/}
+                <HowItWorksSection/>
 
-                < LogoAnimation />
+                {/*< LogoAnimation />*/}
 
-                <section className="w-full bg-primary py-20 flex items-center justify-center">
-                    <div className="text-center px-4">
-                        <h1 className="text-3xl md:text-4xl font-bold text-white mb-8">
-                            Ready to Simplify Your Service Search?
-                        </h1>
+                <section className="relative w-full py-24 flex items-center justify-center bg-[#FFF8ED] overflow-hidden">
 
-                        {/* BUTTONS ROW */}
-                        <div className="flex flex-col md:flex-row items-center justify-center gap-6">
+                 {/* Soft Decorative Elements */}
+                    <div className="absolute top-12 left-12 w-40 h-40 bg-yellow-300/30 rounded-full blur-3xl"></div>
+                    <div className="absolute bottom-12 right-12 w-56 h-56 bg-yellow-400/20 rounded-full blur-3xl"></div>
 
-                            <button className="bg-black text-white font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-gray-900 transition">
-                                Join WorkSure Today!
-                            </button>
+                    <div className="relative z-10 text-center px-6 max-w-3xl">
+        
+                    <h1 className="text-4xl md:text-5xl font-extrabold text-black leading-tight mb-6"> Ready to Simplify Your  <span className="block text-yellow-500"> Service Search?</span></h1>
 
-                            <button className="bg-white text-black font-semibold px-8 py-3 rounded-full shadow-lg hover:bg-gray-100 transition">
-                                Learn More
-                            </button>
+                    <p className="text-black/70 text-lg md:text-xl mb-10">Find reliable professionals, book with confidence, and get things done without stress.</p>
 
-                        </div>
-                    </div>
-                </section>
+                {/* BUTTONS */}
+                <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
+
+                <button className="bg-black text-white font-semibold px-10 py-4 rounded-full shadow-lg transition transform hover:scale-105 hover:bg-gray-900">Join WorkSure Today</button>
+                <button className="bg-yellow-400 text-black font-semibold px-10 py-4 rounded-full shadow-lg transition transform hover:scale-105 hover:bg-yellow-500">Learn More</button>
+            </div>
+        </div>
+    </section>
+
+
+                {/*<PremiumHeroSection/>*/}
                 <Footer/>
 
             </>)}
