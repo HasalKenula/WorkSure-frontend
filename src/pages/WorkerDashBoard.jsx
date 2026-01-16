@@ -292,7 +292,7 @@ export default function WorkerDashBoard() {
                                 <CountUp  key={`completed-${completedCount}`} start={0}   end={completedCount} duration={2} enableScrollSpy scrollSpyOnce />
                             </div>
                         </div>
-                        <div className="w-[75%] flex-1 flex items-center gap-6  shadow-xl border border-slate-200 border py-4 px-8  justify-between">
+                        <div className="w-[75%] flex-1 flex items-center gap-6  shadow-xl border border-slate-200  py-4 px-8  justify-between">
                             <FiPhoneOutgoing color="#f59e0b" size={40} />
                             <div className="text-xl font-bold text-slate-500">
                                 <h1>Number of On Going works</h1>
@@ -301,7 +301,7 @@ export default function WorkerDashBoard() {
                                 <CountUp   key={`ongoing-${ongoingCount}`} start={0} end={ongoingCount} duration={2} enableScrollSpy scrollSpyOnce />
                             </div>
                         </div>
-                        <div className="w-[75%] flex-1 flex items-center gap-6 shadow-xl border border-slate-200 border py-4 px-8  justify-between">
+                        <div className="w-[75%] flex-1 flex items-center gap-6 shadow-xl border border-slate-200  py-4 px-8  justify-between">
                             <MdOutlinePendingActions color="#f59e0b" size={40} />
                             <div className="text-xl font-bold text-slate-500">
                                 <h1>Number of Pending Request</h1>
