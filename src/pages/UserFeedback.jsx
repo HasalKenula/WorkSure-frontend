@@ -9,11 +9,11 @@ import { useAuth } from "../context/AuthContext";
 export default function UserFeedback() {
   const { workerId } = useParams();
   const navigate = useNavigate();
-  const { jwtToken, isAuthenticated } = useAuth();
+  const { jwtToken } = useAuth();
 
-  const [user, setUser] = useState(null); // current user
-  const [worker, setWorker] = useState(null); // worker info
-  const [reviews, setReviews] = useState([]); // user's past reviews
+  const [user, setUser] = useState(null);
+  const [worker, setWorker] = useState(null);
+  const [reviews, setReviews] = useState([]);
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [feedback, setFeedback] = useState("");
@@ -26,7 +26,6 @@ export default function UserFeedback() {
     },
   };
 
-  // 1️⃣ Load current user
   useEffect(() => {
     if (!jwtToken) return;
 
@@ -36,7 +35,6 @@ export default function UserFeedback() {
       .catch((err) => console.error("Failed to load user:", err));
   }, [jwtToken]);
 
-  // 2️⃣ Load worker info
   useEffect(() => {
     if (!jwtToken || !workerId) return;
 
@@ -47,7 +45,6 @@ export default function UserFeedback() {
       .finally(() => setLoading(false));
   }, [jwtToken, workerId]);
 
-  // 3️⃣ Load user's past reviews
   useEffect(() => {
     if (!jwtToken || !user?.id) return;
 
@@ -57,7 +54,6 @@ export default function UserFeedback() {
       .catch((err) => console.error("Failed to load reviews:", err));
   }, [jwtToken, user]);
 
-  // 4️⃣ Submit feedback
   const submitFeedback = async () => {
     if (!rating || !feedback.trim()) {
       alert("Please provide rating and feedback");
@@ -74,7 +70,7 @@ export default function UserFeedback() {
         "http://localhost:8081/rating",
         {
           workerId,
-          userId: user.id, // ✅ real userId from backend
+          userId: user.id,
           rating,
           feedback,
         },
@@ -89,19 +85,17 @@ export default function UserFeedback() {
     }
   };
 
-  // Loading screen
   if (loading) {
     return (
-      <div className="h-screen flex items-center justify-center font-semibold">
+      <div className="h-screen flex items-center justify-center font-semibold text-orange-500 text-xl">
         Loading...
       </div>
     );
   }
 
-  // Worker not found
   if (!worker) {
     return (
-      <div className="h-screen flex items-center justify-center font-semibold">
+      <div className="h-screen flex items-center justify-center font-semibold text-red-500 text-xl">
         Worker not found
       </div>
     );
@@ -113,57 +107,76 @@ export default function UserFeedback() {
 
       <div className="mt-24 min-h-screen bg-gray-100 py-10">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-center text-3xl font-bold text-orange-500 mb-8">
-            Rate & Review {worker.fullName}
+          <h2 className="text-center text-3xl font-bold text-orange-500 mb-10">
+            Rate & Review
           </h2>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
             {/* LEFT FORM */}
-            <div className="bg-white rounded-2xl shadow-xl p-6">
-              <h3 className="text-xl font-semibold mb-4">Provide Feedback</h3>
+            <div className="bg-white rounded-2xl shadow-lg p-6 space-y-6">
+              <h3 className="text-xl font-semibold mb-4 text-gray-700">
+                Provide Feedback
+              </h3>
 
-              <div className="flex justify-center mb-4">
-                <FaUserCircle className="text-7xl text-gray-600" />
+              {/* Worker Avatar */}
+              <div className="flex flex-col items-center gap-3">
+                {worker.user?.imageUrl ? (
+                  <img
+                    src={worker.user.imageUrl}
+                    alt={worker.fullName}
+                    className="w-28 h-28 rounded-full object-cover border-2 border-orange-400"
+                  />
+                ) : (
+                  <FaUserCircle className="text-7xl text-gray-400" />
+                )}
+                <span className="text-lg font-medium">{worker.fullName}</span>
               </div>
 
-              <p className="font-medium mb-2">Your Rating</p>
-              <div className="flex gap-2 mb-4">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <span
-                    key={star}
-                    onClick={() => setRating(star)}
-                    onMouseEnter={() => setHover(star)}
-                    onMouseLeave={() => setHover(0)}
-                    className="cursor-pointer"
-                  >
-                    {star <= (hover || rating) ? (
-                      <FaStar className="text-orange-400 text-xl" />
-                    ) : (
-                      <FaRegStar className="text-gray-400 text-xl" />
-                    )}
-                  </span>
-                ))}
+              {/* Rating */}
+              <div>
+                <p className="font-medium mb-2 text-gray-600">Your Rating</p>
+                <div className="flex gap-2 mb-4 justify-center">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                      key={star}
+                      onClick={() => setRating(star)}
+                      onMouseEnter={() => setHover(star)}
+                      onMouseLeave={() => setHover(0)}
+                      className="cursor-pointer transition-transform hover:scale-110"
+                    >
+                      {star <= (hover || rating) ? (
+                        <FaStar className="text-orange-400 text-2xl" />
+                      ) : (
+                        <FaRegStar className="text-gray-400 text-2xl" />
+                      )}
+                    </span>
+                  ))}
+                </div>
               </div>
 
-              <p className="font-medium mb-2">Detailed Feedback</p>
-              <textarea
-                value={feedback}
-                onChange={(e) => setFeedback(e.target.value)}
-                placeholder="Write your feedback here..."
-                className="w-full h-32 border rounded-lg p-3 focus:ring-2 focus:ring-orange-400"
-              />
+              {/* Feedback */}
+              <div>
+                <p className="font-medium mb-2 text-gray-600">Detailed Feedback</p>
+                <textarea
+                  value={feedback}
+                  onChange={(e) => setFeedback(e.target.value)}
+                  placeholder="Write your feedback here..."
+                  className="w-full h-32 border rounded-lg p-3 focus:ring-2 focus:ring-orange-400 resize-none"
+                />
+              </div>
 
-              <div className="flex justify-between mt-6">
+              {/* Buttons */}
+              <div className="flex justify-between mt-4">
                 <button
                   onClick={() => navigate(-1)}
-                  className="px-5 py-2 rounded-lg border"
+                  className="px-5 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={submitFeedback}
-                  className="px-6 py-2 rounded-lg bg-orange-500 text-white font-semibold"
+                  className="px-6 py-2 rounded-lg bg-orange-500 text-white font-semibold hover:bg-orange-600 transition"
                 >
                   Submit Feedback
                 </button>
@@ -171,20 +184,33 @@ export default function UserFeedback() {
             </div>
 
             {/* RIGHT REVIEWS */}
-            <div className="lg:col-span-2 bg-white rounded-2xl shadow-xl p-6">
-              <h3 className="text-xl font-semibold mb-6">Your Past Reviews</h3>
+            <div className="lg:col-span-2 bg-white rounded-2xl shadow-lg p-6 space-y-6">
+              <h3 className="text-xl font-semibold text-gray-700">Your Past Reviews</h3>
 
               {reviews.length === 0 && (
                 <p className="text-gray-500">No reviews yet.</p>
               )}
 
-              <div className="grid md:grid-cols-2 gap-6">
+              <div className="grid md:grid-cols-2 gap-4">
                 {reviews.map((review, index) => (
-                  <div key={index} className="border rounded-xl p-4">
-                    <div className="flex justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <FaUserCircle />
-                        <span>{review.worker.fullName}</span>
+                  <div
+                    key={index}
+                    className="border rounded-xl p-4 hover:shadow-md transition"
+                  >
+                    <div className="flex justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        {review.worker.user?.imageUrl ? (
+                          <img
+                            src={review.worker.user.imageUrl}
+                            alt={review.user?.name}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                        ) : (
+                          <FaUserCircle className="text-2xl text-gray-400" />
+                        )}
+                        <span className="font-medium text-gray-700">
+                          {review.worker?.fullName || "Anonymous"}
+                        </span>
                       </div>
                       <span className="text-sm text-gray-500">
                         {new Date(review.createdAT).toLocaleDateString()}
@@ -197,7 +223,7 @@ export default function UserFeedback() {
                       ))}
                     </div>
 
-                    <p className="text-sm text-gray-700">{review.feedback}</p>
+                    <p className="text-gray-700 text-sm">{review.feedback}</p>
                   </div>
                 ))}
               </div>
@@ -211,3 +237,4 @@ export default function UserFeedback() {
     </>
   );
 }
+
