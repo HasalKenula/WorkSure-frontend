@@ -367,7 +367,7 @@ export default function WorkerProfileCard() {
           {/* FEEDBACK BUTTON */}
           <div className="flex justify-end">
             <button
-              onClick={() => navigate("/feedback", { state: worker })}
+              onClick={() => navigate(`/feedback/${worker.id}`)}
               className="px-5 py-2 bg-primary text-white rounded-lg hover:bg-accent transition"
             >
               Add Feedback
