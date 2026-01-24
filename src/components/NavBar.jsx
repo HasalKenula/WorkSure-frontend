@@ -55,18 +55,19 @@ export default function Navbar() {
           <li className="hover:text-primary cursor-pointer"><Link to="/workerDetails">Find Workers</Link></li>
           <li className="hover:text-primary cursor-pointer"><Link to="/contact">Contact</Link></li>
           <li className="hover:text-primary cursor-pointer"><Link to="/about">About</Link></li>
+          <li className="hover:text-primary cursor-pointer"><Link to="/transfer">Transfer</Link></li>
           <li className="hover:text-primary cursor-pointer"> <WorkerCardModal triggerButtonText="Worker Registration" /></li>
         </ul>
 
         <div className="hidden md:flex items-center gap-4">
 
-       
+
           {isLoggedIn && (
             <img
-              src={user.imageUrl || MM}  
+              src={user.imageUrl || MM}
               alt="User"
-              onClick={() => navigate("/userProfile")}         
-              className="w-10 h-10 rounded-full object-cover cursor-pointer border border-gray-300"  
+              onClick={() => navigate("/userProfile")}
+              className="w-10 h-10 rounded-full object-cover cursor-pointer border border-gray-300"
             />
           )}
 
@@ -102,14 +103,15 @@ export default function Navbar() {
           <li className="hover:text-primary cursor-pointer"><Link to="/workerDetails">Find Workers</Link></li>
           <li className="hover:text-primary cursor-pointer"><Link to="/contact">Contact</Link></li>
           <li className="hover:text-primary cursor-pointer"><Link to="/about">About</Link></li>
+          <li className="hover:text-primary cursor-pointer"><Link to="/transfer">Transfer</Link></li>
           <li className="hover:text-primary cursor-pointer"> <WorkerCardModal triggerButtonText="Find Workers" /></li>
 
           {isLoggedIn && (
             <img
-              src={user.imageUrl || MM}       
+              src={user.imageUrl || MM}
               alt="User"
-              onClick={() => { setOpen(false); navigate("/userProfile"); }} 
-              className="w-12 h-12 rounded-full object-cover cursor-pointer border border-gray-300" 
+              onClick={() => { setOpen(false); navigate("/userProfile"); }}
+              className="w-12 h-12 rounded-full object-cover cursor-pointer border border-gray-300"
             />
           )}
         </ul>

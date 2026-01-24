@@ -4,8 +4,11 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import uploadFile from "../utils/meadiaUpload";
+import { useNavigate } from "react-router-dom";
 
 export default function WorkerRegistration() {
+    const navigate = useNavigate();
+
     const { jwtToken, isAuthenticated } = useAuth();
 
 
@@ -282,7 +285,7 @@ export default function WorkerRegistration() {
             setCertifications([{ name: "", body: "" }]);
             setExperiences([{ title: "", company: "", years: "" }]);
             setUploadedFiles([]);
-
+            navigate("/planUpgradePage")
         } catch (error) {
             console.log(error)
             toast.error("Registration is faild!");
@@ -534,6 +537,14 @@ export default function WorkerRegistration() {
                     {/* Register Button */}
                     <button type="button" onClick={handleSubmit} className="w-full bg-primary text-white rounded py-1 text-md font-semibold hover:outline-2 hover:outline-offset-1 hover:outline-primary">
                         Register Account
+                    </button>
+                    {/* Manual Navigation Button */}
+                    <button
+                        type="button"
+                        onClick={() => navigate("/planUpgradePage")}
+                        className="w-full mt-3 bg-gray-700 text-white rounded py-1 text-md font-semibold hover:bg-gray-800"
+                    >
+                        Go to Payment 
                     </button>
                 </div>
             </div>

@@ -3,7 +3,7 @@ import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
-import toast from "react-hot-toast"; // for messages
+import toast from "react-hot-toast";
 
 Modal.setAppElement('#root');
 
@@ -18,6 +18,7 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
     const [userId, setUserId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [worker, setWorker] = useState(null);
+    const [payment, setPayment] = useState(null);
 
     const config = {
         headers: {
@@ -25,7 +26,7 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
         },
     };
 
-    // Get logged-in user ID
+
     useEffect(() => {
         if (!jwtToken) return;
 
@@ -39,35 +40,50 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
             .catch(() => setLoading(false));
     }, [jwtToken]);
 
-    // Get worker info if exists
+
     async function getWorkers() {
         try {
             const response = await axios.get(`http://localhost:8081/worker/${userId}`, config);
-            setWorker(response.data); // If found, worker object, else null
+            setWorker(response.data);
         } catch (error) {
             console.log("Error loading worker:", error);
-            setWorker(null); // User not in worker table
+            setWorker(null);
         }
     }
+
+    async function getPayment() {
+        try {
+            const response = await axios.get(`http://localhost:8081/payment/${userId}`, config);
+            setPayment(response.data);
+        } catch (error) {
+            console.log("Error loading paymentDetails:", error);
+            setPayment(null);
+        }
+    }
+
 
     useEffect(() => {
         if (isAuthenticated && userId) {
             getWorkers();
+            getPayment();
         }
     }, [isAuthenticated, userId]);
 
-    // Handle Worker Registration button
+
     const handleRegisterClick = () => {
-        if (worker) {
+        if (worker && payment) {
             toast.error("You are already registered as a worker.");
-        } else {
+        } else if (worker) {
+            navigate("/planUpgradePage");
+        }
+        else {
             navigate("/workerRegistration");
         }
     };
 
-    // Handle Worker Profile button
+
     const handleProfileClick = () => {
-        if (!worker) {
+        if (!worker && !payment) {
             toast.error("Please register first to view your profile.");
             return;
         }
@@ -79,6 +95,35 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
 
         navigate("/workerProfile");
     };
+
+    const handleProfileUpdateClick = () => {
+        if (!worker && !payment) {
+            toast.error("Please register first to view your profile.");
+            return;
+        }
+
+        if (worker.isBlocked) {
+            toast.error("Your account is blocked. You cannot update your profile.");
+            return;
+        }
+
+        navigate("/workerProfileUpdate");
+    };
+
+    const handleBankDetails = () => {
+        if (!worker && !payment) {
+            toast.error("Please register first.");
+            return;
+        }
+
+        if (worker.isBlocked) {
+            toast.error("Your account is blocked. You cannot add the payment details.");
+            return;
+        }
+
+        navigate("/bank");
+    };
+
 
     return (
         <div>
@@ -112,6 +157,20 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
                         className="px-4 py-2 bg-blue-500 text-white rounded-lg"
                     >
                         Worker Profile
+                    </button>
+
+                    <button
+                        onClick={handleProfileUpdateClick}
+                        className="px-4 py-2 bg-yellow-500 text-white rounded-lg"
+                    >
+                        Worker Profile Update
+                    </button>
+
+                     <button
+                        onClick={handleBankDetails}
+                        className="px-4 py-2 bg-red-500 text-white rounded-lg"
+                    >
+                        Worker Payment Details
                     </button>
                 </div>
 
