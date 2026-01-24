@@ -206,6 +206,22 @@ export default function ContactPage() {
                 <IoLocationOutline className="text-4xl text-primary" />
                 <p className="font-sans font-semibold text-lg">Colombo, Sri Lanka</p>
               </div>
+
+              <div class="mt-4 w-full rounded-xl overflow-hidden shadow-md">
+  <iframe
+    src="https://www.google.com/maps?q=Colombo,Sri%20Lanka&output=embed"
+    //src="https://www.google.com/maps/place/Bank+of+Ceylon/@6.4051444,80.2159693,19z/data=!4m9!1m2!2m1!1sbanco+cylone+966%2F4%2FF+Thangama+south,+Palawaththa!3m5!1s0x3ae3d131494219fd:0x8c3b731607e02439!8m2!3d6.4055728!4d80.2158239!16s%2Fg%2F11b73ld3tk?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoKLDEwMDc5MjA2N0gBUAM%3D"
+    class="w-full h-64 border-0"
+    loading="lazy"
+    referrerpolicy="no-referrer-when-downgrade">
+  </iframe>
+</div>
+
+
+
+
+
+
             </div>
 
           </div>

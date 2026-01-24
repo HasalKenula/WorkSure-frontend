@@ -32,11 +32,55 @@ import WorkerProfileCard from './pages/WorkerProfileCard'
 import ChatbotWidget from "./chatbot/ChatbotWidget";
 
 
+
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+<<<<<<< HEAD
         <AppWithChatbot />
+=======
+        <Toaster position="top-right" />
+        <Routes>
+          <Route path="/auth/login" element={<Login />} />
+          <Route path="/auth/register" element={<Register />} />
+          <Route path='/*' element={<HomePage />} />
+          <Route path='/about' element={<AboutUs />} />
+          <Route path='/contact' element={<ContactPage />} />
+          {/* <Route path='/workerDetails' element={<WorkerSearch />} /> */}
+
+          <Route element={<ProtectedRoute />}>
+            {/* <Route path='/*' element={<HomePage />} />
+            <Route path='/about' element={<AboutUs />} />
+            <Route path='/contact' element={<ContactPage />} /> */}
+            <Route path='/payment' element={<Payment />} />
+            <Route path='/feedback' element={<UserFeedback />} />
+            <Route path='/login' element={<UserLogin />} />
+            <Route path='/registration' element={<UserRegistration />} />
+            <Route path='/userProfile' element={<UserProfile />} />
+            <Route path='/workerDashboard' element={<WorkerDashBoard />} />
+            <Route path='/hire/:workerId' element={<WorkerHire />} />
+            <Route path='/workerLogin' element={<WorkerLogin />} />
+            <Route path='/workerProfile' element={<WorkerProfileView />} />
+            <Route path='/workerRegistration' element={<WorkerRegistration />} />
+            <Route path='/workerDetails' element={<WorkerSearch />} />
+            <Route path='/category' element={<Category />} />
+            <Route path="/product" element={<Product />} />
+            <Route path="/adminDashBoard" element={<AdminDashBoard />} />
+            <Route path="/workerRegistrationDetails/:workerId" element={<WorkerRegistrationDetails />} />
+            <Route path="/workerProfileUpdate" element={<WorkerProfileUpdate />} />
+            <Route path='/workerView/:userId' element={<WorkerView />} />
+            <Route path='/workerCard/:workerId' element={<WorkerProfileCard />} />
+            <Route path='/WorkerProgress/:workerId' element={<WorkerProgress />} />
+            <Route path='/planUpgradePage' element={<PlanUpgradePage />} />
+            <Route path='/transfer' element={<MoneyTransferPage />} />
+              <Route path='/bank' element={<WorkerBankDetailsPage />} />
+          </Route>
+
+
+
+        </Routes>
+>>>>>>> main
       </BrowserRouter>
     </AuthProvider>
   );

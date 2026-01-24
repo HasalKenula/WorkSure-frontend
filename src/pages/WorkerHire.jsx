@@ -7,457 +7,279 @@ import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import MM from "../assets/man.jpg";
+import StarRating from "../components/StarRating";
+import { motion } from "framer-motion";
 
 export default function WorkerHire() {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [selectedTime, setSelectedTime] = useState("");
+  const [description, setDescription] = useState("");
+  const [isBooked, setIsBooked] = useState(true);
+  const [isPending, setIsPending] = useState(true);
+  const [isOngoing, setIsOngoing] = useState(false);
+  const [isComplete, setIsComplete] = useState(false);
 
-    const [selectedDate, setSelectedDate] = useState(new Date());
-    const [selectedTime, setSelectedTime] = useState("");
-    const [description, setDescription] = useState("");
-    const [isBooked, setIsBooked] = useState(true);
-    const [isPending, setIsPending] = useState(true);
-    const [isOngoing, setIsOngoing] = useState(false);
-    const [isComplete, setIsComplete] = useState(false);
+  const { jwtToken, isAuthenticated } = useAuth();
+  const { workerId } = useParams();
 
+  const [worker, setWorker] = useState(null);
+  const [user, setUser] = useState({ id: null, name: "", email: "", contact: "", address: "", imageUrl: "" });
+  const [hires, setHires] = useState([]);
+  const [hiresByDate, setHiresByDate] = useState({});
+  const [myHires, setMyHires] = useState([]);
 
-    // Sample booked time slots for demo
-    // const bookedSlots = [
-    //     "09:00 AM - 02:00 PM",
-    //     "04:00 PM - 06:00 PM",
-    // ];
+  const config = {
+    headers: { Authorization: `Bearer ${jwtToken}` },
+  };
 
-    const handleSubmit = () => {
-        alert("Job Request Sent!");
-    };
+  // Fetch worker
+  async function getWorker() {
+    try {
+      const response = await axios.get(`http://localhost:8081/worker/id/${workerId}`, config);
+      setWorker(response.data);
+    } catch (error) {
+      console.log("Error loading worker:", error);
+    }
+  }
 
-    const { jwtToken, isAuthenticated } = useAuth();
+  // Fetch logged-in user
+  useEffect(() => {
+    if (!jwtToken) return;
+    axios
+      .get("http://localhost:8081/user", { headers: { Authorization: `Bearer ${jwtToken}` } })
+      .then((res) => setUser(res.data))
+      .catch((err) => console.log("Failed to load user", err));
+  }, [jwtToken]);
 
-    const { workerId } = useParams();
+  useEffect(() => {
+    if (isAuthenticated && workerId) getWorker();
+  }, [isAuthenticated, workerId]);
 
-    const [worker, setWorker] = useState(null);
+  // Create hire request
+  async function createHire() {
+    if (!user?.id) return alert("User not loaded yet");
 
-    const config = {
-        headers: {
-            Authorization: `Bearer ${jwtToken}`,
+    try {
+      await axios.post(
+        "http://localhost:8081/hire",
+        {
+          workerId,
+          userId: user.id,
+          bookingDate: format(selectedDate, "yyyy-MM-dd"),
+          bookingTime: selectedTime,
+          description,
+          isBooked,
+          isPending,
+          isOngoing,
+          isComplete,
         },
-    };
-
-    async function getWorker() {
-        try {
-            const response = await axios.get(
-                `http://localhost:8081/worker/id/${workerId}`,
-                config
-            );
-            setWorker(response.data);
-        } catch (error) {
-            console.log("Error loading worker:", error);
-        }
+        config
+      );
+      getHires();
+      alert("Job Request Sent Successfully!");
+    } catch (error) {
+      console.log("Error sending hire request:", error);
+      alert("Failed to send hire request.");
     }
+  }
 
+  // Fetch all hires for this worker
+  async function getHires() {
+    if (!worker?.id) return;
 
-    useEffect(() => {
-        if (isAuthenticated && workerId) {
-            getWorker();
-        }
-    }, [isAuthenticated, workerId]);
-
-
-    const [user, setUser] = useState({
-        name: "",
-        email: "",
-        contact: "",
-        address: "",
-        imageUrl: "",
-    });
-
-
-    useEffect(() => {
-        if (!jwtToken) return;
-
-        axios
-            .get("http://localhost:8081/user", {
-                headers: { Authorization: `Bearer ${jwtToken}` },
-            })
-            .then((res) => {
-                setUser(res.data);
-
-            })
-            .catch(() => setLoading(false));
-    }, [jwtToken]);
-
-
-
-
-    async function createHire() {
-        try {
-            const response = await axios.post(
-                "http://localhost:8081/hire", {
-                workerId: workerId,
-                userId: user.id,
-                bookingDate: format(selectedDate, "yyyy-MM-dd"),
-                bookingTime: selectedTime,
-                description: description,
-                isBooked: isBooked,
-                isPending: isPending,
-                isOngoing: isOngoing,
-                isComplete: isComplete,
-            }, config
-            );
-            // setWorker(response.data);
-            getHires();
-
-            alert("Job Request Sent Successfully!");
-        } catch (error) {
-            console.log("Error loading worker:", error);
-            alert("Failed to send hire request.");
-        }
+    try {
+      const response = await axios.get(`http://localhost:8081/hire/${workerId}`, config);
+      setHires(response.data);
+    } catch (error) {
+      console.log("Error loading hires:", error);
     }
+  }
 
+  useEffect(() => {
+    if (worker?.id) getHires();
+  }, [worker]);
 
+  // Map hires by date
+  useEffect(() => {
+    const map = {};
+    hires
+      .filter((hire) => !hire.isBooked)
+      .forEach((hire) => {
+        const date = hire.bookingDate;
+        if (!map[date]) map[date] = [];
+        map[date].push(hire.bookingTime);
+      });
+    setHiresByDate(map);
+  }, [hires]);
 
-
-    const [hires, setHires] = useState([]);
-    const [hiresByDate, setHiresByDate] = useState({});
-
-    async function getHires() {
-        if (!workerId) return;
-
-        try {
-            const response = await axios.get(
-                `http://localhost:8081/hire/${workerId}`,
-                config
-            );
-            console.log("Fetched hires:", response.data);
-            setHires(response.data);
-        } catch (error) {
-            console.log("Error loading hires:", error);
-        }
+  // Filter user's own hires
+  useEffect(() => {
+    if (hires.length > 0 && user?.id) {
+      setMyHires(hires.filter((h) => h.user?.id === user.id));
     }
+  }, [hires, user]);
 
-    useEffect(() => {
-        if (worker) getHires();
-    }, [worker]);
+  // Booked dates for calendar
+  const bookedDates = Array.from(new Set(hires.filter((h) => h.isBooked).map((h) => format(new Date(h.bookingDate), "yyyy-MM-dd"))));
 
-    useEffect(() => {
-        const map = {};
-        hires
-            .filter(hire => !hire.isBooked)
-            .forEach(hire => {
-                const date = hire.bookingDate;
-                if (!map[date]) map[date] = [];
-                map[date].push(hire.bookingTime);
-            });
-        setHiresByDate(map);
-    }, [hires]);
-
-
-
-    const getBookedSlotsForDate = (date) => {
-        const formattedDate = format(date, "yyyy-MM-dd");
-        return hiresByDate[formattedDate] || [];
-    };
-
-
-    const [myHires, setMyHires] = useState([]);
-
-
-    useEffect(() => {
-        if (hires.length > 0 && user?.id) {
-            const userHires = hires.filter(h => h.user?.id === user.id);
-
-            setMyHires(userHires); // <-- Save ALL matching hires
-        }
-    }, [hires, user]);
-
-
-    //  const bookedDates = Object.keys(hiresByDate);
-    const bookedDates = Array.from(
-        new Set(
-            hires
-                .filter(hire => hire.isBooked) // only booked hires
-                .map(hire => format(new Date(hire.bookingDate), "yyyy-MM-dd")) // normalize format
-        )
-    );
-
-    return (
-        <div>
-            <Navbar />
-            <div className="min-h-screen p-4 mt-10 md:p-10">
-                <div className="max-w-5xl mx-auto">
-
-                    {/* Worker Header Card */}
-                    <div className="p-6 mb-10">
-                        <div className="flex flex-col md:flex-row md:items-center justify-between">
-
-                            <div className="flex items-center gap-8">
-                                <div className="bg-gray-200 w-20 h-20 lg:w-40 lg:h-40 rounded-full flex justify-center items-center mx-auto overflow-hidden">
-                                    <img
-                                        src={worker?.user?.imageUrl || MM}
-                                        alt={worker?.fullName || "Worker Image"}
-                                        className="w-full h-full object-cover rounded-full"
-                                    />
-                                </div>
-                                <div>
-                                    <h2 className="text-2xl font-semibold">{worker?.fullName}</h2>
-                                    <p className="text-gray-600 font-semibold">{worker?.jobRole}</p>
-                                    <p className="text-gray-600 font-semibold">{worker?.id}</p>
-                                    <p className="text-gray-600 font-semibold">{user?.id}</p>
-                                    <p className="text-gray-500">{worker?.preferredServiceLocation}</p>
-                                    <div className="flex items-center text-yellow-500 mt-1">
-                                        ⭐⭐⭐⭐⭐ <span className="text-gray-500 ml-1 text-sm">(75 Reviews)</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Calendar + Booked Slots */}
-                    <div className="p-6 mb-10">
-
-                        <h3 className="text-xl font-semibold mb-4">Reserve Your Time</h3>
-
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start ">
-
-                            {/* Calendar */}
-                            <div className="flex justify-center  items-start md:justify-center w-full">
-                                <Calendar
-                                    onChange={setSelectedDate}
-                                    value={selectedDate}
-                                    className="rounded-lg shadow-sm p-2 w-[320px]"
-                                    tileContent={({ date, view }) => {
-                                        // Only highlight dates in the month view
-                                        if (view !== "month") return null;
-
-                                        const formatted = format(date, "yyyy-MM-dd");
-                                        const isBooked = bookedDates.includes(formatted);
-
-                                        if (isBooked) {
-                                            return (
-                                                <div
-                                                    style={{
-                                                        backgroundColor: "#fecaca",
-                                                        borderRadius: "50%",
-                                                        width: "32px",
-                                                        height: "32px",
-                                                        display: "flex",
-                                                        justifyContent: "center",
-                                                        alignItems: "center",
-                                                        margin: "auto",
-                                                    }}
-                                                >
-                                                    {/* Don't render the date number here - it's already rendered by the calendar */}
-                                                </div>
-                                            );
-                                        }
-
-                                        return null;
-                                    }}
-                                    tileClassName={({ date, view }) => {
-                                        // Use tileClassName for styling instead of tileContent for content
-                                        if (view !== "month") return null;
-
-                                        const formatted = format(date, "yyyy-MM-dd");
-                                        const isBooked = bookedDates.includes(formatted);
-
-                                        return isBooked ? 'booked-date' : null;
-                                    }}
-
-
-                                />
-                            </div>
-
-                            {/* Time Slots */}
-                            {/* {Object.keys(hiresByDate).length > 0 ? (
-                                Object.entries(hiresByDate).map(([date, slots]) => (
-                                    <div key={date} className="mb-4 p-2 border rounded-md">
-                                        <h4 className="font-semibold mb-2">{format(new Date(date), "dd MMMM yyyy")}</h4>
-                                        {slots.map((slot, i) => (
-                                            <div
-                                                key={i}
-                                                className="flex justify-between border-b border-gray-300 py-1 text-sm"
-                                            >
-                                                <span>{slot}</span>
-                                                <span className="text-red-500 font-semibold">Booked</span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ))
-                            ) : (
-                                <p className="text-gray-500">No bookings for this worker yet.</p>
-                            )} */}
-
-                            {/* Time Slots */}
-                            <div className="mt-6">
-                                {Object.keys(hiresByDate).length > 0 ? (
-                                    Object.entries(hiresByDate).map(([date, slots]) => (
-                                        <div
-                                            key={date}
-                                            className="mb-6 p-5 bg-white border rounded-2xl shadow-md hover:shadow-lg transition duration-300"
-                                        >
-                                            {/* Date Header */}
-                                            <h4 className="text-lg font-semibold text-gray-800 mb-4 border-b pb-2">
-                                                {format(new Date(date), "dd MMMM yyyy")}
-                                            </h4>
-
-                                            {/* Slots */}
-                                            <div className="space-y-3">
-                                                {slots.map((slot, i) => (
-                                                    <div
-                                                        key={i}
-                                                        className="flex items-center justify-between p-3 bg-gray-50 border rounded-lg hover:bg-gray-100 transition"
-                                                    >
-                                                        {/* Time */}
-                                                        <div className="flex items-center gap-2 text-gray-800 font-medium">
-                                                            <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                                                            {slot}
-                                                        </div>
-
-                                                        {/* Status Badge */}
-                                                        <span className="px-3 py-1 rounded-full text-sm font-semibold bg-red-100 text-red-600">
-                                                            Booked
-                                                        </span>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ))
-                                ) : (
-                                    <p className="text-gray-500 text-center mt-4">No bookings for this worker yet.</p>
-                                )}
-                            </div>
-
-
-                        </div>
-                    </div>
-
-                    {/* Job Request Form */}
-                    <div className="p-6 mb-10 border border-slate-300 shadow-lg rounded-lg">
-
-                        {/* Date */}
-                        <div className="mb-4">
-                            <label className="font-medium">Date :</label>
-                            <input
-                                type="text"
-                                value={format(selectedDate, "dd MMMM yyyy")}
-                                readOnly
-                                className="w-full mt-1 p-2 border border-gray-300 rounded-md  focus:outline-none"
-                            />
-                        </div>
-
-                        {/* Time */}
-                        <div className="mb-4">
-                            <label className="font-medium">Time :</label>
-                            <input
-                                type="time"
-                                className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-1 focus:outline-primary"
-                                onChange={(e) => setSelectedTime(e.target.value)}
-                            />
-                        </div>
-
-                        {/* Description */}
-                        <div>
-                            <label className="font-medium">Description :</label>
-                            <textarea
-                                className="w-full mt-1 p-2 border border-gray-300 rounded-md focus:outline-1 focus:outline-primary"
-                                rows="3"
-                                placeholder="Describe the job..."
-                                value={description}
-                                onChange={(e) => setDescription(e.target.value)}
-                            ></textarea>
-                        </div>
-
-                        {/* Buttons */}
-                        <div className="flex flex-col md:flex-row gap-4 mt-6">
-                            <button
-                                onClick={createHire}
-                                className="w-full md:w-1/3 bg-primary text-white py-1 rounded-md  hover:outline-2 hover:outline-offset-1 hover:outline-primary"
-                            >
-                                Send Job Request
-                            </button>
-
-                            <button className="w-full md:w-1/3  border border-gray-500  hover:border-primary py-1 rounded-md hover:text-primary text-gray-800">
-                                Cancel
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
+  return (
+    <div className="bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen">
+      <Navbar />
+      <motion.div
+        className="max-w-6xl mx-auto p-6 md:p-10 mt-24 mb-10"
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
+        {/* Worker Header Card */}
+        
+        <motion.div
+            className="relative flex flex-col md:flex-row items-center gap-6 p-6 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-transparent hover:border-indigo-300"
+            whileHover={{ scale: 1.03 }}>
+            {/* Ribbon Badge */}
+            <div className="absolute top-0 left-0 bg-yellow-400 text-white px-3 py-1 rounded-tr-3xl rounded-bl-3xl font-semibold text-sm shadow-md z-10">
+                Premium
             </div>
 
-            <div>
-                {myHires.length > 0 && (
-                    <div className="bg-white p-6 rounded-xl shadow-lg mt-10">
-                        <h3 className="text-2xl font-bold mb-6 text-primary">Your Requests</h3>
+            {/* Profile Picture with ring animation */}
+ 
+            <div className="bg-gray-200 w-28 h-28 lg:w-40 lg:h-40 rounded-full flex justify-center items-center overflow-hidden">
+                <img src={worker?.user?.imageUrl || MM} alt={worker?.fullName || "Worker"} className="w-full h-full object-cover rounded-full" />
+            </div>
 
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            {myHires.map((hire, index) => (
-                                <div
-                                    key={index}
-                                    className="border border-slate-300 rounded-xl p-5 shadow-lg hover:shadow-md transition duration-300 bg-gray-50"
-                                >
-                                    {/* Header */}
-                                    <div className="flex justify-between items-center mb-3">
-                                        <h4 className="text-lg font-semibold text-gray-800">
-                                            Request #{index + 1}
-                                        </h4>
+            {/* Info Section */}
+            <div className="flex-1 flex flex-col justify-center gap-2">
+                <h2 className="text-3xl font-extrabold text-gray-800">{worker?.fullName}</h2>
+                <p className="text-gray-600 font-semibold">{worker?.jobRole}</p>
+                <p className="text-gray-500">{worker?.preferredServiceLocation}</p>
 
-                                        <span
-                                            className={`px-3 py-1 rounded-full text-sm font-semibold ${hire.isPending
-                                                ? "bg-yellow-100 text-yellow-700"
-                                                : "bg-green-100 text-green-700"
-                                                }`}
-                                        >
-                                            {hire.isPending ? "Pending" : "Seen"}
-                                        </span>
-                                    </div>
+                {/* Star Rating + Reviews */}
+                <div className="flex items-center mt-2 gap-2 text-yellow-500">
+                {worker && <StarRating itemId={worker.id} />}
+            </div>
 
-                                    {/* Details */}
-                                    <div className="text-sm text-gray-700 space-y-1">
-                                        <p><strong>Date:</strong> {hire.bookingDate}</p>
-                                        <p><strong>Time:</strong> {hire.bookingTime}</p>
-
-                                        <p className="mt-3">
-                                            <strong>Description:</strong>
-                                            <div className="mt-1 p-3 bg-white rounded-md shadow-inner border border-slate-300">
-                                                {hire.description}
-                                            </div>
-                                        </p>
-                                    </div>
-
-                                    {/* Status Badges */}
-                                    <div className="mt-4 flex flex-wrap gap-2">
-                                        <span
-                                            className={`px-3 py-1 rounded-full text-xs font-semibold ${hire.isBooked
-                                                ? "bg-red-100 text-red-700"
-                                                : "bg-green-100 text-green-700"
-                                                }`}
-                                        >
-                                            {hire.isBooked ? "Not Approved" : "Approved"}
-                                        </span>
-
-                                        <span
-                                            className={`px-3 py-1 rounded-full text-xs font-semibold ${hire.isOngoing
-                                                ? "bg-blue-100 text-blue-700"
-                                                : "bg-gray-200 text-gray-600"
-                                                }`}
-                                        >
-                                            {hire.isOngoing ? "Ongoing" : "Not Ongoing"}
-                                        </span>
-
-                                        <span
-                                            className={`px-3 py-1 rounded-full text-xs font-semibold ${hire.isComplete
-                                                ? "bg-purple-100 text-purple-700"
-                                                : "bg-gray-200 text-gray-600"
-                                                }`}
-                                        >
-                                            {hire.isComplete ? "Completed" : "Incomplete"}
-                                        </span>
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                )}
+            {/* Extra Info */}
+            <div className="mt-3 flex flex-wrap gap-3">
+                <span className="px-3 py-1 bg-indigo-100 text-indigo-800 text-xs font-semibold rounded-full shadow-sm"> 5 Years Experience</span>
+                <span className="px-3 py-1 bg-purple-100 text-purple-800 text-xs font-semibold rounded-full shadow-sm">Available Today</span>
+                <span className="px-3 py-1 bg-pink-100 text-pink-800 text-xs font-semibold rounded-full shadow-sm">Verified</span>
             </div>
         </div>
-    );
+    </motion.div>
+
+
+        {/* Calendar + Time Slots */}
+        <motion.div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-10" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 }}>
+          <div className="flex justify-center">
+            <Calendar
+              onChange={setSelectedDate}
+              value={selectedDate}
+              className="rounded-xl shadow-lg p-4 w-[320px]"
+              tileContent={({ date, view }) => {
+                if (view !== "month") return null;
+                const formatted = format(date, "yyyy-MM-dd");
+                if (bookedDates.includes(formatted)) {
+                  return (
+                    // <div className="bg-red-200 w-8 h-8 rounded-full mx-auto"></div>
+
+                    <div className="relative group flex justify-center">
+  <div className="bg-red-200 w-8 h-8 rounded-full"></div>
+
+  {/* Tooltip */}
+  <div className="absolute bottom-full mb-2 hidden group-hover:block">
+    <div className="bg-black text-white text-xs px-3 py-1 rounded-lg shadow-lg whitespace-nowrap">
+      New job request is pending
+    </div>
+  </div>
+</div>
+
+                    
+                  );
+                }
+                return null;
+              }}
+              tileClassName={({ date, view }) => (view === "month" && bookedDates.includes(format(date, "yyyy-MM-dd")) ? "bg-red-200 rounded-full" : "")}
+            />
+          </div>
+
+          <div className="space-y-4">
+            {Object.keys(hiresByDate).length > 0 ? (
+              Object.entries(hiresByDate).map(([date, slots]) => (
+                <motion.div key={date} className="p-4 bg-white rounded-2xl shadow-md hover:shadow-lg transition duration-300" whileHover={{ scale: 1.02 }}>
+                  <h4 className="font-semibold text-gray-700 mb-2">{format(new Date(date), "dd MMMM yyyy")}</h4>
+                  {slots.map((slot, i) => (
+                    <div key={i} className="flex justify-between items-center bg-gray-50 p-2 rounded-lg mb-2 transition hover:bg-gray-100">
+                      <span className="text-gray-800 font-medium">{slot}</span>
+                      <span className="px-3 py-1 text-sm bg-red-100 text-red-700 rounded-full">Booked</span>
+                    </div>
+                  ))}
+                </motion.div>
+              ))
+            ) : (
+              <p className="text-gray-500 text-center mt-4">No bookings for this worker yet.</p>
+            )}
+          </div>
+        </motion.div>
+
+        {/* Job Request Form */}
+        <motion.div className="bg-white p-6 rounded-3xl shadow-xl mt-10" initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4 }}>
+          <h3 className="text-2xl font-bold mb-6 text-gray-800">Send a Job Request</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="font-medium text-gray-700">Date</label>
+              <input type="text" value={format(selectedDate, "dd MMMM yyyy")} readOnly className="w-full mt-1 p-3 border border-gray-300 rounded-xl focus:outline-none" />
+            </div>
+            <div>
+              <label className="font-medium text-gray-700">Time</label>
+              <input type="time" onChange={(e) => setSelectedTime(e.target.value)} className="w-full mt-1 p-3 border border-gray-300 rounded-xl focus:outline-none" />
+            </div>
+          </div>
+          <div className="mt-4">
+            <label className="font-medium text-gray-700">Description</label>
+            <textarea onChange={(e) => setDescription(e.target.value)} value={description} rows={4} placeholder="Describe the job..." className="w-full mt-2 p-3 border border-gray-300 rounded-xl focus:outline-none" />
+          </div>
+          <div className="flex gap-4 mt-6">
+            <button onClick={createHire} className="flex-1 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-bold rounded-xl hover:shadow-lg hover:scale-103 transition-all duration-300 flex items-center gap-2 justify-center whitespace-nowrap">
+              Send Request
+            </button>
+            <button className="flex-1 border border-gray-300 p-3 rounded-2xl hover:bg-gray-100 transition">Cancel</button>
+          </div>
+        </motion.div>
+
+        {/* User Hires */}
+        {myHires.length > 0 && (
+          <motion.div className="mt-10 space-y-6" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
+            <h3 className="text-2xl font-bold text-gray-800">Your Requests</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {myHires.map((hire, idx) => (
+                <motion.div key={idx} className="p-5 bg-white rounded-3xl shadow-md hover:shadow-xl transition hover:scale-105" whileHover={{ scale: 1.03 }}>
+                  <div className="flex justify-between items-center mb-3">
+                    <h4 className="font-semibold text-gray-800">Request #{idx + 1}</h4>
+                    <span className={`px-3 py-1 rounded-full text-sm font-semibold ${hire.isPending ? "bg-yellow-100 text-yellow-700" : "bg-green-100 text-green-700"}`}>
+                      {hire.isPending ? "Pending" : "Seen"}
+                    </span>
+                  </div>
+                  <p><strong>Date:</strong> {hire.bookingDate}</p>
+                  <p><strong>Time:</strong> {hire.bookingTime}</p>
+                  <p className="mt-3"><strong>Description:</strong> <div className="p-2 bg-gray-50 rounded-lg">{hire.description}</div></p>
+                  <div className="flex gap-2 mt-4 flex-wrap">
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${hire.isBooked ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}>
+                      {hire.isBooked ? "Not Approved" : "Approved"}
+                    </span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${hire.isOngoing ? "bg-blue-100 text-blue-700" : "bg-gray-200 text-gray-600"}`}>
+                      {hire.isOngoing ? "Ongoing" : "Not Ongoing"}
+                    </span>
+                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${hire.isComplete ? "bg-purple-100 text-purple-700" : "bg-gray-200 text-gray-600"}`}>
+                      {hire.isComplete ? "Completed" : "Incomplete"}
+                    </span>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </motion.div>
+    </div>
+  );
 }
+
