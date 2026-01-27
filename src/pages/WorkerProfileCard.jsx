@@ -14,6 +14,7 @@ export default function WorkerProfileCard() {
   const { workerId } = useParams();
 
   const [worker, setWorker] = useState(null);
+  const [reviews, setReviews] = useState([]);
 
   const config = {
     headers: {
@@ -33,12 +34,27 @@ export default function WorkerProfileCard() {
     }
   }
 
+  const authHeaders = {
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+      "Content-Type": "application/json",
+    },
+  };
 
   useEffect(() => {
     if (isAuthenticated && workerId) {
       getWorker();
     }
   }, [isAuthenticated, workerId]);
+
+  useEffect(() => {
+    if (!jwtToken || !workerId) return;
+
+    axios
+      .get(`http://localhost:8081/rating/${workerId}`, authHeaders)
+      .then((res) => setReviews(res.data))
+      .catch((err) => console.error("Failed to load reviews:", err));
+  }, [jwtToken]);
 
   const getWorkingDays = (worker) => {
     if (!worker) return [];
@@ -338,17 +354,17 @@ export default function WorkerProfileCard() {
           </div>
 
           {/* USER RATINGS */}
-          <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
+          {/* <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
             <h3 className="text-xl font-bold border-b pb-2 border-primary">
               User Ratings
             </h3>
 
-            {userRate.map((user) => (
-              <div key={user.id} className="mt-4 border-b pb-4 last:border-none">
+            {userRate.map((review, index) => (
+              <div key={review.id} className="mt-4 border-b pb-4 last:border-none">
                 <div className="flex items-center gap-3">
                   <FaUserCircle className="text-3xl text-gray-600" />
                   <div>
-                    <p className="font-semibold">{user.name}</p>
+                    <p className="font-semibold">{review.username}</p>
                     <p className="text-sm text-gray-500">{user.date}</p>
                   </div>
                 </div>
@@ -362,12 +378,53 @@ export default function WorkerProfileCard() {
                 <p className="mt-2 text-gray-700">{user.message}</p>
               </div>
             ))}
+          </div> */}
+          {/* USER RATINGS */}
+<div className="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
+  <h3 className="text-xl font-bold border-b pb-2 border-primary">
+    User Ratings
+  </h3>
+
+  {reviews.ratings && reviews.ratings.length > 0 ? (
+    reviews.ratings.map((review) => (
+      <div key={review.id} className="mt-4 border-b pb-4 last:border-none">
+        <div className="flex items-center gap-3">
+          {review.user?.imageUrl ? (
+            <img
+              src={review.user.imageUrl}
+              alt={review.user.name}
+              className="w-10 h-10 rounded-full object-cover"
+            />
+          ) : (
+            <FaUserCircle className="text-3xl text-gray-600" />
+          )}
+          <div>
+            <p className="font-semibold">{review.user?.name || "Anonymous"}</p>
+            <p className="text-sm text-gray-500">
+              {new Date(review.createdAT).toLocaleDateString()}
+            </p>
           </div>
+        </div>
+
+        <div className="flex mt-1">
+          {[...Array(review.rating)].map((_, i) => (
+            <FaStar key={i} className="text-yellow-500" />
+          ))}
+        </div>
+
+        <p className="mt-2 text-gray-700">{review.feedback}</p>
+      </div>
+    ))
+  ) : (
+    <p className="mt-2 text-gray-500">No reviews yet.</p>
+  )}
+</div>
+
 
           {/* FEEDBACK BUTTON */}
           <div className="flex justify-end">
             <button
-              onClick={() => navigate("/feedback", { state: worker })}
+              onClick={() => navigate(`/feedback/${worker.id}`)}
               className="px-5 py-2 bg-primary text-white rounded-lg hover:bg-accent transition"
             >
               Add Feedback
