@@ -52,6 +52,7 @@ function App() {
 
           {/* Protected routes */}
           <Route element={<ProtectedRoute />}>
+<<<<<<< HEAD
             <Route path="/payment" element={<Payment />} />
             <Route path="/feedback" element={<UserFeedback />} />
             <Route path="/login" element={<UserLogin />} />
@@ -64,6 +65,23 @@ function App() {
             <Route path="/workerRegistration" element={<WorkerRegistration />} />
             <Route path="/workerDetails" element={<WorkerSearch />} />
             <Route path="/category" element={<Category />} />
+=======
+            {/* <Route path='/*' element={<HomePage />} />
+            <Route path='/about' element={<AboutUs />} />
+            <Route path='/contact' element={<ContactPage />} /> */}
+            <Route path='/payment' element={<Payment />} />
+            <Route path='/feedback/:workerId' element={<UserFeedback />} />
+            <Route path='/login' element={<UserLogin />} />
+            <Route path='/registration' element={<UserRegistration />} />
+            <Route path='/userProfile' element={<UserProfile />} />
+            <Route path='/workerDashboard' element={<WorkerDashBoard />} />
+            <Route path='/hire/:workerId' element={<WorkerHire />} />
+            <Route path='/workerLogin' element={<WorkerLogin />} />
+            <Route path='/workerProfile' element={<WorkerProfileView />} />
+            <Route path='/workerRegistration' element={<WorkerRegistration />} />
+            <Route path='/workerDetails' element={<WorkerSearch />} />
+            <Route path='/category' element={<Category />} />
+>>>>>>> main
             <Route path="/product" element={<Product />} />
             <Route path="/adminDashBoard" element={<AdminDashBoard />} />
             <Route path="/workerRegistrationDetails/:workerId" element={<WorkerRegistrationDetails />} />

@@ -1,180 +1,240 @@
+import React, { useEffect, useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { FaStar, FaRegStar, FaUserCircle } from "react-icons/fa";
+import axios from "axios";
 import Navbar from "../components/NavBar";
-import { FaUserCircle, FaStar } from "react-icons/fa";
-import { useLocation, useNavigate } from "react-router-dom";
-import React from 'react';
+import Footer from "../components/Footer";
+import { useAuth } from "../context/AuthContext";
 
 export default function UserFeedback() {
-    const location = useLocation();
-    const navigate = useNavigate();
-    const workerData = location.state || { name: "Unknown Worker" };
+  const { workerId } = useParams();
+  const navigate = useNavigate();
+  const { jwtToken } = useAuth();
 
-    const gotoprofile = () => {
-        navigate("/workerProfile");
-    };
+  const [user, setUser] = useState(null);
+  const [worker, setWorker] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [rating, setRating] = useState(0);
+  const [hover, setHover] = useState(0);
+  const [feedback, setFeedback] = useState("");
+  const [loading, setLoading] = useState(true);
 
-    const colors = {
-        orange: "#FFBA5A",
-        grey: "#a9a9a9",
-    };
+  const authHeaders = {
+    headers: {
+      Authorization: `Bearer ${jwtToken}`,
+      "Content-Type": "application/json",
+    },
+  };
 
-    const stars = Array(5).fill(0);
-    const [currentValue, setCurrentValue] = React.useState(0);
-    const [hoverValue, setHoverValue] = React.useState(undefined);
+  useEffect(() => {
+    if (!jwtToken) return;
 
-    const handleClick = (value) => setCurrentValue(value);
-    const handleMouseOver = (value) => setHoverValue(value);
-    const handleMouseLeave = () => setHoverValue(undefined);
+    axios
+      .get("http://localhost:8081/user", authHeaders)
+      .then((res) => setUser(res.data))
+      .catch((err) => console.error("Failed to load user:", err));
+  }, [jwtToken]);
 
-    const userRate = [
+  useEffect(() => {
+    if (!jwtToken || !workerId) return;
+
+    axios
+      .get(`http://localhost:8081/worker/id/${workerId}`, authHeaders)
+      .then((res) => setWorker(res.data))
+      .catch((err) => console.error("Failed to load worker:", err))
+      .finally(() => setLoading(false));
+  }, [jwtToken, workerId]);
+
+  useEffect(() => {
+    if (!jwtToken || !user?.id) return;
+
+    axios
+      .get(`http://localhost:8081/rating/user/${user.id}`, authHeaders)
+      .then((res) => setReviews(res.data))
+      .catch((err) => console.error("Failed to load reviews:", err));
+  }, [jwtToken, user]);
+
+  const submitFeedback = async () => {
+    if (!rating || !feedback.trim()) {
+      alert("Please provide rating and feedback");
+      return;
+    }
+
+    if (!user?.id) {
+      alert("User not loaded yet");
+      return;
+    }
+
+    try {
+      await axios.post(
+        "http://localhost:8081/rating",
         {
-            id: 1,
-            name: "John Doe",
-            date: "2023/10/26",
-            rating: 1,
-            message:
-                "Excellent work on the project, delivered ahead of schedule and with great attention to detail. Highly recommended!",
+          workerId,
+          userId: user.id,
+          rating,
+          feedback,
         },
-        {
-            id: 2,
-            name: "John Doe",
-            date: "2023/10/26",
-            rating: 2,
-            message:
-                "Excellent work on the project, delivered ahead of schedule and with great attention to detail. Highly recommended!",
-        },
-        {
-            id: 3,
-            name: "John Doe",
-            date: "2023/10/26",
-            rating: 3,
-            message:
-                "Excellent work on the project, delivered ahead of schedule and with great attention to detail. Highly recommended!",
-        },
-        {
-            id: 4,
-            name: "John Doe",
-            date: "2023/10/26",
-            rating: 4,
-            message:
-                "Excellent work on the project, delivered ahead of schedule and with great attention to detail. Highly recommended!",
-        },
-    ];
+        authHeaders
+      );
 
-    const middle = Math.ceil(userRate.length / 2);
-    const column2 = userRate.slice(0, middle);
-    const column3 = userRate.slice(middle);
+      alert("Feedback submitted successfully!");
+      navigate(-1);
+    } catch (err) {
+      console.error("Submit error:", err.response || err);
+      alert("Failed to submit feedback");
+    }
+  };
 
+  if (loading) {
     return (
-        <div className="mt-19 flex flex-col items-center min-h-screen bg-[#e5e5e5] font-outfit">
-            <Navbar />
-
-            <h1 className="text-4xl font-bold text-primary mt-6 mb-4">
-                USER RATING & FEEDBACK
-            </h1>
-
-            {/* MAIN BOX - RESPONSIVE */}
-            <div className="w-[90%] min-h-screen flex flex-col lg:flex-row bg-white shadow-xl border border-gray-300 p-6 rounded-2xl gap-6">
-
-                {/* PROVIDE FEEDBACK */}
-                <div className="w-full lg:w-1/3 flex flex-col">
-                    <p className="text-3xl font-semibold mt-4 ml-5">Provide Feedback</p>
-
-                    <div className="flex flex-row items-center space-x-3 mt-6 ml-5">
-                        <FaUserCircle className="text-8xl text-gray-700" />
-                        <p className="text-2xl font-semibold">{workerData.name}</p>
-                    </div>
-
-                    <div className="flex flex-col mt-6 ml-5">
-                        <p className="text-lg font-semibold text-gray-800">Your Rating :</p>
-                        <div className="flex items-center mt-2 shrink-0">
-                            {stars.map((_, index) => (
-                                <FaStar
-                                    key={index}
-                                    size={30}
-                                    className="mr-2 cursor-pointer"
-                                    color={(hoverValue || currentValue) > index ? colors.orange : colors.grey}
-                                    onClick={() => handleClick(index + 1)}
-                                    onMouseOver={() => handleMouseOver(index + 1)}
-                                    onMouseLeave={handleMouseLeave}
-                                />
-                            ))}
-                        </div>
-                    </div>
-
-                    <div className="flex flex-col mt-8 ml-5 mr-6">
-                        <p className="text-lg font-semibold text-gray-800">Detailed Feedback :</p>
-                        <textarea
-                            className="h-32 p-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 mt-2"
-                            placeholder="Write your feedback here..."
-                        ></textarea>
-                    </div>
-
-                    <div className="flex flex-row space-x-6 mt-10 ml-5">
-                        <button
-                            onClick={gotoprofile}
-                            className="text-lg font-semibold text-black border border-gray-400 rounded-xl shadow-md w-1/3 py-2 hover:bg-gray-200 transition-all duration-300"
-                        >
-                            Cancel
-                        </button>
-
-                        <button className="text-lg font-semibold bg-primary text-white rounded-xl shadow-md w-1/2 py-2 hover:bg-accent transition-all duration-300">
-                            Submit Feedback
-                        </button>
-                    </div>
-                </div>
-
-                {/* PAST REVIEWS COLUMN 1 */}
-                <div className="w-full lg:w-1/3 flex flex-col space-y-8">
-                    <h1 className="font-semibold text-3xl ml-6 mt-2">Your Past Reviews</h1>
-
-                    <div className="flex flex-col overflow-y-auto space-y-10 pr-2">
-                        {column2.map((user) => (
-                            <div key={user.id} className="flex flex-col p-4 border rounded-xl shadow-sm">
-                                <div className="flex flex-row items-center mb-2">
-                                    <FaUserCircle className="text-4xl mr-3" />
-                                    <p className="font-semibold text-lg flex-1">{user.name}</p>
-                                    <p className="text-sm text-gray-800">{user.date}</p>
-                                </div>
-
-                                <div className="flex items-center space-x-1 mb-2">
-                                    {[...Array(user.rating)].map((_, i) => (
-                                        <FaStar key={i} className="text-yellow-500 text-xl" />
-                                    ))}
-                                </div>
-
-                                <p className="text-lg text-gray-800">{user.message}</p>
-                                <div className="mt-2 h-px bg-gray-400 w-full"></div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                {/* PAST REVIEWS COLUMN 2 */}
-                <div className="w-full lg:w-1/3 flex flex-col space-y-8">
-                    <h1 className="font-semibold text-3xl ml-6 mt-2"></h1>
-
-                    <div className="flex flex-col overflow-y-auto space-y-10 pr-2">
-                        {column3.map((user) => (
-                            <div key={user.id} className="flex flex-col p-4 border rounded-xl shadow-sm">
-                                <div className="flex flex-row items-center mb-2">
-                                    <FaUserCircle className="text-4xl mr-3" />
-                                    <p className="font-semibold text-lg flex-1">{user.name}</p>
-                                    <p className="text-sm text-gray-800">{user.date}</p>
-                                </div>
-
-                                <div className="flex items-center space-x-1 mb-2">
-                                    {[...Array(user.rating)].map((_, i) => (
-                                        <FaStar key={i} className="text-yellow-500 text-xl" />
-                                    ))}
-                                </div>
-
-                                <p className="text-lg text-gray-800">{user.message}</p>
-                                <div className="mt-2 h-px bg-gray-400 w-full"></div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-        </div>
+      <div className="h-screen flex items-center justify-center font-semibold text-orange-500 text-xl">
+        Loading...
+      </div>
     );
+  }
+
+  if (!worker) {
+    return (
+      <div className="h-screen flex items-center justify-center font-semibold text-red-500 text-xl">
+        Worker not found
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <Navbar />
+
+      <div className="mt-24 min-h-screen bg-gray-100 py-10">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-center text-3xl font-bold text-orange-500 mb-10">
+            Rate & Review
+          </h2>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+            {/* LEFT FORM */}
+            <div className="bg-white rounded-2xl shadow-lg p-6 space-y-6">
+              <h3 className="text-xl font-semibold mb-4 text-gray-700">
+                Provide Feedback
+              </h3>
+
+              {/* Worker Avatar */}
+              <div className="flex flex-col items-center gap-3">
+                {worker.user?.imageUrl ? (
+                  <img
+                    src={worker.user.imageUrl}
+                    alt={worker.fullName}
+                    className="w-28 h-28 rounded-full object-cover border-2 border-orange-400"
+                  />
+                ) : (
+                  <FaUserCircle className="text-7xl text-gray-400" />
+                )}
+                <span className="text-lg font-medium">{worker.fullName}</span>
+              </div>
+
+              {/* Rating */}
+              <div>
+                <p className="font-medium mb-2 text-gray-600">Your Rating</p>
+                <div className="flex gap-2 mb-4 justify-center">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <span
+                      key={star}
+                      onClick={() => setRating(star)}
+                      onMouseEnter={() => setHover(star)}
+                      onMouseLeave={() => setHover(0)}
+                      className="cursor-pointer transition-transform hover:scale-110"
+                    >
+                      {star <= (hover || rating) ? (
+                        <FaStar className="text-orange-400 text-2xl" />
+                      ) : (
+                        <FaRegStar className="text-gray-400 text-2xl" />
+                      )}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* Feedback */}
+              <div>
+                <p className="font-medium mb-2 text-gray-600">Detailed Feedback</p>
+                <textarea
+                  value={feedback}
+                  onChange={(e) => setFeedback(e.target.value)}
+                  placeholder="Write your feedback here..."
+                  className="w-full h-32 border rounded-lg p-3 focus:ring-2 focus:ring-orange-400 resize-none"
+                />
+              </div>
+
+              {/* Buttons */}
+              <div className="flex justify-between mt-4">
+                <button
+                  onClick={() => navigate(-1)}
+                  className="px-5 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={submitFeedback}
+                  className="px-6 py-2 rounded-lg bg-orange-500 text-white font-semibold hover:bg-orange-600 transition"
+                >
+                  Submit Feedback
+                </button>
+              </div>
+            </div>
+
+            {/* RIGHT REVIEWS */}
+            <div className="lg:col-span-2 bg-white rounded-2xl shadow-lg p-6 space-y-6">
+              <h3 className="text-xl font-semibold text-gray-700">Your Past Reviews</h3>
+
+              {reviews.length === 0 && (
+                <p className="text-gray-500">No reviews yet.</p>
+              )}
+
+              <div className="grid md:grid-cols-2 gap-4">
+                {reviews.map((review, index) => (
+                  <div
+                    key={index}
+                    className="border rounded-xl p-4 hover:shadow-md transition"
+                  >
+                    <div className="flex justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        {review.worker.user?.imageUrl ? (
+                          <img
+                            src={review.worker.user.imageUrl}
+                            alt={review.user?.name}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                        ) : (
+                          <FaUserCircle className="text-2xl text-gray-400" />
+                        )}
+                        <span className="font-medium text-gray-700">
+                          {review.worker?.fullName || "Anonymous"}
+                        </span>
+                      </div>
+                      <span className="text-sm text-gray-500">
+                        {new Date(review.createdAT).toLocaleDateString()}
+                      </span>
+                    </div>
+
+                    <div className="flex gap-1 mb-2">
+                      {[...Array(review.rating)].map((_, i) => (
+                        <FaStar key={i} className="text-orange-400" />
+                      ))}
+                    </div>
+
+                    <p className="text-gray-700 text-sm">{review.feedback}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <Footer />
+    </>
+  );
 }
+
