@@ -1,7 +1,8 @@
 import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-
 import HomePage from './pages/HomePage'
 import AboutUs from './pages/AboutUsPage'
 import ContactPage from './pages/ContactPage'
@@ -17,40 +18,39 @@ import WorkerProfileView from './pages/WorkerProfileView'
 import WorkerRegistration from './pages/WorkerRegistration'
 import WorkerSearch from './pages/WorkerSearch'
 import Category from './pages/Category'
+import { AuthProvider } from './context/AuthContext'
+import ProtectedRoute from './components/ProtectedRoute'
+import Login from './pages/auth/Login'
+import Register from './pages/auth/Register'
 import Product from './pages/Product'
 import AdminDashBoard from './pages/AdminDashBoard'
 import WorkerRegistrationDetails from './pages/WorkerRegistrationDetails'
 import WorkerProfileUpdate from './pages/WorkerProfileUpdate'
 import WorkerView from './pages/WorkerView'
+import { Toaster } from 'react-hot-toast'
 import WorkerProfileCard from './pages/WorkerProfileCard'
 import WorkerProgress from './pages/WorkerProgress'
 import PlanUpgradePage from './pages/PlanUpgradePage'
 import MoneyTransferPage from './pages/MoneyTransferPage'
 import WorkerBankDetailsPage from './pages/WorkerBankDetailsPage'
 
-import Login from './pages/auth/Login'
-import Register from './pages/auth/Register'
-
-import { AuthProvider } from './context/AuthContext'
-import ProtectedRoute from './components/ProtectedRoute'
-import { Toaster } from 'react-hot-toast'
 import ChatbotWidget from './chatbot/ChatbotWidget'
 
 function App() {
+  const [count, setCount] = useState(0)
+
   return (
     <AuthProvider>
       <BrowserRouter>
-       <Toaster position="top-right" />
-
+        <Toaster position="top-right" />
         <Routes>
-          {/* Public routes */}
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/register" element={<Register />} />
-          <Route path="/*" element={<HomePage />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/contact" element={<ContactPage />} />
+          <Route path='/*' element={<HomePage />} />
+          <Route path='/about' element={<AboutUs />} />
+          <Route path='/contact' element={<ContactPage />} />
+          {/* <Route path='/workerDetails' element={<WorkerSearch />} /> */}
 
-          {/* Protected routes */}
           <Route element={<ProtectedRoute />}>
             {/* <Route path='/*' element={<HomePage />} />
             <Route path='/about' element={<AboutUs />} />
@@ -71,20 +71,18 @@ function App() {
             <Route path="/adminDashBoard" element={<AdminDashBoard />} />
             <Route path="/workerRegistrationDetails/:workerId" element={<WorkerRegistrationDetails />} />
             <Route path="/workerProfileUpdate" element={<WorkerProfileUpdate />} />
-            <Route path="/workerView/:userId" element={<WorkerView />} />
-            <Route path="/workerCard/:workerId" element={<WorkerProfileCard />} />
-            <Route path="/WorkerProgress/:workerId" element={<WorkerProgress />} />
-            <Route path="/planUpgradePage" element={<PlanUpgradePage />} />
-            <Route path="/transfer" element={<MoneyTransferPage />} />
-            <Route path="/bank" element={<WorkerBankDetailsPage />} />
+            <Route path='/workerView/:userId' element={<WorkerView />} />
+            <Route path='/workerCard/:workerId' element={<WorkerProfileCard />} />
+            <Route path='/WorkerProgress/:workerId' element={<WorkerProgress />} />
+            <Route path='/planUpgradePage' element={<PlanUpgradePage />} />
+            <Route path='/transfer' element={<MoneyTransferPage />} />
+              <Route path='/bank' element={<WorkerBankDetailsPage />} />
           </Route>
+
+
+
         </Routes>
-
-
-
-        {/* Chatbot visible on ALL pages */}
-        <ChatbotWidget />
-
+          <ChatbotWidget />
       </BrowserRouter>
     </AuthProvider>
   )
