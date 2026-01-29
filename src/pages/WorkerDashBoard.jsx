@@ -213,7 +213,7 @@ export default function WorkerDashBoard() {
     //     }
     // }
 
-     async function handleToggleBlock(hire) {
+    async function handleToggleBlock(hire) {
         try {
             await axios.put(
                 `http://localhost:8081/hire/toggle-block/${hire.id}`,
@@ -486,10 +486,24 @@ export default function WorkerDashBoard() {
                                                 <div className="flex items-center gap-2">
 
                                                     {/* Approve / Block */}
-                                                    <button
+                                                    {/* <button
                                                         onClick={() => handleToggleBlock(user.id)}
                                                         title={user.isBooked ? "Approve Job" : "Block Job"}
                                                         className={`p-2 rounded-full border ${user.isBooked ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"} hover:opacity-80`}
+                                                    >
+                                                        {user.isBooked ? (
+                                                            <IoCheckmarkDoneCircleOutline size={18} />
+                                                        ) : (
+                                                            <IoCloseCircleOutline size={18} />
+                                                        )}
+                                                    </button> */}
+                                                    {/* Approve / Block */}
+                                                    <button
+                                                        onClick={() => handleToggleBlock(user)}
+                                                        title={user.isBooked ? "Approve Job" : "Block Job"}
+                                                        className={`p-2 rounded-full border ${user.isBooked
+                                                            ? "bg-green-100 text-green-700"
+                                                            : "bg-red-100 text-red-700"} hover:opacity-80`}
                                                     >
                                                         {user.isBooked ? (
                                                             <IoCheckmarkDoneCircleOutline size={18} />
