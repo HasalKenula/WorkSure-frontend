@@ -21,67 +21,6 @@ export default function AdminDashBoard() {
     const [payments, setPayments] = useState({});
 
     const navigate = useNavigate();
-    // const roles = [
-    //     {
-    //         job: "plumber",
-    //         amount: 12
-    //     },
-    //     {
-    //         job: "plumber",
-    //         amount: 12
-    //     },
-    //     {
-    //         job: "plumber",
-    //         amount: 12
-    //     },
-    //     {
-    //         job: "plumber",
-    //         amount: 12
-    //     },
-    //     {
-    //         job: "plumber",
-    //         amount: 12
-    //     },
-    //     {
-    //         job: "plumber",
-    //         amount: 12
-    //     },
-    //     {
-    //         job: "plumber",
-    //         amount: 12
-    //     },
-    //     {
-    //         job: "plumber",
-    //         amount: 12
-    //     },
-    // ]
-
-    // const details = [
-    //     {
-    //         name: "Kamal Perera"
-    //     },
-    //     {
-    //         name: "Kamal Perera"
-    //     },
-    //     {
-    //         name: "Kamal Perera"
-    //     },
-    //     {
-    //         name: "Kamal Perera"
-    //     },
-    //     {
-    //         name: "Kamal Perera"
-    //     },
-    //     {
-    //         name: "Kamal Perera"
-    //     },
-    //     {
-    //         name: "Kamal Perera"
-    //     },
-    //     {
-    //         name: "Kamal Perera"
-    //     },
-    // ]
 
     const [openMenuId, setOpenMenuId] = useState(null);
 
@@ -180,21 +119,79 @@ export default function AdminDashBoard() {
         }
     }, [isAuthenticated])
 
-    async function handleToggleBlock(workerId) {
+    // async function handleToggleBlock(workerId) {
+    //     try {
+    //         await axios.put(`http://localhost:8081/worker/toggle-block/${workerId}`, {}, config);
+
+
+    //         setWorkers(prev =>
+    //             prev.map(worker =>
+    //                 worker.id === workerId ? { ...worker, isBlocked: !worker.isBlocked } : worker
+    //             )
+    //         );
+    //         toast.success("Worker status updated successfully");
+
+    //     } catch (error) {
+
+    //         toast.error("Failed to update worker status");
+    //     }
+    // }
+
+    async function handleToggleBlock(worker) {
         try {
-            await axios.put(`http://localhost:8081/worker/toggle-block/${workerId}`, {}, config);
+            // Toggle block / approve
+            await axios.put(
+                `http://localhost:8081/worker/toggle-block/${worker.id}`,
+                {},
+                config
+            );
 
+            const isNowApproved = worker.isBlocked;
+            // because before click it was blocked, after toggle → approved
 
+            // Update UI state
             setWorkers(prev =>
-                prev.map(worker =>
-                    worker.id === workerId ? { ...worker, isBlocked: !worker.isBlocked } : worker
+                prev.map(w =>
+                    w.id === worker.id
+                        ? { ...w, isBlocked: !w.isBlocked }
+                        : w
                 )
             );
-            toast.success("Worker status updated successfully");
+
+            // -----------------------
+            // SEND EMAIL
+            // -----------------------
+            if (isNowApproved) {
+                // APPROVE EMAIL
+                await axios.post(
+                    "http://localhost:8081/api/email/send",
+                    {
+                        to: worker.email,
+                        subject: "Request Approved",
+                        body: `Your request has been approved.\nYour Worker ID is ${worker.id}`
+                    },
+                    config
+                );
+
+                toast.success("Worker approved & email sent");
+            } else {
+                // BLOCK EMAIL
+                await axios.post(
+                    "http://localhost:8081/api/email/send",
+                    {
+                        to: worker.email,
+                        subject: "Request Not Approved",
+                        body: "Unfortunately, your worker request has been blocked. Please contact support for more details."
+                    },
+                    config
+                );
+
+                toast.success("Worker blocked & email sent");
+            }
 
         } catch (error) {
-
-            toast.error("Failed to update worker status");
+            console.error(error);
+            toast.error("Failed to update worker status or send email");
         }
     }
 
@@ -238,7 +235,7 @@ export default function AdminDashBoard() {
         }
     }, [isAuthenticated]);
 
-    //
+
     const selectRole = (jobRole) => {
         setSelectedRole(jobRole);
         axios.get("http://localhost:8081/worker/searchbylocandskill", {
@@ -322,7 +319,7 @@ export default function AdminDashBoard() {
 
                 </div>
 
-                {/*  */}
+
                 <div className="w-full h-[50vh] mx-auto flex flex-col  text-slate-400 lg:flex-row items-center justify-center gap-6 p-6">
                     <div className="bg-white  w-full h-full lg:flex-2 flex flex-col items-center justify-center pb-4 shadow-lg border rounded-lg border-slate-200">
                         {/* search fixed */}
@@ -367,21 +364,6 @@ export default function AdminDashBoard() {
                             <h1 className="text-xl font-bold text-center lg:text-center">{capitalizeFirst(selectedRole)}s</h1>
                         </div>
                         {/* Scrollable employees */}
-                        {/* <div className="w-full  flex flex-col lg:flex-row justify-center items-center lg:flex-wrap gap-4">
-                            {employees.map((emp) => {
-                                return (
-                                    <div key={emp.id} className="w-[40%] flex justify-center items-center lg:gap-2 lg:p-2">
-                                        <img
-                                            // src={Man}
-                                            src={emp.user?.imageUrl || Man}
-                                            alt="profile"
-                                            className="w-[50px] aspect-square rounded-full object-cover"
-                                        />
-                                        <h1 className="font-bold text-xl">{emp.fullName}</h1>
-                                    </div>
-                                )
-                            })}
-                        </div> */}
                         <div className="w-full flex-1 overflow-y-auto px-6">
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                                 {employees.map((emp) => (
@@ -446,49 +428,31 @@ export default function AdminDashBoard() {
 
                                             <td class="border border-gray-300 px-6 py-3 relative">
                                                 <div className="flex items-center gap-2">
-                                                    {/* primary action */}
-                                                    {/* <button
-                                                        onClick={() => handleToggleBlock(user.id)}
-                                                        className={`px-3 py-1 rounded-lg border ${user.isBlocked ? "bg-green-100 text-green-700 text-white" : "bg-red-100 text-red-700 text-white"}hover:opacity-80`}
-                                                    >
-                                                        {user.isBlocked ? "Approve Worker" : "Block Worker"}
-                                                    </button> */}
+
 
                                                     <button
-        onClick={() => {
-          handleToggleBlock(user.id);
-          setOpenMenuId(null);
-        }}
-        className={`w-full text-left px-4 py-2 font-semibold
-          ${user.isBlocked
-            ? "text-green-600 hover:bg-green-50"
-            : "text-red-600 hover:bg-red-50"
-          }`}
-      >
-        {user.isBlocked ? "Approve Worker" : "Block Worker"}
-      </button>
+                                                        onClick={() => {
+                                                            handleToggleBlock(user.id);
+                                                            setOpenMenuId(null);
+                                                        }}
+                                                        className={`w-full text-left px-4 py-2 font-semibold ${user.isBlocked
+                                                            ? "text-green-600 hover:bg-green-50"
+                                                            : "text-red-600 hover:bg-red-50"
+                                                            }`}
+                                                    >
+                                                        {user.isBlocked ? "Approve Worker" : "Block Worker"}
+                                                    </button>
 
-
-
-                                                    {/* more menu btn */}
-                                                    {/* <button
-                                                        onClick={() => toggleMenu(user.id)}
-                                                        className="p-2 rounded-lg hover:bg-gray-100 hover:"
-                                                        >
-                                                        <FiMoreVertical size={18} />
-                                                    </button> */}
-
-                                                    
                                                     <div className="relative group">
-                                                        <button 
+                                                        <button
                                                             className="p-2 rounded-lg hover:bg-gray-100"
                                                             onClick={() => toggleMenu(user.id)}
                                                         >
                                                             <FiMoreVertical size={18} />
                                                         </button>
 
-                                                    {/* Tooltip */}
-                                                    <span className="
+                                                        {/* Tooltip */}
+                                                        <span className="
                                                         absolute -top-8 left-1/2 -translate-x-1/2
                                                         bg-gray-800 text-white text-xs
                                                         px-2 py-1 rounded
@@ -496,32 +460,9 @@ export default function AdminDashBoard() {
                                                         transition duration-200
                                                         whitespace-nowrap
                                                     ">
-                                                        {openMenuId === user.id ? "Show less" : "Show more"}
-                                                    </span>
+                                                            {openMenuId === user.id ? "Show less" : "Show more"}
+                                                        </span>
                                                     </div>
-
-
-                                                    {/* <button
-                                                        className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white"
-                                                        onClick={() => handleDownloadPDF(user.pdfUrl, user.fullName)}
-                                                    >
-                                                        Download PDF
-                                                    </button> */}
-
-                                                    {/* <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/workerRegistrationDetails/${user.id}`)}>
-                                                        Review Details
-                                                    </button> */}
-
-                                                    {/* <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/WorkerProgress/${user.id}`)}>
-                                                        Progress
-                                                    </button> */}
-
-                                                    {/* <PaymentDetailsModal
-                                                        userId={user.user?.id}
-                                                        triggerButtonText="Payment Details"
-                                                        buttonClass="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white"
-                                                    /> */}
-
                                                 </div>
 
                                                 {/* dropdown menu */}
@@ -529,8 +470,8 @@ export default function AdminDashBoard() {
                                                     <div className="absolute right-6 top-14 z-50 w-48 bg-white border border-gray-200 rounded-lg shadow-lg">
                                                         <button
                                                             onClick={() => {
-                                                            navigate(`/WorkerProgress/${user.id}`);
-                                                            setOpenMenuId(null);
+                                                                navigate(`/WorkerProgress/${user.id}`);
+                                                                setOpenMenuId(null);
                                                             }}
                                                             className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100"
                                                         >
@@ -540,8 +481,8 @@ export default function AdminDashBoard() {
 
                                                         <button
                                                             onClick={() => {
-                                                            handleDownloadPDF(user.pdfUrl, user.fullName);
-                                                            setOpenMenuId(null);
+                                                                handleDownloadPDF(user.pdfUrl, user.fullName);
+                                                                setOpenMenuId(null);
                                                             }}
                                                             className="w-full flex items-center gap-3 px-4 py-2 hover:bg-gray-100"
                                                         >
@@ -561,32 +502,16 @@ export default function AdminDashBoard() {
                                                             userId={user.user?.id}
                                                             triggerButtonText={
                                                                 <div className="flex items-center gap-3">
-                                                                <FiCreditCard className="text-gray-600" />
-                                                                <span>Payment Details</span>
+                                                                    <FiCreditCard className="text-gray-600" />
+                                                                    <span>Payment Details</span>
                                                                 </div>
                                                             }
                                                             buttonClass="w-full flex items-center px-4 py-2 hover:bg-gray-100"
                                                         />
+                                                    </div>
+                                                )}
 
-      
 
-      {/* <button
-        onClick={() => {
-          handleToggleBlock(user.id);
-          setOpenMenuId(null);
-        }}
-        className={`w-full text-left px-4 py-2 font-semibold
-          ${user.isBlocked
-            ? "text-green-600 hover:bg-green-50"
-            : "text-red-600 hover:bg-red-50"
-          }`}
-      >
-        {user.isBlocked ? "Approve Worker" : "Block Worker"}
-      </button> */}
-    </div>
-  )}
-                                            
-                                            
                                             </td>
 
 

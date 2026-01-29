@@ -9,7 +9,7 @@ import CountUp from "react-countup";
 import { FiPhoneOutgoing } from "react-icons/fi";
 import { MdOutlineGeneratingTokens, MdOutlinePendingActions } from "react-icons/md";
 import { GiTakeMyMoney } from "react-icons/gi";
-import {  IoEyeOutline, IoCloseCircleOutline } from "react-icons/io5";
+import { IoEyeOutline, IoCloseCircleOutline } from "react-icons/io5";
 import { MdOutlinePlayCircle, MdOutlineDoneAll } from "react-icons/md";
 
 
@@ -289,7 +289,7 @@ export default function WorkerDashBoard() {
                                 <h1>Number of completed works</h1>
                             </div>
                             <div className="text-5xl font-bold">
-                                <CountUp  key={`completed-${completedCount}`} start={0}   end={completedCount} duration={2} enableScrollSpy scrollSpyOnce />
+                                <CountUp key={`completed-${completedCount}`} start={0} end={completedCount} duration={2} enableScrollSpy scrollSpyOnce />
                             </div>
                         </div>
                         <div className="w-[75%] flex-1 flex items-center gap-6  shadow-xl border border-slate-200 border py-4 px-8  justify-between">
@@ -298,7 +298,7 @@ export default function WorkerDashBoard() {
                                 <h1>Number of On Going works</h1>
                             </div>
                             <div className="text-5xl font-bold">
-                                <CountUp   key={`ongoing-${ongoingCount}`} start={0} end={ongoingCount} duration={2} enableScrollSpy scrollSpyOnce />
+                                <CountUp key={`ongoing-${ongoingCount}`} start={0} end={ongoingCount} duration={2} enableScrollSpy scrollSpyOnce />
                             </div>
                         </div>
                         <div className="w-[75%] flex-1 flex items-center gap-6 shadow-xl border border-slate-200 border py-4 px-8  justify-between">
@@ -307,7 +307,7 @@ export default function WorkerDashBoard() {
                                 <h1>Number of Pending Request</h1>
                             </div>
                             <div className="text-5xl font-bold">
-                                <CountUp   key={`pending-${pendingCount}`} start={0}  end={pendingCount} duration={2} enableScrollSpy scrollSpyOnce />
+                                <CountUp key={`pending-${pendingCount}`} start={0} end={pendingCount} duration={2} enableScrollSpy scrollSpyOnce />
                             </div>
                         </div>
                     </div>
@@ -400,69 +400,47 @@ export default function WorkerDashBoard() {
 
                                             </td>
 
-                                            {/* <td class="border border-gray-300 px-6 py-3"><div className="flex items-center gap-3">
-                                                <button
-                                                    onClick={() => handleToggleBlock(user.id)}
-                                                    className={`px-3 py-1 rounded-lg border ${user.isBooked ? "bg-green-100 text-green-700 text-white" : "bg-red-100 text-red-700 text-white"}hover:opacity-80`}
-                                                >
-                                                    {user.isBooked ? "Approve" : "Block"}
-                                                </button>
 
-                                                <button
-                                                    onClick={() => handleTogglePending(user.id)}
-                                                    className={`px-3 py-1 rounded-lg border ${user.isPending ? "bg-yellow-100 text-yellow-700 text-white" : "bg-blue-100 text-blue-700 text-white"}hover:opacity-80`}
-                                                >
-                                                    {user.isPending ? "Pending" : "Seen"}
-                                                </button>
-
-                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/workerView/${user.user.id}`)}>
-                                                    Profile
-                                                </button>
-                                            </div></td>  */}
 
                                             <td className="border border-gray-300 px-6 py-3">
-  <div className="flex items-center gap-2">
+                                                <div className="flex items-center gap-2">
 
-    {/* Approve / Block */}
-    <button
-      onClick={() => handleToggleBlock(user.id)}
-      title={user.isBooked ? "Approve Job" : "Block Job"}
-      className={`p-2 rounded-full border 
-        ${user.isBooked ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}
-        hover:opacity-80`}
-    >
-      {user.isBooked ? (
-        <IoCheckmarkDoneCircleOutline size={18} />
-      ) : (
-        <IoCloseCircleOutline size={18} />
-      )}
-    </button>
+                                                    {/* Approve / Block */}
+                                                    <button
+                                                        onClick={() => handleToggleBlock(user.id)}
+                                                        title={user.isBooked ? "Approve Job" : "Block Job"}
+                                                        className={`p-2 rounded-full border ${user.isBooked ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"} hover:opacity-80`}
+                                                    >
+                                                        {user.isBooked ? (
+                                                            <IoCheckmarkDoneCircleOutline size={18} />
+                                                        ) : (
+                                                            <IoCloseCircleOutline size={18} />
+                                                        )}
+                                                    </button>
 
-    {/* Pending / Seen */}
-    <button
-      onClick={() => handleTogglePending(user.id)}
-      title={user.isPending ? "Mark as Seen" : "Mark as Pending"}
-      className={`p-2 rounded-full border 
-        ${user.isPending ? "bg-yellow-100 text-yellow-700" : "bg-blue-100 text-blue-700"}
-        hover:opacity-80`}
-    >
-      <IoEyeOutline size={18} />
-    </button>
+                                                    {/* Pending / Seen */}
+                                                    <button
+                                                        onClick={() => handleTogglePending(user.id)}
+                                                        title={user.isPending ? "Mark as Seen" : "Mark as Pending"}
+                                                        className={`p-2 rounded-full border ${user.isPending ? "bg-yellow-100 text-yellow-700" : "bg-blue-100 text-blue-700"} hover:opacity-80`}
+                                                    >
+                                                        <IoEyeOutline size={18} />
+                                                    </button>
 
-    {/* Profile */}
-    <button
-      title="View Profile"
-      className="p-2 rounded-full border bg-white text-primary hover:bg-primary hover:text-white"
-      onClick={() => navigate(`/workerView/${user.user.id}`)}
-    >
-      <IoEyeOutline size={18} />
-    </button>
+                                                    {/* Profile */}
+                                                    <button
+                                                        title="View Profile"
+                                                        className="p-2 rounded-full border bg-white text-primary hover:bg-primary hover:text-white"
+                                                        onClick={() => navigate(`/workerView/${user.user.id}`)}
+                                                    >
+                                                        <IoEyeOutline size={18} />
+                                                    </button>
 
-  </div>
-</td>
+                                                </div>
+                                            </td>
 
 
-                                            
+
 
 
                                         </tr>
@@ -562,87 +540,52 @@ export default function WorkerDashBoard() {
 
 
                                             </td>
-                                            {/* <td class="border border-gray-300 px-6 py-3"><div className="flex items-center gap-3">
-                                                <button
-                                                    onClick={() => handleToggleBlock(user.id)}
-                                                    className={`px-3 py-1 rounded-lg border ${user.isBooked ? "bg-green-100 text-green-700 text-white" : "bg-red-100 text-red-700 text-white"}hover:opacity-80`}
-                                                >
-                                                    {user.isBooked ? "Approve" : "Block"}
-                                                </button>
 
-                                                <button
-                                                    onClick={() => handleToggleOngoing(user.id)}
-                                                    className={`px-3 py-1 rounded-lg border ${user.isOngoing ? "bg-yellow-100 text-yellow-700 text-white" : "bg-blue-100 text-blue-700 text-white"}hover:opacity-80`}
-                                                >
-                                                    {user.isOngoing ? "Ongoing" : "Free"}
-                                                </button>
-
-                                                <button
-                                                    onClick={() => handleToggleComplete(user.id)}
-                                                    className={`px-3 py-1 rounded-lg border ${user.isComplete ? "bg-yellow-100 text-yellow-700 text-white" : "bg-blue-100 text-blue-700 text-white"}hover:opacity-80`}
-                                                >
-                                                    {user.isComplete ? "Complete" : "InComplete"}
-                                                </button>
-
-
-
-                                                <button className="px-3 py-1 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white" onClick={() => navigate(`/workerView/${user.user.id}`)}>
-                                                    Profile
-                                                </button>
-                                            </div></td>  */}
-                                            
-                                            
                                             <td className="border border-gray-300 px-6 py-3">
-  <div className="flex items-center gap-2">
+                                                <div className="flex items-center gap-2">
 
-    {/* Block / Approve */}
-    <button
-      onClick={() => handleToggleBlock(user.id)}
-      title={user.isBooked ? "Approve" : "Block"}
-      className={`p-2 rounded-full border 
-        ${user.isBooked ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"}
-        hover:opacity-80`}
-    >
-      {user.isBooked ? (
-        <IoCheckmarkDoneCircleOutline size={18} />
-      ) : (
-        <IoCloseCircleOutline size={18} />
-      )}
-    </button>
+                                                    {/* Block / Approve */}
+                                                    <button
+                                                        onClick={() => handleToggleBlock(user.id)}
+                                                        title={user.isBooked ? "Approve" : "Block"}
+                                                        className={`p-2 rounded-full border ${user.isBooked ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"} hover:opacity-80`}
+                                                    >
+                                                        {user.isBooked ? (
+                                                            <IoCheckmarkDoneCircleOutline size={18} />
+                                                        ) : (
+                                                            <IoCloseCircleOutline size={18} />
+                                                        )}
+                                                    </button>
 
-    {/* Ongoing / Free */}
-    <button
-      onClick={() => handleToggleOngoing(user.id)}
-      title={user.isOngoing ? "Ongoing" : "Start Work"}
-      className={`p-2 rounded-full border 
-        ${user.isOngoing ? "bg-yellow-100 text-yellow-700" : "bg-blue-100 text-blue-700"}
-        hover:opacity-80`}
-    >
-      <MdOutlinePlayCircle size={18} />
-    </button>
+                                                    {/* Ongoing / Free */}
+                                                    <button
+                                                        onClick={() => handleToggleOngoing(user.id)}
+                                                        title={user.isOngoing ? "Ongoing" : "Start Work"}
+                                                        className={`p-2 rounded-full border ${user.isOngoing ? "bg-yellow-100 text-yellow-700" : "bg-blue-100 text-blue-700"} hover:opacity-80`}
+                                                    >
+                                                        <MdOutlinePlayCircle size={18} />
+                                                    </button>
 
-    {/* Complete */}
-    <button
-      onClick={() => handleToggleComplete(user.id)}
-      title="Mark as Complete"
-      className={`p-2 rounded-full border 
-        ${user.isComplete ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-600"}
-        hover:opacity-80`}
-    >
-      <MdOutlineDoneAll size={18} />
-    </button>
+                                                    {/* Complete */}
+                                                    <button
+                                                        onClick={() => handleToggleComplete(user.id)}
+                                                        title="Mark as Complete"
+                                                        className={`p-2 rounded-full border ${user.isComplete ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-600"} hover:opacity-80`}
+                                                    >
+                                                        <MdOutlineDoneAll size={18} />
+                                                    </button>
 
-    {/* Profile */}
-    <button
-      title="View Profile"
-      className="p-2 rounded-full border bg-white text-primary hover:bg-primary hover:text-white"
-      onClick={() => navigate(`/workerView/${user.user.id}`)}
-    >
-      <IoEyeOutline size={18} />
-    </button>
+                                                    {/* Profile */}
+                                                    <button
+                                                        title="View Profile"
+                                                        className="p-2 rounded-full border bg-white text-primary hover:bg-primary hover:text-white"
+                                                        onClick={() => navigate(`/workerView/${user.user.id}`)}
+                                                    >
+                                                        <IoEyeOutline size={18} />
+                                                    </button>
 
-  </div>
-</td>
+                                                </div>
+                                            </td>
 
 
                                         </tr>
@@ -688,7 +631,7 @@ export default function WorkerDashBoard() {
                                     <div className="flex justify-between items-center">
                                         <div className="flex items-center justify-between ">
                                             <img
-                                                src={Man}   // or any image url
+                                                src={Man}
                                                 alt="profile"
                                                 className="w-[50px] aspect-square rounded-full object-cover"
                                             />
