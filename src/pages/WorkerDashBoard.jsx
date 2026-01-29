@@ -196,22 +196,102 @@ export default function WorkerDashBoard() {
         }
     ];
 
-    async function handleToggleBlock(hireId) {
+    // async function handleToggleBlock(hireId) {
+    //     try {
+    //         await axios.put(`http://localhost:8081/hire/toggle-block/${hireId}`, {}, config);
+
+    //         setHire(prev =>
+    //             prev.map(hire =>
+    //                 hire.id === hireId ? { ...hire, isBlocked: !hire.isBlocked } : hire
+    //             )
+    //         );
+    //         getHires();
+
+    //         toast.success("Hire status updated successfully");
+    //     } catch (error) {
+    //         toast.error("Failed to update hire status");
+    //     }
+    // }
+
+     async function handleToggleBlock(hire) {
         try {
-            await axios.put(`http://localhost:8081/hire/toggle-block/${hireId}`, {}, config);
+            await axios.put(
+                `http://localhost:8081/hire/toggle-block/${hire.id}`,
+                {},
+                config
+            );
+
+            const isNowApproved = hire.isBooked;
 
             setHire(prev =>
-                prev.map(hire =>
-                    hire.id === hireId ? { ...hire, isBlocked: !hire.isBlocked } : hire
+                prev.map(h =>
+                    h.id === hire.id
+                        ? { ...h, isBooked: !h.isBooked }
+                        : h
                 )
             );
+
             getHires();
 
-            toast.success("Hire status updated successfully");
+            // =====================
+            // SEND EMAIL
+            // =====================
+            if (isNowApproved) {
+                // APPROVED MAIL
+                await axios.post(
+                    "http://localhost:8081/api/email/send",
+                    {
+                        to: hire.user.email,
+                        subject: "Job Request Approved",
+                        body: `Dear ${hire.user.name},
+
+                        Good news! Your job request has been approved by the worker.
+
+                        Job Details:
+                        - Job ID: ${hire.id}
+                        - Worker: ${worker.fullName}
+                        - Date: ${hire.bookingDate}
+                        - Time: ${hire.bookingTime}
+
+                        The worker will contact you shortly.
+
+                        Thank you for using our platform.
+                        Service Management Team`
+                    },
+                    config
+                );
+
+                toast.success("Job approved & email sent ");
+
+            } else {
+                // BLOCKED MAIL
+                await axios.post(
+                    "http://localhost:8081/api/email/send",
+                    {
+                        to: hire.user.email,
+                        subject: "Job Request Not Approved",
+                        body: `Dear ${hire.user.name},
+
+                        We regret to inform you that your job request could not be approved.
+
+                        Job ID: ${hire.id}
+
+                        Please try requesting another worker or contact support.
+
+                        Service Management Team`
+                    },
+                    config
+                );
+
+                toast.error("Job blocked & email sent ");
+            }
+
         } catch (error) {
-            toast.error("Failed to update hire status");
+            console.error(error);
+            toast.error("Failed to update job status or send email");
         }
     }
+
 
 
     async function handleTogglePending(hireId) {
