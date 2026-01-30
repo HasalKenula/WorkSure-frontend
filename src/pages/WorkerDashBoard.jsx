@@ -3,7 +3,6 @@ import Navbar from "../components/NavBar";
 import Man from "../assets/man.jpg"
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, } from "react";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import CountUp from "react-countup";
 import { FiPhoneOutgoing } from "react-icons/fi";
@@ -11,7 +10,7 @@ import { MdOutlineGeneratingTokens, MdOutlinePendingActions } from "react-icons/
 import { GiTakeMyMoney } from "react-icons/gi";
 import { IoEyeOutline, IoCloseCircleOutline } from "react-icons/io5";
 import { MdOutlinePlayCircle, MdOutlineDoneAll } from "react-icons/md";
-
+import api from "../api/axios"
 
 export default function WorkerDashBoard() {
     const { jwtToken, isAuthenticated } = useAuth();
@@ -33,8 +32,8 @@ export default function WorkerDashBoard() {
     useEffect(() => {
         if (!jwtToken) return;
 
-        axios
-            .get("http://localhost:8081/user", {
+        api
+            .get("/user", {
                 headers: { Authorization: `Bearer ${jwtToken}` },
             })
             .then((res) => {
@@ -52,7 +51,7 @@ export default function WorkerDashBoard() {
 
     async function getWorkers() {
         try {
-            const response = await axios.get(`http://localhost:8081/worker/${userId}`, config);
+            const response = await api.get(`/worker/${userId}`, config);
             setWorker(response.data);
         } catch (error) {
             console.log("error to load the correct worker according to the id");
@@ -65,7 +64,7 @@ export default function WorkerDashBoard() {
     async function getHires() {
         if (!worker || !worker.id) return;
         try {
-            const response = await axios.get(`http://localhost:8081/hire/${worker.id}`, config);
+            const response = await api.get(`/hire/${worker.id}`, config);
             setHire(response.data);
         } catch (error) {
             console.log("error to load the correct worker according to the id");
@@ -196,27 +195,10 @@ export default function WorkerDashBoard() {
         }
     ];
 
-    // async function handleToggleBlock(hireId) {
-    //     try {
-    //         await axios.put(`http://localhost:8081/hire/toggle-block/${hireId}`, {}, config);
-
-    //         setHire(prev =>
-    //             prev.map(hire =>
-    //                 hire.id === hireId ? { ...hire, isBlocked: !hire.isBlocked } : hire
-    //             )
-    //         );
-    //         getHires();
-
-    //         toast.success("Hire status updated successfully");
-    //     } catch (error) {
-    //         toast.error("Failed to update hire status");
-    //     }
-    // }
-
     async function handleToggleBlock(hire) {
         try {
-            await axios.put(
-                `http://localhost:8081/hire/toggle-block/${hire.id}`,
+            await api.put(
+                `/hire/toggle-block/${hire.id}`,
                 {},
                 config
             );
@@ -233,13 +215,11 @@ export default function WorkerDashBoard() {
 
             getHires();
 
-            // =====================
-            // SEND EMAIL
-            // =====================
+
             if (isNowApproved) {
                 // APPROVED MAIL
-                await axios.post(
-                    "http://localhost:8081/api/email/send",
+                await api.post(
+                    "/api/email/send",
                     {
                         to: hire.user.email,
                         subject: "Job Request Approved",
@@ -265,8 +245,8 @@ export default function WorkerDashBoard() {
 
             } else {
                 // BLOCKED MAIL
-                await axios.post(
-                    "http://localhost:8081/api/email/send",
+                await api.post(
+                    "/api/email/send",
                     {
                         to: hire.user.email,
                         subject: "Job Request Not Approved",
@@ -296,7 +276,7 @@ export default function WorkerDashBoard() {
 
     async function handleTogglePending(hireId) {
         try {
-            await axios.put(`http://localhost:8081/hire/toggle-pending/${hireId}`, {}, config);
+            await api.put(`/hire/toggle-pending/${hireId}`, {}, config);
 
             setHire(prev =>
                 prev.map(hire =>
@@ -313,7 +293,7 @@ export default function WorkerDashBoard() {
 
     async function handleToggleOngoing(hireId) {
         try {
-            await axios.put(`http://localhost:8081/hire/toggle-ongoging/${hireId}`, {}, config);
+            await api.put(`/hire/toggle-ongoging/${hireId}`, {}, config);
 
             setHire(prev =>
                 prev.map(hire =>
@@ -331,7 +311,7 @@ export default function WorkerDashBoard() {
 
     async function handleToggleComplete(hireId) {
         try {
-            await axios.put(`http://localhost:8081/hire/toggle-complete/${hireId}`, {}, config);
+            await api.put(`/hire/toggle-complete/${hireId}`, {}, config);
 
             setHire(prev =>
                 prev.map(hire =>
@@ -484,19 +464,6 @@ export default function WorkerDashBoard() {
 
                                             <td className="border border-gray-300 px-6 py-3">
                                                 <div className="flex items-center gap-2">
-
-                                                    {/* Approve / Block */}
-                                                    {/* <button
-                                                        onClick={() => handleToggleBlock(user.id)}
-                                                        title={user.isBooked ? "Approve Job" : "Block Job"}
-                                                        className={`p-2 rounded-full border ${user.isBooked ? "bg-green-100 text-green-700" : "bg-red-100 text-red-700"} hover:opacity-80`}
-                                                    >
-                                                        {user.isBooked ? (
-                                                            <IoCheckmarkDoneCircleOutline size={18} />
-                                                        ) : (
-                                                            <IoCloseCircleOutline size={18} />
-                                                        )}
-                                                    </button> */}
                                                     {/* Approve / Block */}
                                                     <button
                                                         onClick={() => handleToggleBlock(user)}
@@ -532,11 +499,6 @@ export default function WorkerDashBoard() {
 
                                                 </div>
                                             </td>
-
-
-
-
-
                                         </tr>
                                     )
                                 })}
@@ -680,8 +642,6 @@ export default function WorkerDashBoard() {
 
                                                 </div>
                                             </td>
-
-
                                         </tr>
                                     )
                                 })}
@@ -746,10 +706,7 @@ export default function WorkerDashBoard() {
 
                             )
                         })}
-
                     </div>
-
-
                 </div>
             </div>
 
