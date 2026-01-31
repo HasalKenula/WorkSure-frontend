@@ -2,7 +2,6 @@ import { RiDeleteBin6Line, RiPassPendingLine } from "react-icons/ri";
 import Navbar from "../components/NavBar";
 import PlatformAnalyticsChart from "../components/PlatformAnalyticsChart";
 import Man from "../assets/man.jpg"
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
@@ -13,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import PaymentDetailsModal from "../components/PaymentDetailsModal";
 import { FiMoreVertical } from "react-icons/fi";
 import { FiTrendingUp, FiDownload, FiEye, FiCreditCard } from "react-icons/fi";
-
+import api from '../api/axios'
 
 
 export default function AdminDashBoard() {
@@ -37,7 +36,7 @@ export default function AdminDashBoard() {
 
 
     async function loadContact() {
-        const response = await axios.get("http://localhost:8081/contact", config);
+        const response = await api.get("/contact", config);
         setContact(response.data);
 
     }
@@ -48,7 +47,7 @@ export default function AdminDashBoard() {
 
     async function loadWorkerDetails() {
         try {
-            const workers = await axios.get("http://localhost:8081/worker", config);
+            const workers = await api.get("/worker", config);
             setWorkers(workers.data);
             toast.success("workers are loaded successfully");
         } catch (error) {
@@ -58,7 +57,7 @@ export default function AdminDashBoard() {
 
     async function loadUserDetails() {
         try {
-            const user = await axios.get("http://localhost:8081/user/count", config);
+            const user = await api.get("/user/count", config);
             setUsers(user.data);
 
         } catch (error) {
@@ -68,7 +67,7 @@ export default function AdminDashBoard() {
 
     async function loadHireDetails() {
         try {
-            const hires = await axios.get("http://localhost:8081/hire", config);
+            const hires = await api.get("/hire", config);
             setHires(hires.data);
 
         } catch (error) {
@@ -79,7 +78,7 @@ export default function AdminDashBoard() {
 
     async function deleteContact(contactId) {
         try {
-            await axios.delete(`http://localhost:8081/contact/${contactId}`, config);
+            await api.delete(`/contact/${contactId}`, config);
             loadContact();
             toast.success("contact message status deleted successfully");
         } catch (error) {
@@ -89,8 +88,8 @@ export default function AdminDashBoard() {
 
     async function loadPayments() {
         try {
-            const res = await axios.get(
-                "http://localhost:8081/payment",
+            const res = await api.get(
+                "/payment",
                 config
             );
 
@@ -119,35 +118,18 @@ export default function AdminDashBoard() {
         }
     }, [isAuthenticated])
 
-    // async function handleToggleBlock(workerId) {
-    //     try {
-    //         await axios.put(`http://localhost:8081/worker/toggle-block/${workerId}`, {}, config);
-
-
-    //         setWorkers(prev =>
-    //             prev.map(worker =>
-    //                 worker.id === workerId ? { ...worker, isBlocked: !worker.isBlocked } : worker
-    //             )
-    //         );
-    //         toast.success("Worker status updated successfully");
-
-    //     } catch (error) {
-
-    //         toast.error("Failed to update worker status");
-    //     }
-    // }
 
     async function handleToggleBlock(worker) {
         try {
-            // Toggle block / approve
-            await axios.put(
-                `http://localhost:8081/worker/toggle-block/${worker.id}`,
+            
+            await api.put(
+                `/worker/toggle-block/${worker.id}`,
                 {},
                 config
             );
 
             const isNowApproved = worker.isBlocked;
-            // because before click it was blocked, after toggle → approved
+         
 
             // Update UI state
             setWorkers(prev =>
@@ -158,13 +140,11 @@ export default function AdminDashBoard() {
                 )
             );
 
-            // -----------------------
-            // SEND EMAIL
-            // -----------------------
+         
             if (isNowApproved) {
                 // APPROVE EMAIL
-                await axios.post(
-                    "http://localhost:8081/api/email/send",
+                await api.post(
+                    "/api/email/send",
                     {
                         to: worker.email,
                         subject: "Request Approved",
@@ -176,8 +156,8 @@ export default function AdminDashBoard() {
                 toast.success("Worker approved & email sent");
             } else {
                 // BLOCK EMAIL
-                await axios.post(
-                    "http://localhost:8081/api/email/send",
+                await api.post(
+                    "/api/email/send",
                     {
                         to: worker.email,
                         subject: "Request Not Approved",
@@ -226,11 +206,11 @@ export default function AdminDashBoard() {
     //fetch job roles 
     useEffect(() => {
         if (isAuthenticated) {
-            axios
-                .get("http://localhost:8081/worker/job-roles", config)
+            api
+                .get("/worker/job-roles", config)
                 .then(res => {
                     setAllJobRoles(res.data);
-                    setJobRoles(res.data); // initially show all
+                    setJobRoles(res.data); 
                 });
         }
     }, [isAuthenticated]);
@@ -238,7 +218,7 @@ export default function AdminDashBoard() {
 
     const selectRole = (jobRole) => {
         setSelectedRole(jobRole);
-        axios.get("http://localhost:8081/worker/searchbylocandskill", {
+        api.get("/worker/searchbylocandskill", {
             params: { jobRole },
             headers: {
                 Authorization: `Bearer ${jwtToken}`
@@ -429,20 +409,6 @@ export default function AdminDashBoard() {
                                             <td class="border border-gray-300 px-6 py-3 relative">
                                                 <div className="flex items-center gap-2">
 
-
-                                                    {/* <button
-                                                        onClick={() => {
-                                                            handleToggleBlock(user.id);
-                                                            setOpenMenuId(null);
-                                                        }}
-                                                        className={`w-full text-left px-4 py-2 font-semibold ${user.isBlocked
-                                                            ? "text-green-600 hover:bg-green-50"
-                                                            : "text-red-600 hover:bg-red-50"
-                                                            }`}
-                                                    >
-                                                        {user.isBlocked ? "Approve Worker" : "Block Worker"}
-                                                    </button> */}
-
                                                     <button
                                                         onClick={() => {
                                                             handleToggleBlock(user);
@@ -523,12 +489,7 @@ export default function AdminDashBoard() {
                                                         />
                                                     </div>
                                                 )}
-
-
                                             </td>
-
-
-
                                         </tr>
                                     )
                                 })}
@@ -544,8 +505,6 @@ export default function AdminDashBoard() {
                                     <p><span className="font-semibold">Client:</span> {user.Client}</p>
                                     <p><span className="font-semibold">Date:</span> {user.Date}</p>
                                     <p><span className="font-semibold">Time:</span> {user.Time}</p>
-
-
 
                                     <div className="flex gap-3 mt-4">
                                         <button className="w-full px-3 py-2 bg-primary text-white rounded-lg border hover:bg-white hover:text-primary">
@@ -624,13 +583,9 @@ export default function AdminDashBoard() {
 
                             )
                         })}
-
                     </div>
-
-
                 </div>
             </div>
-
         </div>
     )
 }

@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaStar } from "react-icons/fa";
-import axios from "axios";
-
+import api from '../api/axios'
 function StarRating({ itemId }) {
 
   const [savedRating, setSavedRating] = useState(0);
@@ -11,8 +10,8 @@ function StarRating({ itemId }) {
   // GET rating function
   const fetchRating = async () => {
     try {
-      const response = await axios.get(
-        `http://localhost:8081/rating/${itemId}`
+      const response = await api.get(
+        `/rating/${itemId}`
       );
 
       if (response.data.length > 0) {
@@ -38,7 +37,7 @@ function StarRating({ itemId }) {
   // POST rating
   const submitRating = async (value) => {
     try {
-      await axios.post("http://localhost:8081/rating", {
+      await api.post("/rating", {
         itemId,
         stars: value,
       });
