@@ -34,7 +34,7 @@ import PlanUpgradePage from './pages/PlanUpgradePage'
 import MoneyTransferPage from './pages/MoneyTransferPage'
 import WorkerBankDetailsPage from './pages/WorkerBankDetailsPage'
 
-
+import ChatbotWidget from './chatbot/ChatbotWidget'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -82,6 +82,7 @@ function App() {
 
 
         </Routes>
+          <ChatbotWidget />
       </BrowserRouter>
     </AuthProvider>
   )
