@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import uploadFile from "../../utils/meadiaUpload";
 import toast from "react-hot-toast";
+import api from '../../api/axios'
 
 function Register() {
 
@@ -60,12 +60,10 @@ function Register() {
         };
 
         try {
-            await axios.post("http://localhost:8081/user", data);
+            await api.post("/user", data);
 
             setSuccess("User registered successfully!");
-            setError("");
-            // toast.success("Registration successful!");
-            // setTimeout(() => navigate("/auth/login"), 1000);
+            setError("");         
             toast.success("Registration successful!");
             navigate("/auth/login");
 
@@ -101,8 +99,7 @@ function Register() {
                         {/* NEW INPUT */}
                         <input
                             type="file"
-                            accept="image/*"
-                            //className="block w-full p-2 border border-gray-200 rounded-lg"
+                            accept="image/*"                           
                             className ="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
                             onChange={(e) => setImage(e.target.files[0])}
                         />
@@ -112,8 +109,7 @@ function Register() {
                             <img
                                 src={URL.createObjectURL(image)}
                                 alt="preview"
-                                className="w-24 h-24 mt-2 rounded-full object-cover border"
-                                //className ="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
+                                className="w-24 h-24 mt-2 rounded-full object-cover border"  
                             />
                         )}
                     </div>
@@ -121,8 +117,7 @@ function Register() {
                     {/* NAME */}
                     <div className="mb-4">
                         <label className="block mb-1">Full Name</label>
-                        <input type="text"
-                            //className="block w-full p-2 border border-gray-200 rounded-lg"
+                        <input type="text"                        
                             className ="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
                             placeholder="Enter your full name"
                             onChange={(e) => { setName(e.target.value); setError(""); setSuccess(""); }} />
@@ -131,8 +126,7 @@ function Register() {
                     {/* USERNAME */}
                     <div className="mb-4">
                         <label className="block mb-1">Username</label>
-                        <input type="text"
-                            //className="block w-full p-2 border border-gray-200 rounded-lg"
+                        <input type="text"                          
                             className ="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
                             placeholder="Choose a username"
                             onChange={(e) => { setUsername(e.target.value); setError(""); setSuccess(""); }} />
@@ -141,8 +135,7 @@ function Register() {
                     {/* EMAIL */}
                     <div className="mb-4">
                         <label className="block mb-1">Email</label>
-                        <input type="email"
-                            //className="block w-full p-2 border border-gray-200 rounded-lg"
+                        <input type="email"                          
                             className ="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
                             placeholder="Enter your email"
                             onChange={(e) => { setEmail(e.target.value); setError(""); setSuccess(""); }} />
@@ -151,8 +144,7 @@ function Register() {
                     {/* CONTACT */}
                     <div className="mb-4">
                         <label className="block mb-1">Contact Number</label>
-                        <input type="text"
-                            //className="block w-full p-2 border border-gray-200 rounded-lg"
+                        <input type="text"                          
                             className ="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
                             placeholder="Enter your phone number"
                             onChange={(e) => { setContact(e.target.value); setError(""); setSuccess(""); }} />
@@ -161,8 +153,7 @@ function Register() {
                     {/* ADDRESS */}
                     <div className="mb-4">
                         <label className="block mb-1">Address</label>
-                        <input type="text"
-                            //className="block w-full p-2 border border-gray-200 rounded-lg"
+                        <input type="text"                          
                             className ="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
                             placeholder="Enter your address"
                             onChange={(e) => { setAddress(e.target.value); setError(""); setSuccess(""); }} />
@@ -171,8 +162,7 @@ function Register() {
                     {/* PASSWORD */}
                     <div className="mb-4">
                         <label className="block mb-1">Password</label>
-                        <input type="password"
-                            //className="block w-full p-2 border border-gray-200 rounded-lg"
+                        <input type="password"                          
                             className ="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
                             placeholder="Enter password"
                             onChange={(e) => { setPassword(e.target.value); setError(""); setSuccess(""); }} />
@@ -181,8 +171,7 @@ function Register() {
                     {/* CONFIRM PASSWORD */}
                     <div className="mb-4">
                         <label className="block mb-1">Confirm Password</label>
-                        <input type="password"
-                            //className="block w-full p-2 border border-gray-200 rounded-lg"
+                        <input type="password"                          
                             className ="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
                             placeholder="Re-enter password"
                             onChange={(e) => { setConfirmPassword(e.target.value); setError(""); setSuccess(""); }} />
@@ -192,8 +181,7 @@ function Register() {
                     {success && <div className="text-green-600 text-sm">{success}</div>}
 
                     <div className="mt-8">
-                        <button type="submit"
-                            //className="bg-primary text-white px-4 py-2 rounded-lg w-full hover:bg-white hover:text-primary border border-primary"
+                        <button type="submit"                           
                             className="px-4 py-2 rounded-lg w-full font-semibold bg-gradient-to-r from-amber-500 to-yellow-500 hover:shadow-lg hover:scale-105 transition-all duration-300 text-white"
                             >
                             Register

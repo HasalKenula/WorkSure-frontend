@@ -4,11 +4,11 @@ import "react-calendar/dist/Calendar.css";
 import { format } from "date-fns";
 import Navbar from "../components/NavBar";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
 import { useParams } from "react-router-dom";
 import MM from "../assets/man.jpg";
 import StarRating from "../components/StarRating";
 import { motion } from "framer-motion";
+import api from '../api/axios'
 
 export default function WorkerHire() {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -35,7 +35,7 @@ export default function WorkerHire() {
   // Fetch worker
   async function getWorker() {
     try {
-      const response = await axios.get(`http://localhost:8081/worker/id/${workerId}`, config);
+      const response = await api.get(`/worker/id/${workerId}`, config);
       setWorker(response.data);
     } catch (error) {
       console.log("Error loading worker:", error);
@@ -45,8 +45,8 @@ export default function WorkerHire() {
   // Fetch logged-in user
   useEffect(() => {
     if (!jwtToken) return;
-    axios
-      .get("http://localhost:8081/user", { headers: { Authorization: `Bearer ${jwtToken}` } })
+    api
+      .get("/user", { headers: { Authorization: `Bearer ${jwtToken}` } })
       .then((res) => setUser(res.data))
       .catch((err) => console.log("Failed to load user", err));
   }, [jwtToken]);
@@ -60,8 +60,8 @@ export default function WorkerHire() {
     if (!user?.id) return alert("User not loaded yet");
 
     try {
-      await axios.post(
-        "http://localhost:8081/hire",
+      await api.post(
+        "/hire",
         {
           workerId,
           userId: user.id,
@@ -88,7 +88,7 @@ export default function WorkerHire() {
     if (!worker?.id) return;
 
     try {
-      const response = await axios.get(`http://localhost:8081/hire/${workerId}`, config);
+      const response = await api.get(`/hire/${workerId}`, config);
       setHires(response.data);
     } catch (error) {
       console.log("Error loading hires:", error);
@@ -132,40 +132,40 @@ export default function WorkerHire() {
         transition={{ duration: 0.6 }}
       >
         {/* Worker Header Card */}
-        
+
         <motion.div
-            className="relative flex flex-col md:flex-row items-center gap-6 p-6 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-transparent hover:border-indigo-300"
-            whileHover={{ scale: 1.03 }}>
-            {/* Ribbon Badge */}
-            <div className="absolute top-0 left-0 bg-yellow-400 text-white px-3 py-1 rounded-tr-3xl rounded-bl-3xl font-semibold text-sm shadow-md z-10">
-                Premium
-            </div>
+          className="relative flex flex-col md:flex-row items-center gap-6 p-6 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-transparent hover:border-indigo-300"
+          whileHover={{ scale: 1.03 }}>
+          {/* Ribbon Badge */}
+          <div className="absolute top-0 left-0 bg-yellow-400 text-white px-3 py-1 rounded-tr-3xl rounded-bl-3xl font-semibold text-sm shadow-md z-10">
+            Premium
+          </div>
 
-            {/* Profile Picture with ring animation */}
- 
-            <div className="bg-gray-200 w-28 h-28 lg:w-40 lg:h-40 rounded-full flex justify-center items-center overflow-hidden">
-                <img src={worker?.user?.imageUrl || MM} alt={worker?.fullName || "Worker"} className="w-full h-full object-cover rounded-full" />
-            </div>
+          {/* Profile Picture with ring animation */}
 
-            {/* Info Section */}
-            <div className="flex-1 flex flex-col justify-center gap-2">
-                <h2 className="text-3xl font-extrabold text-gray-800">{worker?.fullName}</h2>
-                <p className="text-gray-600 font-semibold">{worker?.jobRole}</p>
-                <p className="text-gray-500">{worker?.preferredServiceLocation}</p>
+          <div className="bg-gray-200 w-28 h-28 lg:w-40 lg:h-40 rounded-full flex justify-center items-center overflow-hidden">
+            <img src={worker?.user?.imageUrl || MM} alt={worker?.fullName || "Worker"} className="w-full h-full object-cover rounded-full" />
+          </div>
 
-                {/* Star Rating + Reviews */}
-                <div className="flex items-center mt-2 gap-2 text-yellow-500">
-                {worker && <StarRating itemId={worker.id} />}
+          {/* Info Section */}
+          <div className="flex-1 flex flex-col justify-center gap-2">
+            <h2 className="text-3xl font-extrabold text-gray-800">{worker?.fullName}</h2>
+            <p className="text-gray-600 font-semibold">{worker?.jobRole}</p>
+            <p className="text-gray-500">{worker?.preferredServiceLocation}</p>
+
+            {/* Star Rating + Reviews */}
+            <div className="flex items-center mt-2 gap-2 text-yellow-500">
+              {worker && <StarRating itemId={worker.id} />}
             </div>
 
             {/* Extra Info */}
             <div className="mt-3 flex flex-wrap gap-3">
-                <span className="px-3 py-1 bg-indigo-100 text-indigo-800 text-xs font-semibold rounded-full shadow-sm"> 5 Years Experience</span>
-                <span className="px-3 py-1 bg-purple-100 text-purple-800 text-xs font-semibold rounded-full shadow-sm">Available Today</span>
-                <span className="px-3 py-1 bg-pink-100 text-pink-800 text-xs font-semibold rounded-full shadow-sm">Verified</span>
+              <span className="px-3 py-1 bg-indigo-100 text-indigo-800 text-xs font-semibold rounded-full shadow-sm"> 5 Years Experience</span>
+              <span className="px-3 py-1 bg-purple-100 text-purple-800 text-xs font-semibold rounded-full shadow-sm">Available Today</span>
+              <span className="px-3 py-1 bg-pink-100 text-pink-800 text-xs font-semibold rounded-full shadow-sm">Verified</span>
             </div>
-        </div>
-    </motion.div>
+          </div>
+        </motion.div>
 
 
         {/* Calendar + Time Slots */}
@@ -180,20 +180,19 @@ export default function WorkerHire() {
                 const formatted = format(date, "yyyy-MM-dd");
                 if (bookedDates.includes(formatted)) {
                   return (
-                    // <div className="bg-red-200 w-8 h-8 rounded-full mx-auto"></div>
 
                     <div className="relative group flex justify-center">
-  <div className="bg-red-200 w-8 h-8 rounded-full"></div>
+                      <div className="bg-red-200 w-8 h-8 rounded-full"></div>
 
-  {/* Tooltip */}
-  <div className="absolute bottom-full mb-2 hidden group-hover:block">
-    <div className="bg-black text-white text-xs px-3 py-1 rounded-lg shadow-lg whitespace-nowrap">
-      New job request is pending
-    </div>
-  </div>
-</div>
+                      {/* Tooltip */}
+                      <div className="absolute bottom-full mb-2 hidden group-hover:block">
+                        <div className="bg-black text-white text-xs px-3 py-1 rounded-lg shadow-lg whitespace-nowrap">
+                          New job request is pending
+                        </div>
+                      </div>
+                    </div>
 
-                    
+
                   );
                 }
                 return null;

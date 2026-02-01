@@ -2,13 +2,12 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineCreditCard, AiOutlineWallet } from "react-icons/ai";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { FaLock } from "react-icons/fa";
-
+import api from '../api/axios'
 
 export default function SecurePayment() {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const location = useLocation();
   const { planName, planPrice } = location.state || { planName: "N/A", planPrice: 0 };
   const { jwtToken, isAuthenticated } = useAuth();
@@ -24,8 +23,8 @@ export default function SecurePayment() {
   useEffect(() => {
     if (!jwtToken) return;
 
-    axios
-      .get("http://localhost:8081/user", config)
+    api
+      .get("/user", config)
       .then((res) => {
 
         setUserId(res.data.id);
@@ -42,11 +41,11 @@ export default function SecurePayment() {
 
   async function createPayment() {
     try {
-      await axios.post("http://localhost:8081/payment", {
-        name:fullname,
+      await api.post("/payment", {
+        name: fullname,
         email,
         address,
-        amount: Math.round(planPrice * 1.08), 
+        amount: Math.round(planPrice * 1.08),
         planName,
         userId: userId
 
@@ -77,8 +76,8 @@ export default function SecurePayment() {
 
       {/* Page Title */}
       <h1 className="text-3xl md:text-4xl font-bold text-amber-900 mb-3 text-center" >
-                  <FaLock className="inline-block mr-3 mb-1" />
-                  Secure Payment
+        <FaLock className="inline-block mr-3 mb-1" />
+        Secure Payment
       </h1>
       <p className="text-amber-700 text-lg text-center  mb-10 ">
         Finalize your payment for the <b>{planName}</b> plan.
@@ -99,8 +98,7 @@ export default function SecurePayment() {
             value={fullname}
             onChange={handleFullname}
             placeholder="hasalkenula"
-            // className="w-full p-3 mt-2 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition"
-            className ="w-full p-3 mt-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
+            className="w-full p-3 mt-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
           />
 
           <label className="block mt-4 text-sm font-medium text-gray-600">Billing Address</label>
@@ -124,9 +122,8 @@ export default function SecurePayment() {
           <div className="  mt-6 mb-3 font-semibold  block  text-amber-700">Choose Payment Method</div>
 
           {/* Card Box */}
-          <div 
-          //  className="bg-blue-50 border border-blue-200 p-5 rounded-xl mb-4"
-          className="p-5 bg-amber-50   rounded-xl mb-4 focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
+          <div
+            className="p-5 bg-amber-50   rounded-xl mb-4 focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
           >
             <div className="flex items-center gap-2 text-amber-800 mb-3">
               <AiOutlineCreditCard className="text-2xl" /> Credit / Debit Card
@@ -134,7 +131,6 @@ export default function SecurePayment() {
             <input
               type="text"
               placeholder="XXXX XXXX XXXX XXXX"
-              // className="w-full p-3 border border-gray-300 rounded-lg outline-none focus:border-blue-500 transition"
               className="w-full p-3 bg-amber-50 border-2 border-amber-200 rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
             />
             <div className="flex gap-3 mt-3">
@@ -192,7 +188,6 @@ export default function SecurePayment() {
 
           <button
             onClick={createPayment}
-            // className="w-full bg-blue-600 hover:bg-yellow-500 text-white py-4 rounded-xl font-semibold transition-colors"
             className="px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-bold rounded-xl hover:shadow-lg hover:scale-105 transition-all duration-300 flex items-center gap-2 justify-center whitespace-nowrap"
           >
             Confirm Payment

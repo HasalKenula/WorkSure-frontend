@@ -1,12 +1,12 @@
 import React from 'react'
 import Navbar from '../components/NavBar'
 import { FaUserCircle } from "react-icons/fa";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, useParams } from 'react-router-dom';
 import toast from "react-hot-toast";
 import MM from "../assets/man.jpg";
+import api from '../api/axios'
 
 export default function WorkerView() {
 
@@ -22,8 +22,8 @@ export default function WorkerView() {
   const [user, setUser] = useState({});
   async function loadWorkerDetails() {
     try {
-      const response = await axios.get(
-        `http://localhost:8081/user/${userId}`,
+      const response = await api.get(
+        `/user/${userId}`,
         config
       );
       setUser(response.data);

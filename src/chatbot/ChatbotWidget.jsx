@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import ChatWindow from "./ChatWindow";
 import chatbotIcon from "../assets/chatbot-icon.jpg";
+import api from "../api/axios";
 
 export default function ChatbotWidget() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (open) {
-      axios.post("http://localhost:8081/api/chat/reset").catch(() => {
+      api.post("/api/chat/reset").catch(() => {
       });
     }
   }, [open]);

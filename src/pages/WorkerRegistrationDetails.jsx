@@ -1,11 +1,12 @@
 import React from 'react';
 import Navbar from '../components/NavBar';
-import axios from "axios";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, useParams } from 'react-router-dom';
 import toast from "react-hot-toast";
 import MM from "../assets/man.jpg";
+import api from '../api/axios'
+
 const WorkerRegistrationDetails = () => {
 
     const { workerId } = useParams();
@@ -36,8 +37,8 @@ const WorkerRegistrationDetails = () => {
     const [workers, setWorkers] = useState({});
     async function loadWorkerDetails() {
         try {
-            const response = await axios.get(
-                `http://localhost:8081/worker/id/${workerId}`,
+            const response = await api.get(
+                `/worker/id/${workerId}`,
                 config
             );
             setWorkers(response.data);
@@ -72,7 +73,7 @@ const WorkerRegistrationDetails = () => {
 
     async function handleToggleBlock(workerId) {
         try {
-            await axios.put(`http://localhost:8081/worker/toggle-block/${workerId}`, {}, config);
+            await api.put(`/worker/toggle-block/${workerId}`, {}, config);
 
 
             setWorkers(prev => ({
@@ -238,7 +239,7 @@ const WorkerRegistrationDetails = () => {
 
                         <button
                             className="px-6 py-2 border border-black text-black font-bold rounded-lg shadow hover:bg-slate-200"
-                            onClick={() => navigate(-1)} 
+                            onClick={() => navigate(-1)}
                         >
                             Back
                         </button>

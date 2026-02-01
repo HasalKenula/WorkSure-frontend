@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
-
+import api from '../api/axios'
 
 import {
     FaCreditCard,
@@ -57,8 +56,8 @@ export default function MoneyTransferPage() {
     useEffect(() => {
         if (!jwtToken) return;
 
-        axios
-            .get("http://localhost:8081/bank", config)
+        api
+            .get("/bank", config)
             .then((res) => {
 
                 setWorkers(res.data);
@@ -82,8 +81,8 @@ export default function MoneyTransferPage() {
     useEffect(() => {
         if (!jwtToken) return;
 
-        axios
-            .get("http://localhost:8081/user", {
+        api
+            .get("/user", {
                 headers: { Authorization: `Bearer ${jwtToken}` },
             })
             .then((res) => {
@@ -198,7 +197,7 @@ export default function MoneyTransferPage() {
         const transactionId = `TX${Date.now()}`; // frontend ID (can be overridden by backend)
 
         try {
-            const res = await axios.post("http://localhost:8081/transfer", {
+            const res = await api.post("/transfer", {
                 transactionId,
                 paymentMethod: formData.paymentMethod,
                 fullName: formData.workerName,

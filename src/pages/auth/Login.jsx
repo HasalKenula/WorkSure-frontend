@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import api from '../../api/axios'
 
 function Login() {
 
@@ -28,7 +28,7 @@ function Login() {
         }
 
         try {
-            const response = await axios.post("http://localhost:8081/auth/login", data);
+            const response = await api.post("/auth/login", data);
 
             const token = response.data.token;
             const returnedUsername = response.data.username;

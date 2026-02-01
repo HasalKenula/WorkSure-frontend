@@ -4,8 +4,8 @@ import { IoLocationSharp } from "react-icons/io5";
 import { FaStar, FaUserCircle, FaBriefcase, FaCertificate } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import api from '../api/axios'
 
 export default function WorkerProfileView() {
     const { jwtToken, isAuthenticated } = useAuth();
@@ -22,8 +22,8 @@ export default function WorkerProfileView() {
     /* ---------------- FETCH USER ---------------- */
     useEffect(() => {
         if (!jwtToken) return;
-        axios
-            .get("http://localhost:8081/user", config)
+        api
+            .get("/user", config)
             .then(res => setUserId(res.data.id))
             .catch(() => setLoading(false));
     }, [jwtToken]);
@@ -35,8 +35,8 @@ export default function WorkerProfileView() {
         const fetchWorker = async () => {
             setLoading(true);
             try {
-                const res = await axios.get(
-                    `http://localhost:8081/worker/${userId}`,
+                const res = await api.get(
+                    `/worker/${userId}`,
                     config
                 );
                 setWorker(res.data);
@@ -67,8 +67,8 @@ export default function WorkerProfileView() {
     useEffect(() => {
         if (!jwtToken || !worker?.id) return;
 
-        axios
-            .get(`http://localhost:8081/rating/${worker.id}`, config)
+        api
+            .get(`/rating/${worker.id}`, config)
             .then(res => setReviews(res.data))
             .catch(err => console.error("Failed to load reviews", err));
     }, [jwtToken, worker]);
@@ -133,7 +133,6 @@ export default function WorkerProfileView() {
 
                         <button
                             onClick={() => navigate("/workerDashboard")}
-                            //className="h-fit px-6 py-3 bg-primary text-white rounded-lg hover:bg-accent transition"
                             className="h-fit px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-medium rounded-lg hover:shadow-lg hover:scale-102 transition-all duration-300 flex items-center gap-2 justify-center whitespace-nowrap"
                         >
                             Dashboard

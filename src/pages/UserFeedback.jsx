@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaStar, FaRegStar, FaUserCircle } from "react-icons/fa";
-import axios from "axios";
 import Navbar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { useAuth } from "../context/AuthContext";
-
+import api from '../api/axios'
 export default function UserFeedback() {
   const { workerId } = useParams();
   const navigate = useNavigate();
@@ -29,8 +28,8 @@ export default function UserFeedback() {
   useEffect(() => {
     if (!jwtToken) return;
 
-    axios
-      .get("http://localhost:8081/user", authHeaders)
+    api
+      .get("/user", authHeaders)
       .then((res) => setUser(res.data))
       .catch((err) => console.error("Failed to load user:", err));
   }, [jwtToken]);
@@ -38,8 +37,8 @@ export default function UserFeedback() {
   useEffect(() => {
     if (!jwtToken || !workerId) return;
 
-    axios
-      .get(`http://localhost:8081/worker/id/${workerId}`, authHeaders)
+    api
+      .get(`/worker/id/${workerId}`, authHeaders)
       .then((res) => setWorker(res.data))
       .catch((err) => console.error("Failed to load worker:", err))
       .finally(() => setLoading(false));
@@ -48,8 +47,8 @@ export default function UserFeedback() {
   useEffect(() => {
     if (!jwtToken || !user?.id) return;
 
-    axios
-      .get(`http://localhost:8081/rating/user/${user.id}`, authHeaders)
+    api
+      .get(`/rating/user/${user.id}`, authHeaders)
       .then((res) => setReviews(res.data))
       .catch((err) => console.error("Failed to load reviews:", err));
   }, [jwtToken, user]);
@@ -66,8 +65,8 @@ export default function UserFeedback() {
     }
 
     try {
-      await axios.post(
-        "http://localhost:8081/rating",
+      await api.post(
+        "/rating",
         {
           workerId,
           userId: user.id,
