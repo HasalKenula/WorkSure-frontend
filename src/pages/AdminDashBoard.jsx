@@ -1,5 +1,4 @@
 import { RiDeleteBin6Line, RiPassPendingLine } from "react-icons/ri";
-import Navbar from "../components/NavBar";
 import PlatformAnalyticsChart from "../components/PlatformAnalyticsChart";
 import Man from "../assets/man.jpg"
 import { useEffect, useState } from "react";
@@ -15,6 +14,7 @@ import { FiTrendingUp, FiDownload, FiEye, FiCreditCard } from "react-icons/fi";
 import api from '../api/axios'
 import TransferDetailsModal from "../components/TransferDetailsModal";
 import { FaMoneyCheckAlt } from "react-icons/fa";
+import AdminNavbar from "../components/AdminNavBar";
 
 
 export default function AdminDashBoard() {
@@ -254,11 +254,9 @@ export default function AdminDashBoard() {
         }
     }, [jobRoles]);
 
-
-
     return (
         <div>
-            <Navbar />
+            <AdminNavbar />
             <div className="w-full flex flex-col pt-24 my-auto  ">
                 <div className="px-6 my-8">
                     <h1 className="text-3xl md:text-4xl font-bold text-amber-900 mb-3 ">Admin DashBoard</h1>

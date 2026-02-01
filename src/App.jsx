@@ -27,6 +27,7 @@ import MoneyTransferPage from './pages/MoneyTransferPage'
 import WorkerBankDetailsPage from './pages/WorkerBankDetailsPage'
 import ChatbotWidget from './chatbot/ChatbotWidget'
 import TransferDetailsPage from './pages/TransferDetailsPage'
+import AdminOnlyRoute from './components/AdminOnlyRoute'
 
 function App() {
 
@@ -51,7 +52,7 @@ function App() {
             <Route path='/workerProfile' element={<WorkerProfileView />} />
             <Route path='/workerRegistration' element={<WorkerRegistration />} />
             <Route path='/workerDetails' element={<WorkerSearch />} />
-            <Route path="/adminDashBoard" element={<AdminDashBoard />} />
+
             <Route path="/workerRegistrationDetails/:workerId" element={<WorkerRegistrationDetails />} />
             <Route path="/workerProfileUpdate" element={<WorkerProfileUpdate />} />
             <Route path='/workerView/:userId' element={<WorkerView />} />
@@ -62,6 +63,10 @@ function App() {
             <Route path='/bank' element={<WorkerBankDetailsPage />} />
             <Route path="/workerTransfers/:workerId" element={<TransferDetailsPage />} />
 
+          </Route>
+
+          <Route element={<AdminOnlyRoute />}>
+            <Route path="/adminDashBoard" element={<AdminDashBoard />} />
           </Route>
 
         </Routes>
