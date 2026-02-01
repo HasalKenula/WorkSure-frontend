@@ -26,6 +26,7 @@ import PlanUpgradePage from './pages/PlanUpgradePage'
 import MoneyTransferPage from './pages/MoneyTransferPage'
 import WorkerBankDetailsPage from './pages/WorkerBankDetailsPage'
 import ChatbotWidget from './chatbot/ChatbotWidget'
+import TransferDetailsPage from './pages/TransferDetailsPage'
 
 function App() {
 
@@ -59,6 +60,8 @@ function App() {
             <Route path='/planUpgradePage' element={<PlanUpgradePage />} />
             <Route path='/transfer' element={<MoneyTransferPage />} />
             <Route path='/bank' element={<WorkerBankDetailsPage />} />
+            <Route path="/workerTransfers/:workerId" element={<TransferDetailsPage />} />
+
           </Route>
 
         </Routes>

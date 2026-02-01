@@ -13,6 +13,8 @@ import PaymentDetailsModal from "../components/PaymentDetailsModal";
 import { FiMoreVertical } from "react-icons/fi";
 import { FiTrendingUp, FiDownload, FiEye, FiCreditCard } from "react-icons/fi";
 import api from '../api/axios'
+import TransferDetailsModal from "../components/TransferDetailsModal";
+import { FaMoneyCheckAlt } from "react-icons/fa";
 
 
 export default function AdminDashBoard() {
@@ -121,7 +123,7 @@ export default function AdminDashBoard() {
 
     async function handleToggleBlock(worker) {
         try {
-            
+
             await api.put(
                 `/worker/toggle-block/${worker.id}`,
                 {},
@@ -129,7 +131,7 @@ export default function AdminDashBoard() {
             );
 
             const isNowApproved = worker.isBlocked;
-         
+
 
             // Update UI state
             setWorkers(prev =>
@@ -140,7 +142,7 @@ export default function AdminDashBoard() {
                 )
             );
 
-         
+
             if (isNowApproved) {
                 // APPROVE EMAIL
                 await api.post(
@@ -210,7 +212,7 @@ export default function AdminDashBoard() {
                 .get("/worker/job-roles", config)
                 .then(res => {
                     setAllJobRoles(res.data);
-                    setJobRoles(res.data); 
+                    setJobRoles(res.data);
                 });
         }
     }, [isAuthenticated]);
@@ -487,6 +489,18 @@ export default function AdminDashBoard() {
                                                             }
                                                             buttonClass="w-full flex items-center px-4 py-2 hover:bg-gray-100"
                                                         />
+
+                                                        <TransferDetailsModal
+                                                            workerId={user.id}
+                                                            triggerButtonText={
+                                                                <div className="flex items-center gap-3">
+                                                                    <FaMoneyCheckAlt className="text-gray-600" />
+                                                                    <span>Transfer Details</span>
+                                                                </div>
+                                                            }
+                                                            buttonClass="w-full flex items-center px-4 py-2 hover:bg-gray-100"
+                                                        />
+
                                                     </div>
                                                 )}
                                             </td>

@@ -157,9 +157,9 @@ export default function PaymentDetailsModal({
                 onClick={openModal}
                 className={`${buttonClass} group`}
             >
-                {/* <FaCreditCard className="w-4 h-4" /> */}
+               
                 <span>{triggerButtonText}</span>
-                {/* <FiExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" /> */}
+              
             </button>
 
             {/* Modal */}
