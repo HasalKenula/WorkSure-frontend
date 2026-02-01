@@ -14,7 +14,7 @@ export default function WorkerProfileView() {
     const [userId, setUserId] = useState(null);
     const [worker, setWorker] = useState(null);
     const [loading, setLoading] = useState(true);
-
+    const [reviews, setReviews] = useState([]);
     const config = {
         headers: { Authorization: `Bearer ${jwtToken}` }
     };
@@ -62,6 +62,25 @@ export default function WorkerProfileView() {
         if (worker.sun) days.push("Sun");
         return days;
     };
+
+
+    useEffect(() => {
+        if (!jwtToken || !worker?.id) return;
+
+        axios
+            .get(`http://localhost:8081/rating/${worker.id}`, config)
+            .then(res => setReviews(res.data))
+            .catch(err => console.error("Failed to load reviews", err));
+    }, [jwtToken, worker]);
+
+
+    const averageRating =
+        reviews.length > 0
+            ? (
+                reviews.reduce((sum, r) => sum + r.rating, 0) /
+                reviews.length
+            ).toFixed(1)
+            : "0.0";
 
     if (loading) {
         return (
@@ -172,25 +191,39 @@ export default function WorkerProfileView() {
                             </InfoCard>
 
                             <InfoCard title="Client Reviews">
-                                {[1, 2, 3].map(i => (
-                                    <div key={i} className="border-b pb-4 mb-4">
-                                        <div className="flex items-center gap-3">
-                                            <FaUserCircle className="text-3xl" />
-                                            <span className="font-semibold">John Doe</span>
+                                {reviews.ratings && reviews.ratings.length > 0 ? (
+                                    reviews.ratings.map((review) => (
+                                        <div key={review.id} className="border-b pb-4 mb-4">
+                                            <div className="flex items-center gap-3">
+                                                {review.user?.imageUrl ? (
+                                                    <img
+                                                        src={review.user.imageUrl}
+                                                        alt={review.user.name}
+                                                        className="w-10 h-10 rounded-full object-cover"
+                                                    />
+                                                ) : (
+                                                    <FaUserCircle className="text-3xl text-gray-600" />
+                                                )}
+                                                <span className="font-semibold">
+                                                    {review.user?.name || "Anonymous"}
+                                                </span>
+                                            </div>
+
+                                            <div className="flex gap-1 ml-9 mt-1">
+                                                {[...Array(review.rating)].map((_, i) => (
+                                                    <FaStar key={i} className="text-yellow-500" />
+                                                ))}
+                                            </div>
+
+                                            <p className="ml-9 mt-2 text-gray-700">{review.feedback}</p>
                                         </div>
-                                        <div className="flex gap-1 ml-9">
-                                            {[...Array(5)].map((_, i) => (
-                                                <FaStar key={i} className="text-yellow-500" />
-                                            ))}
-                                        </div>
-                                        <p className="ml-9 text-gray-700">
-                                            Excellent service and very professional.
-                                        </p>
-                                    </div>
-                                ))}
+                                    ))
+                                ) : (
+                                    <p className="mt-2 text-gray-500">No reviews yet.</p>
+                                )}
                             </InfoCard>
 
-                           
+
                         </main>
                     </div>
                 </div>

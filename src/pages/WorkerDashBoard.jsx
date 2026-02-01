@@ -19,6 +19,7 @@ export default function WorkerDashBoard() {
     const [userId, setUserId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [worker, setWorker] = useState(null);
+    const [reviews, setReviews] = useState([]);
 
 
 
@@ -87,6 +88,21 @@ export default function WorkerDashBoard() {
         }
     }, [worker?.id]);
 
+    useEffect(() => {
+        if (!worker?.id) return;
+
+        const fetchReviews = async () => {
+            try {
+                const res = await api.get(`/rating/${worker.id}`, config);
+                console.log("Reviews from API:", res.data);
+                setReviews(res.data.ratings); // assuming your API returns { ratings: [...] }
+            } catch (error) {
+                console.error("Failed to fetch reviews:", error);
+            }
+        };
+
+        fetchReviews();
+    }, [worker?.id]);
 
 
     const users = [
@@ -672,43 +688,44 @@ export default function WorkerDashBoard() {
                 </div>
             </div>
 
-            <div className=" w-full   flex  my-auto ">
-                <div className="w-full mx-auto flex flex-col  gap-3 p-6">
-                    <div className="px-6">
-                        <h1 className="text-2xl font-bold ">User Reviews</h1>
-                    </div>
-
-                    <div className="flex flex-col lg:flex-row  flex-wrap items-center justify-center gap-6 ">
-                        {workerReviews.map((comment) => {
-                            return (
-                                <div className="border border-slate-200 shadow-xl w-full lg:w-[40%] p-8 gap-6">
-                                    <div className="flex justify-between items-center">
-                                        <div className="flex items-center justify-between ">
-                                            <img
-                                                src={Man}
-                                                alt="profile"
-                                                className="w-[50px] aspect-square rounded-full object-cover"
-                                            />
-
-                                            <h1 className="font-bold text-xl px-4">{comment.name}</h1>
-                                        </div>
-                                        <h1>{comment.label}</h1>
-                                    </div>
-                                    <div className="flex items-center py-4 text-lg">
-                                        {renderStars(comment.rating)}
-                                        <h1 className="text-slate-500 px-2">{comment.ratingText}</h1>
-                                    </div>
-                                    <div>
-                                        <p>{comment.review}
-                                        </p>
-                                    </div>
+            <div className="flex flex-col lg:flex-row flex-wrap items-center justify-center gap-6 py-4">
+                {reviews && reviews.length > 0 ? (
+                    reviews.map((comment) => (
+                        <div key={comment.id} className="border border-slate-200 shadow-xl w-full lg:w-[40%] p-8 gap-6">
+                            <div className="flex justify-between items-center">
+                                <div className="flex items-center justify-between">
+                                    {comment.user?.imageUrl ? (
+                                        <img
+                                            src={comment.user.imageUrl}
+                                            alt={comment.user.name}
+                                            className="w-[50px] aspect-square rounded-full object-cover"
+                                        />
+                                    ) : (
+                                        <FaUserCircle className="text-4xl text-gray-500" />
+                                    )}
+                                    <h1 className="font-bold text-xl px-4">
+                                        {comment.user?.name || "Anonymous"}
+                                    </h1>
                                 </div>
+                                <h1>{new Date(comment.createdAT).toLocaleDateString()}</h1>
+                            </div>
 
-                            )
-                        })}
-                    </div>
-                </div>
+                            <div className="flex items-center py-4 text-lg">
+                                {[...Array(comment.rating)].map((_, i) => (
+                                    <IoStarSharp key={i} className="text-yellow-500" />
+                                ))}
+                                <h1 className="text-slate-500 px-2">{comment.rating}</h1>
+                            </div>
+                            <div>
+                                <p>{comment.feedback}</p>
+                            </div>
+                        </div>
+                    ))
+                ) : (
+                    <p className="text-gray-500">No reviews yet.</p>
+                )}
             </div>
+
 
         </div>
     )
