@@ -2,9 +2,8 @@ import { useEffect, useState } from "react";
 import Modal from "react-modal";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
-import axios from "axios";
 import toast from "react-hot-toast";
-
+import api from '../api/axios'
 Modal.setAppElement('#root');
 
 export default function WorkerCardModal({ triggerButtonText = "Find Worker", buttonClass = "" }) {
@@ -31,8 +30,8 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
         if (!jwtToken) return;
 
         setLoading(true);
-        axios
-            .get("http://localhost:8081/user", config)
+        api
+            .get("/user", config)
             .then((res) => {
                 setUserId(res.data.id);
                 setLoading(false);
@@ -43,7 +42,7 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
 
     async function getWorkers() {
         try {
-            const response = await axios.get(`http://localhost:8081/worker/${userId}`, config);
+            const response = await api.get(`/worker/${userId}`, config);
             setWorker(response.data);
         } catch (error) {
             console.log("Error loading worker:", error);
@@ -53,7 +52,7 @@ export default function WorkerCardModal({ triggerButtonText = "Find Worker", but
 
     async function getPayment() {
         try {
-            const response = await axios.get(`http://localhost:8081/payment/${userId}`, config);
+            const response = await api.get(`/payment/${userId}`, config);
             setPayment(response.data);
         } catch (error) {
             console.log("Error loading paymentDetails:", error);

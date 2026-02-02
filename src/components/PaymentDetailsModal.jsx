@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import Modal from "react-modal";
-import axios from "axios";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import {
@@ -32,7 +31,7 @@ import {
     FiDownload,
     FiChevronDown
 } from "react-icons/fi";
-
+import api from '../api/axios'
 Modal.setAppElement("#root");
 
 /* ----------------- Helper Functions ----------------- */
@@ -136,8 +135,8 @@ export default function PaymentDetailsModal({
         if (!isModalOpen || !userId) return;
 
         setLoading(true);
-        axios
-            .get(`http://localhost:8081/payment/${userId}`, config)
+        api
+            .get(`/payment/${userId}`, config)
             .then((res) => setPayment(res.data))
             .catch(() => {
                 toast.error("Payment details not found");
@@ -158,9 +157,9 @@ export default function PaymentDetailsModal({
                 onClick={openModal}
                 className={`${buttonClass} group`}
             >
-                {/* <FaCreditCard className="w-4 h-4" /> */}
+               
                 <span>{triggerButtonText}</span>
-                {/* <FiExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" /> */}
+              
             </button>
 
             {/* Modal */}

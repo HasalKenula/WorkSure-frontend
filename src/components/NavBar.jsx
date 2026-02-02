@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import WorkerCardModal from "./WorkerCardModal";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import MM from "../assets/man.jpg";
-
+import api from '../api/axios'
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
@@ -21,8 +20,8 @@ export default function Navbar() {
   useEffect(() => {
     if (!jwtToken) return;
 
-    axios
-      .get("http://localhost:8081/user", {
+    api
+      .get("/user", {
         headers: { Authorization: `Bearer ${jwtToken}` },
       })
       .then((res) => setUser(res.data))
