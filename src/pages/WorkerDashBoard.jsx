@@ -403,7 +403,7 @@ export default function WorkerDashBoard() {
                         </div>
 
                         <div className="w-[75%] flex-1 flex-col  shadow-xl items-center justify-center gap-6  border  border-slate-200 py-4 px-8">
-                            <div className="flex items-center justify-center ">
+                            {/* <div className="flex items-center justify-center ">
                                 <MdOutlineGeneratingTokens color="#f59e0b" size={80} />
                             </div>
                             <div className="flex items-center justify-center text-4xl font-bold pb-4">
@@ -421,7 +421,22 @@ export default function WorkerDashBoard() {
                                 <h1>(0 Reviews)</h1>
                                 <h1>{hire?.worker?.id}</h1>
                                 <h1>{hire?.user?.id}</h1>
+                            </div> */}
+
+                             <div
+                            onClick={() => navigate(`/workerSlip/${worker?.id}`)}
+                            className="w-[75%] flex-1 flex-col shadow-xl items-center justify-center gap-6 border border-slate-200 py-4 px-8 cursor-pointer hover:scale-[1.02] transition"
+                        >
+                            <div className="flex items-center justify-center">
+                                <GiTakeMyMoney color="#f59e0b" size={80} />
                             </div>
+
+                            <div className="flex items-center justify-center text-4xl font-bold pb-4">
+                                <h1 className="text-slate-500">Earning Progress</h1>
+                            </div>
+
+
+                        </div>
                         </div>
                     </div>
                 </div>

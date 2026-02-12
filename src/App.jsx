@@ -29,6 +29,7 @@ import ChatbotWidget from './chatbot/ChatbotWidget'
 import TransferDetailsPage from './pages/TransferDetailsPage'
 import AdminOnlyRoute from './components/AdminOnlyRoute'
 import PaymentSIPUpload from './pages/PaymentSIPUpload'
+import WorkerSlipsPage from './pages/WorkerSlipsPage'
 
 function App() {
 
@@ -64,6 +65,7 @@ function App() {
             <Route path='/bank' element={<WorkerBankDetailsPage />} />
             <Route path="/workerTransfers/:workerId" element={<TransferDetailsPage />} />
             <Route path='/slip/:workerId' element={<PaymentSIPUpload />} />
+            <Route path='/workerSlip/:workerId' element={<WorkerSlipsPage />} />
 
           </Route>
 
