@@ -106,24 +106,18 @@ function PaymentSIPUpload() {
 
         const paymentData = {
             amount: parseFloat(amount),
-
             bankName: bankName,
             accountNumber: accountNumber,
-
             paymentDate: paymentDate,
             sipImageUrl: sipImageUrl,
             remarks: remarks || "",
-            paymentStatus: "pending",
-            paymentMethod: "bank_transfer",
-            submittedAt: new Date().toISOString(),
-            workerId: workerId,
-            workerName: worker?.name || "",
-            userId: user?.id || "",
-            userName: user?.name || ""
+            workerId,
+            userId: user.id,
+
         };
 
         try {
-            await api.post("/payment/sip-upload", paymentData);
+            await api.post("/slip", paymentData, config);
 
             setSuccess("Payment SIP uploaded successfully!");
             toast.success("Payment SIP uploaded successfully!");
@@ -141,8 +135,7 @@ function PaymentSIPUpload() {
 
             setIsLoading(false);
 
-            // Navigate after success (optional)
-            // navigate("/payment/history");
+
 
         } catch (error) {
             setIsLoading(false);
@@ -310,14 +303,16 @@ function PaymentSIPUpload() {
                                 }}
                             >
                                 <option value="">Select Bank</option>
-                                <option value="SBI">State Bank of India</option>
-                                <option value="HDFC">HDFC Bank</option>
-                                <option value="ICICI">ICICI Bank</option>
-                                <option value="Axis">Axis Bank</option>
-                                <option value="Kotak">Kotak Mahindra Bank</option>
-                                <option value="Yes">Yes Bank</option>
-                                <option value="PNB">Punjab National Bank</option>
-                                <option value="BOB">Bank of Baroda</option>
+                                <option value="Commercial Bank">Commercial Bank</option>
+                                <option value="Bank of Ceylonk">Bank of Ceylonk</option>
+                                <option value="Hatton National Bank">Hatton National Bank</option>
+                                <option value="Sampath Bank">Sampath Bank</option>
+                                <option value="DFCC Bank">DFCC Bank</option>
+                                <option value="People's Bank">People's Bank</option>
+                                <option value="National Savings Bank">National Savings Bank</option>
+                                <option value="Seylan Bank">Seylan Bank</option>
+                                <option value="Pan Asia Bank">Pan Asia Bank</option>
+                                <option value="Union Bank">Union Bank</option>
                                 <option value="Other">Other</option>
                             </select>
                         </div>
@@ -488,29 +483,6 @@ function PaymentSIPUpload() {
                         </button>
                     </div>
                 </form>
-
-                {/* Footer Links */}
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                    <div className="flex justify-between items-center text-sm">
-                        <p className="text-gray-500">
-                            Need help with payment?
-                        </p>
-                        <div className="flex gap-4">
-                            <span
-                                className="cursor-pointer text-amber-600 hover:text-amber-700 font-medium"
-                                onClick={function () { navigate("/payment/instructions"); }}
-                            >
-                                Payment Instructions
-                            </span>
-                            <span
-                                className="cursor-pointer text-amber-600 hover:text-amber-700 font-medium"
-                                onClick={function () { navigate("/payment/history"); }}
-                            >
-                                View History
-                            </span>
-                        </div>
-                    </div>
-                </div>
 
                 {/* Secure Payment Badge */}
                 <div className="mt-4 flex justify-center items-center gap-2 text-xs text-gray-400">
