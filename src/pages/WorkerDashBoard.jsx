@@ -11,6 +11,8 @@ import { IoEyeOutline, IoCloseCircleOutline } from "react-icons/io5";
 import { MdOutlinePlayCircle, MdOutlineDoneAll } from "react-icons/md";
 import api from "../api/axios"
 import toast from "react-hot-toast";
+import { FaMoneyBillTransfer } from "react-icons/fa6";
+import { HiDocumentText } from "react-icons/hi";
 
 export default function WorkerDashBoard() {
     const { jwtToken, isAuthenticated } = useAuth();
@@ -388,7 +390,7 @@ export default function WorkerDashBoard() {
                     </div>
                     <div className="flex-1 flex flex-col items-center justify-center gap-18 ">
                         <div
-                            onClick={() => navigate(`/workerTransfers/${worker?.id}`)}
+
                             className="w-[75%] flex-1 flex-col shadow-xl items-center justify-center gap-6 border border-slate-200 py-4 px-8 cursor-pointer hover:scale-[1.02] transition"
                         >
                             <div className="flex items-center justify-center">
@@ -399,11 +401,34 @@ export default function WorkerDashBoard() {
                                 <h1 className="text-slate-500">Earning Progress</h1>
                             </div>
 
+                            <div className="flex flex-row items-center justify-center gap-6 pb-6">
+
+                                {/* Transfer Progress Button */}
+                                <button
+                                    onClick={() => navigate(`/workerTransfers/${worker?.id}`)}
+                                    className="group flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-400 text-white text-lg font-semibold shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
+                                >
+                                    <FaMoneyBillTransfer className="text-2xl group-hover:rotate-6 transition-transform duration-300" />
+                                    Transfer Details
+                                </button>
+
+                                {/* Slip Progress Button */}
+                                <button
+                                    onClick={() => navigate(`/workerSlip/${worker?.id}`)}
+                                    className="group flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-amber-500 to-orange-400 text-white text-lg font-semibold shadow-lg hover:shadow-2xl hover:scale-105 transition-all duration-300"
+                                >
+                                    <HiDocumentText className="text-2xl group-hover:-rotate-6 transition-transform duration-300" />
+                                    Slip Details
+                                </button>
+
+                            </div>
+
+
 
                         </div>
 
                         <div className="w-[75%] flex-1 flex-col  shadow-xl items-center justify-center gap-6  border  border-slate-200 py-4 px-8">
-                            {/* <div className="flex items-center justify-center ">
+                            <div className="flex items-center justify-center ">
                                 <MdOutlineGeneratingTokens color="#f59e0b" size={80} />
                             </div>
                             <div className="flex items-center justify-center text-4xl font-bold pb-4">
@@ -421,22 +446,7 @@ export default function WorkerDashBoard() {
                                 <h1>(0 Reviews)</h1>
                                 <h1>{hire?.worker?.id}</h1>
                                 <h1>{hire?.user?.id}</h1>
-                            </div> */}
-
-                             <div
-                            onClick={() => navigate(`/workerSlip/${worker?.id}`)}
-                            className="w-[75%] flex-1 flex-col shadow-xl items-center justify-center gap-6 border border-slate-200 py-4 px-8 cursor-pointer hover:scale-[1.02] transition"
-                        >
-                            <div className="flex items-center justify-center">
-                                <GiTakeMyMoney color="#f59e0b" size={80} />
                             </div>
-
-                            <div className="flex items-center justify-center text-4xl font-bold pb-4">
-                                <h1 className="text-slate-500">Earning Progress</h1>
-                            </div>
-
-
-                        </div>
                         </div>
                     </div>
                 </div>
