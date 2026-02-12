@@ -1,17 +1,18 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import uploadFile from "../utils/meadiaUpload";
 import toast from "react-hot-toast";
 import api from '../api/axios';
+import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function PaymentSIPUpload() {
     const navigate = useNavigate();
 
     const [amount, setAmount] = useState("");
-    const [transactionId, setTransactionId] = useState("");
+
     const [bankName, setBankName] = useState("");
     const [accountNumber, setAccountNumber] = useState("");
-    const [ifscCode, setIfscCode] = useState("");
+
     const [paymentDate, setPaymentDate] = useState("");
     const [paymentSIP, setPaymentSIP] = useState(null);
     const [remarks, setRemarks] = useState("");
@@ -19,6 +20,39 @@ function PaymentSIPUpload() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+
+    const { jwtToken, isAuthenticated } = useAuth();
+    const { workerId } = useParams();
+
+    const [worker, setWorker] = useState(null);
+    const [user, setUser] = useState({ id: null, name: "", email: "", contact: "", address: "", imageUrl: "" });
+
+    const config = {
+        headers: { Authorization: `Bearer ${jwtToken}` },
+    };
+
+    // Fetch worker
+    async function getWorker() {
+        try {
+            const response = await api.get(`/worker/id/${workerId}`, config);
+            setWorker(response.data);
+        } catch (error) {
+            console.log("Error loading worker:", error);
+        }
+    }
+
+    // Fetch logged-in user
+    useEffect(() => {
+        if (!jwtToken) return;
+        api
+            .get("/user", { headers: { Authorization: `Bearer ${jwtToken}` } })
+            .then((res) => setUser(res.data))
+            .catch((err) => console.log("Failed to load user", err));
+    }, [jwtToken]);
+
+    useEffect(() => {
+        if (isAuthenticated && workerId) getWorker();
+    }, [isAuthenticated, workerId]);
 
     async function handleFileChange(event) {
         const file = event.target.files[0];
@@ -35,7 +69,7 @@ function PaymentSIPUpload() {
         setSuccess("");
 
         // --- VALIDATIONS ---
-        if (!amount || !transactionId || !bankName || !accountNumber || !ifscCode || !paymentDate || !paymentSIP) {
+        if (!amount || !bankName || !accountNumber || !paymentDate || !paymentSIP) {
             setError("All fields are required");
             toast.error("All fields are required!");
             setIsLoading(false);
@@ -56,12 +90,6 @@ function PaymentSIPUpload() {
             return;
         }
 
-        if (ifscCode.length < 11) {
-            setError("Please enter a valid IFSC code");
-            toast.error("Please enter a valid IFSC code!");
-            setIsLoading(false);
-            return;
-        }
 
         // UPLOAD SIP IMAGE TO SUPABASE
         let sipImageUrl = "";
@@ -78,16 +106,20 @@ function PaymentSIPUpload() {
 
         const paymentData = {
             amount: parseFloat(amount),
-            transactionId: transactionId,
+
             bankName: bankName,
             accountNumber: accountNumber,
-            ifscCode: ifscCode,
+
             paymentDate: paymentDate,
             sipImageUrl: sipImageUrl,
             remarks: remarks || "",
             paymentStatus: "pending",
             paymentMethod: "bank_transfer",
-            submittedAt: new Date().toISOString()
+            submittedAt: new Date().toISOString(),
+            workerId: workerId,
+            workerName: worker?.name || "",
+            userId: user?.id || "",
+            userName: user?.name || ""
         };
 
         try {
@@ -95,22 +127,20 @@ function PaymentSIPUpload() {
 
             setSuccess("Payment SIP uploaded successfully!");
             toast.success("Payment SIP uploaded successfully!");
-            
+
             // Reset form
             setAmount("");
-            setTransactionId("");
             setBankName("");
             setAccountNumber("");
-            setIfscCode("");
             setPaymentDate("");
             setPaymentSIP(null);
             setRemarks("");
-            
+
             // Reset file input
             document.getElementById("sip-upload").value = "";
-            
+
             setIsLoading(false);
-            
+
             // Navigate after success (optional)
             // navigate("/payment/history");
 
@@ -146,7 +176,7 @@ function PaymentSIPUpload() {
     return (
         <div className="w-full min-h-screen p-6 flex items-center justify-center bg-gray-50">
             <div className="w-[700px] p-8 shadow-xl rounded-2xl mx-auto border border-gray-200 bg-white">
-                
+
                 {/* Header Section */}
                 <div className="text-center mb-8">
                     <div className="flex justify-center mb-3">
@@ -165,7 +195,63 @@ function PaymentSIPUpload() {
                 </div>
 
                 <form onSubmit={submit} className="space-y-5">
-                    
+
+                    {/* NEW: Worker Name and User Name Row */}
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        {/* WORKER NAME */}
+                        <div>
+                            <label className="block mb-1.5 text-sm font-semibold text-gray-700">
+                                Worker Name
+                            </label>
+                            <div className="relative">
+                                <div className="absolute left-3 top-2.5 text-gray-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                                <input
+                                    type="text"
+                                    className="w-full p-2.5 pl-10 bg-gray-50 border border-gray-200 rounded-xl text-gray-700 cursor-not-allowed focus:outline-none"
+                                    placeholder="Loading worker..."
+                                    value={worker?.fullName || "No worker selected"}
+                                    readOnly
+                                    disabled
+                                />
+                            </div>
+                            {workerId && !worker && (
+                                <p className="text-xs text-amber-600 mt-1">Loading worker details...</p>
+                            )}
+                        </div>
+
+                        {/* USER NAME */}
+                        <div>
+                            <label className="block mb-1.5 text-sm font-semibold text-gray-700">
+                                User Name
+                            </label>
+                            <div className="relative">
+                                <div className="absolute left-3 top-2.5 text-gray-400">
+                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                    </svg>
+                                </div>
+                                <input
+                                    type="text"
+                                    className="w-full p-2.5 pl-10 bg-gray-50 border border-gray-200 rounded-xl text-gray-700 cursor-not-allowed focus:outline-none"
+                                    placeholder="Loading user..."
+                                    value={user?.name || "Not logged in"}
+                                    readOnly
+                                    disabled
+                                />
+                            </div>
+                            {user?.email && (
+                                <p className="text-xs text-gray-500 mt-1">{user.email}</p>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* Divider */}
+                    <div className="border-t border-gray-100 my-2"></div>
+
                     {/* Amount and Transaction ID Row */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         {/* AMOUNT */}
@@ -175,35 +261,34 @@ function PaymentSIPUpload() {
                             </label>
                             <div className="relative">
                                 <span className="absolute left-3 top-2.5 text-gray-500">₹</span>
-                                <input 
-                                    type="number"                        
+                                <input
+                                    type="number"
                                     className="w-full p-2.5 pl-8 border border-gray-300 rounded-xl focus:border-amber-500 focus:ring-2 focus:ring-amber-200 focus:outline-none transition-all"
                                     placeholder="0.00"
                                     value={amount}
-                                    onChange={function(e) { 
-                                        setAmount(e.target.value); 
-                                        setError(""); 
-                                        setSuccess(""); 
-                                    }} 
+                                    onChange={function (e) {
+                                        setAmount(e.target.value);
+                                        setError("");
+                                        setSuccess("");
+                                    }}
                                 />
                             </div>
                         </div>
 
-                        {/* TRANSACTION ID */}
+                        {/* PAYMENT DATE */}
                         <div>
                             <label className="block mb-1.5 text-sm font-semibold text-gray-700">
-                                Transaction ID <span className="text-red-500">*</span>
+                                Payment Date <span className="text-red-500">*</span>
                             </label>
-                            <input 
-                                type="text"                          
+                            <input
+                                type="date"
                                 className="w-full p-2.5 border border-gray-300 rounded-xl focus:border-amber-500 focus:ring-2 focus:ring-amber-200 focus:outline-none transition-all"
-                                placeholder="Enter transaction ID"
-                                value={transactionId}
-                                onChange={function(e) { 
-                                    setTransactionId(e.target.value); 
-                                    setError(""); 
-                                    setSuccess(""); 
-                                }} 
+                                value={paymentDate}
+                                onChange={function (e) {
+                                    setPaymentDate(e.target.value);
+                                    setError("");
+                                    setSuccess("");
+                                }}
                             />
                         </div>
                     </div>
@@ -218,10 +303,10 @@ function PaymentSIPUpload() {
                             <select
                                 className="w-full p-2.5 border border-gray-300 rounded-xl focus:border-amber-500 focus:ring-2 focus:ring-amber-200 focus:outline-none transition-all"
                                 value={bankName}
-                                onChange={function(e) { 
-                                    setBankName(e.target.value); 
-                                    setError(""); 
-                                    setSuccess(""); 
+                                onChange={function (e) {
+                                    setBankName(e.target.value);
+                                    setError("");
+                                    setSuccess("");
                                 }}
                             >
                                 <option value="">Select Bank</option>
@@ -242,76 +327,39 @@ function PaymentSIPUpload() {
                             <label className="block mb-1.5 text-sm font-semibold text-gray-700">
                                 Account Number <span className="text-red-500">*</span>
                             </label>
-                            <input 
-                                type="text"                          
+                            <input
+                                type="text"
                                 className="w-full p-2.5 border border-gray-300 rounded-xl focus:border-amber-500 focus:ring-2 focus:ring-amber-200 focus:outline-none transition-all"
                                 placeholder="Enter account number"
                                 value={accountNumber}
                                 maxLength="18"
-                                onChange={function(e) { 
-                                    setAccountNumber(e.target.value); 
-                                    setError(""); 
-                                    setSuccess(""); 
-                                }} 
+                                onChange={function (e) {
+                                    setAccountNumber(e.target.value);
+                                    setError("");
+                                    setSuccess("");
+                                }}
                             />
                         </div>
                     </div>
 
-                    {/* IFSC Code and Payment Date Row */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {/* IFSC CODE */}
-                        <div>
-                            <label className="block mb-1.5 text-sm font-semibold text-gray-700">
-                                IFSC Code <span className="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="text"                          
-                                className="w-full p-2.5 uppercase border border-gray-300 rounded-xl focus:border-amber-500 focus:ring-2 focus:ring-amber-200 focus:outline-none transition-all"
-                                placeholder="Enter IFSC code"
-                                value={ifscCode}
-                                maxLength="11"
-                                onChange={function(e) { 
-                                    setIfscCode(e.target.value.toUpperCase()); 
-                                    setError(""); 
-                                    setSuccess(""); 
-                                }} 
-                            />
-                        </div>
 
-                        {/* PAYMENT DATE */}
-                        <div>
-                            <label className="block mb-1.5 text-sm font-semibold text-gray-700">
-                                Payment Date <span className="text-red-500">*</span>
-                            </label>
-                            <input 
-                                type="date"                          
-                                className="w-full p-2.5 border border-gray-300 rounded-xl focus:border-amber-500 focus:ring-2 focus:ring-amber-200 focus:outline-none transition-all"
-                                value={paymentDate}
-                                onChange={function(e) { 
-                                    setPaymentDate(e.target.value); 
-                                    setError(""); 
-                                    setSuccess(""); 
-                                }} 
-                            />
-                        </div>
-                    </div>
 
                     {/* SIP UPLOAD SECTION */}
                     <div className="mb-2">
                         <label className="block mb-1.5 text-sm font-semibold text-gray-700">
                             Upload Bank SIP/Transaction Screenshot <span className="text-red-500">*</span>
                         </label>
-                        
+
                         {/* File Upload Area */}
                         <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 hover:border-amber-500 transition-colors bg-gray-50">
                             <input
                                 id="sip-upload"
                                 type="file"
-                                accept="image/*,.pdf"                           
+                                accept="image/*,.pdf"
                                 className="hidden"
                                 onChange={handleFileChange}
                             />
-                            
+
                             {!paymentSIP ? (
                                 <label htmlFor="sip-upload" className="cursor-pointer block text-center">
                                     <div className="flex justify-center mb-2">
@@ -349,7 +397,7 @@ function PaymentSIPUpload() {
                                         )}
                                         <button
                                             type="button"
-                                            onClick={function() { 
+                                            onClick={function () {
                                                 setPaymentSIP(null);
                                                 document.getElementById("sip-upload").value = "";
                                             }}
@@ -363,7 +411,7 @@ function PaymentSIPUpload() {
                                 </div>
                             )}
                         </div>
-                        
+
                         {/* Preview for image files */}
                         {paymentSIP && paymentSIP.type.includes('image') && (
                             <div className="mt-3">
@@ -387,8 +435,8 @@ function PaymentSIPUpload() {
                             className="w-full p-2.5 border border-gray-300 rounded-xl focus:border-amber-500 focus:ring-2 focus:ring-amber-200 focus:outline-none transition-all resize-none"
                             placeholder="Enter any additional remarks or notes..."
                             value={remarks}
-                            onChange={function(e) { 
-                                setRemarks(e.target.value); 
+                            onChange={function (e) {
+                                setRemarks(e.target.value);
                             }}
                         ></textarea>
                     </div>
@@ -399,7 +447,7 @@ function PaymentSIPUpload() {
                             {error}
                         </div>
                     )}
-                    
+
                     {success && (
                         <div className="bg-green-50 border border-green-200 text-green-600 px-4 py-3 rounded-lg text-sm">
                             {success}
@@ -408,7 +456,7 @@ function PaymentSIPUpload() {
 
                     {/* Action Buttons */}
                     <div className="flex gap-4 pt-4">
-                        <button 
+                        <button
                             type="submit"
                             disabled={isLoading}
                             className="flex-1 px-4 py-3 rounded-xl font-semibold bg-gradient-to-r from-amber-500 to-yellow-500 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 flex items-center justify-center gap-2"
@@ -430,8 +478,8 @@ function PaymentSIPUpload() {
                                 </>
                             )}
                         </button>
-                        
-                        <button 
+
+                        <button
                             type="button"
                             onClick={clearForm}
                             className="px-6 py-3 rounded-xl font-semibold border border-gray-300 hover:bg-gray-50 transition-all duration-300 text-gray-700"
@@ -448,15 +496,15 @@ function PaymentSIPUpload() {
                             Need help with payment?
                         </p>
                         <div className="flex gap-4">
-                            <span 
+                            <span
                                 className="cursor-pointer text-amber-600 hover:text-amber-700 font-medium"
-                                onClick={function() { navigate("/payment/instructions"); }}
+                                onClick={function () { navigate("/payment/instructions"); }}
                             >
                                 Payment Instructions
                             </span>
-                            <span 
+                            <span
                                 className="cursor-pointer text-amber-600 hover:text-amber-700 font-medium"
-                                onClick={function() { navigate("/payment/history"); }}
+                                onClick={function () { navigate("/payment/history"); }}
                             >
                                 View History
                             </span>
