@@ -153,6 +153,14 @@ export default function WorkerProfileCard() {
                   Hire Now
                 </button>
 
+                <button
+                  onClick={() => navigate(`/slip/${worker.id}`)}
+                  className="mt-6 px-6 py-2 bg-primary text-white rounded-lg 
+                         font-semibold hover:bg-accent transition"
+                >
+                  Upload slip
+                </button>
+
 
                 {/* WORKING AREA */}
                 <div className="mt-6 bg-white shadow-lg rounded-xl p-5 border border-gray-200">

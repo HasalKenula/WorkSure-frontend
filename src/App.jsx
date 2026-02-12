@@ -63,7 +63,7 @@ function App() {
             <Route path='/transfer' element={<MoneyTransferPage />} />
             <Route path='/bank' element={<WorkerBankDetailsPage />} />
             <Route path="/workerTransfers/:workerId" element={<TransferDetailsPage />} />
-            <Route path='/slip' element={<PaymentSIPUpload />} />
+            <Route path='/slip/:workerId' element={<PaymentSIPUpload />} />
 
           </Route>
 
