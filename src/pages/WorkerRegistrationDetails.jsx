@@ -1,18 +1,18 @@
-import React from 'react';
-import Navbar from '../components/NavBar';
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, useParams } from 'react-router-dom';
 import toast from "react-hot-toast";
 import MM from "../assets/man.jpg";
 import api from '../api/axios'
+import { FaStar } from 'react-icons/fa6';
+import AdminNavbar from '../components/AdminNavBar';
 
 const WorkerRegistrationDetails = () => {
 
     const { workerId } = useParams();
     const navigate = useNavigate();
     const { isAuthenticated, jwtToken } = useAuth();
-
+    const [reviews, setReviews] = useState([]);
 
     const getWorkingDays = (worker) => {
         if (!worker) return [];
@@ -55,6 +55,39 @@ const WorkerRegistrationDetails = () => {
         }
     }, [isAuthenticated])
 
+    useEffect(() => {
+        if (!jwtToken || !workerId) return;
+
+        api
+            .get(`/rating/${workerId}`, {
+                headers: { Authorization: `Bearer ${jwtToken}` }
+            })
+            .then(res => setReviews(res.data?.ratings || []))
+            .catch(err => console.error("Failed to load ratings", err));
+    }, [jwtToken, workerId]);
+
+    const totalReviews = reviews.length;
+
+    const averageRating =
+        totalReviews > 0
+            ? reviews.reduce((sum, r) => sum + Number(r.rating || 0), 0) / totalReviews
+            : 0;
+
+    const renderAverageStars = (avg) => {
+        const roundedAvg = Math.round(avg);
+
+        return [...Array(5)].map((_, i) => (
+            <FaStar
+                key={i}
+                className={
+                    i + 1 <= roundedAvg
+                        ? "text-yellow-500"
+                        : "text-gray-300"
+                }
+            />
+        ));
+    };
+
     function handleDownloadPDF(pdfUrl, fullName) {
         if (!pdfUrl) {
             toast.error("No PDF uploaded for this worker.");
@@ -91,7 +124,7 @@ const WorkerRegistrationDetails = () => {
 
     return (
         <div className="bg-slate-100 min-h-screen">
-            <Navbar />
+            <AdminNavbar />
 
             <div className="pt-20 p-4 flex justify-center">
                 <div className="w-full max-w-5xl">
@@ -122,6 +155,14 @@ const WorkerRegistrationDetails = () => {
                                 <p className="text-yellow-600 font-medium">
                                     {workers.jobRole}
                                 </p>
+
+                                <div className="flex items-center gap-1 mt-2">
+                                    {renderAverageStars(averageRating)}
+                                    <span className="ml-2 text-sm text-slate-500">
+                                        {averageRating.toFixed(1)} ({totalReviews} reviews)
+                                    </span>
+                                </div>
+
 
                                 <div className="mt-4 w-full">
                                     <div className="bg-slate-100 rounded-lg p-3 text-center">

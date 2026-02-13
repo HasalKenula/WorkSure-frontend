@@ -350,6 +350,31 @@ export default function WorkerDashBoard() {
     const ongoingCount = hire.filter(h => h.isOngoing && !h.isComplete).length;
     const completedCount = hire.filter(h => h.isComplete).length;
 
+    const totalReviews = reviews.length;
+
+    const averageRating =
+        totalReviews > 0
+            ? (
+                reviews.reduce((sum, r) => sum + r.rating, 0) / totalReviews
+            ).toFixed(1)
+            : 0;
+
+    const renderAverageStars = (avg) => {
+        return [...Array(5)].map((_, i) => {
+            if (avg >= i + 1) {
+                // full star
+                return <IoStarSharp key={i} className="text-yellow-500" />;
+            } else if (avg >= i + 0.5) {
+                // half-like effect (lighter star)
+                return <IoStarSharp key={i} className="text-yellow-300" />;
+            } else {
+                // empty star
+                return <IoStarSharp key={i} className="text-slate-300" />;
+            }
+        });
+    };
+
+
     return (
         <div>
             <Navbar />
@@ -422,32 +447,38 @@ export default function WorkerDashBoard() {
                                 </button>
 
                             </div>
-
-
-
                         </div>
 
-                        <div className="w-[75%] flex-1 flex-col  shadow-xl items-center justify-center gap-6  border  border-slate-200 py-4 px-8">
-                            <div className="flex items-center justify-center ">
+                        <div className="w-[75%] flex-1 flex-col shadow-xl items-center justify-center gap-6 border border-slate-200 py-4 px-8">
+                            <div className="flex items-center justify-center">
                                 <MdOutlineGeneratingTokens color="#f59e0b" size={80} />
                             </div>
+
                             <div className="flex items-center justify-center text-4xl font-bold pb-4">
                                 <h1 className="text-slate-500">Rating</h1>
                             </div>
-                            <div className="flex items-center justify-center text-primary text-xl">
-                                <IoStarSharp />
-                                <IoStarSharp />
-                                <IoStarSharp />
-                                <IoStarSharp />
-                                <IoStarSharp />
-                                <CountUp start={0} end={0} duration={2} decimals={1} enableScrollSpy scrollSpyOnce />
+
+                            {/* Stars + Average */}
+                            <div className="flex items-center justify-center gap-2 text-2xl">
+                                {renderAverageStars(averageRating)}
+                                <span className="ml-2 font-semibold text-slate-600">
+                                    <CountUp
+                                        start={0}
+                                        end={averageRating}
+                                        decimals={1}
+                                        duration={2}
+                                        enableScrollSpy
+                                        scrollSpyOnce
+                                    />
+                                </span>
                             </div>
-                            <div className="flex items-center flex-col justify-center text-xl">
-                                <h1>(0 Reviews)</h1>
-                                <h1>{hire?.worker?.id}</h1>
-                                <h1>{hire?.user?.id}</h1>
+
+                            {/* Review count */}
+                            <div className="flex items-center flex-col justify-center text-lg mt-2 text-slate-500">
+                                <h1>({totalReviews} Reviews)</h1>
                             </div>
                         </div>
+
                     </div>
                 </div>
             </div>

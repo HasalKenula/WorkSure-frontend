@@ -1,4 +1,3 @@
-import Navbar from "../components/NavBar";
 import CountUp from "react-countup";
 import { useEffect, useState, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
@@ -21,6 +20,7 @@ import html2canvas from "html2canvas";
 import WorkerPieCharts from "../components/WorkerProgressChart";
 import { FaUser, FaTools, FaEnvelope, FaPhone, FaIdCard } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
+import AdminNavbar from "../components/AdminNavBar";
 
 export default function WorkerProgress() {
   const { workerId } = useParams();
@@ -96,7 +96,7 @@ export default function WorkerProgress() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar />
+      <AdminNavbar />
 
 
       <style>{`

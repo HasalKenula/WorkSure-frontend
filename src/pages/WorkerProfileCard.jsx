@@ -95,6 +95,31 @@ export default function WorkerProfileCard() {
     );
   }
 
+  const ratingsArray = reviews?.ratings || [];
+
+  const totalReviews = ratingsArray.length;
+
+  const averageRating =
+    totalReviews > 0
+      ? ratingsArray.reduce((sum, r) => sum + Number(r.rating || 0), 0) / totalReviews
+      : 0;
+
+
+  const renderAverageStars = (avg) => {
+    const roundedAvg = Math.round(avg); // full stars
+
+    return [...Array(5)].map((_, i) => (
+      <FaStar
+        key={i}
+        className={
+          i + 1 <= roundedAvg
+            ? "text-yellow-500"
+            : "text-gray-300"
+        }
+      />
+    ));
+  };
+
   return (
 
     <>
@@ -138,11 +163,12 @@ export default function WorkerProfileCard() {
 
                 {/* RATINGS */}
                 <div className="flex items-center mt-3">
-                  {[...Array(5)].map((_, i) => (
-                    <FaStar key={i} className="text-yellow-500" />
-                  ))}
-                  <span className="ml-2 text-gray-500">(75 Reviews)</span>
+                  {renderAverageStars(averageRating)}
+                  <span className="ml-2 text-gray-500">
+                    {averageRating.toFixed(1)} ({totalReviews} Reviews)
+                  </span>
                 </div>
+
 
                 {/* HIRE BUTTON */}
                 <button

@@ -52,16 +52,7 @@ export default function AdminNavbar() {
 
                 {/* Auth & Profile */}
                 <div className="hidden md:flex items-center gap-4">
-                    {isLoggedIn && (
-                        <img
-                            src={user.imageUrl || MM}
-                            alt="User"
-                            onClick={() => navigate("/userProfile")}
-                            className="w-10 h-10 rounded-full object-cover cursor-pointer
-                         border-2 border-yellow-400 shadow-lg
-                         hover:scale-110 transition-transform"
-                        />
-                    )}
+
 
                     {!isLoggedIn ? (
                         <button
@@ -101,20 +92,6 @@ export default function AdminNavbar() {
                     }`}
             >
                 <ul className="flex flex-col gap-4 px-6 text-white">
-
-                    {isLoggedIn && (
-                        <img
-                            src={user.imageUrl || MM}
-                            alt="User"
-                            onClick={() => {
-                                setOpen(false);
-                                navigate("/userProfile");
-                            }}
-                            className="w-12 h-12 rounded-full object-cover cursor-pointer
-                 border-2 border-yellow-400 shadow-lg
-                 hover:scale-110 transition-transform"
-                        />
-                    )}
 
                     {!isLoggedIn ? (
                         <button

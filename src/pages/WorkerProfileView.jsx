@@ -15,6 +15,7 @@ export default function WorkerProfileView() {
     const [worker, setWorker] = useState(null);
     const [loading, setLoading] = useState(true);
     const [reviews, setReviews] = useState([]);
+
     const config = {
         headers: { Authorization: `Bearer ${jwtToken}` }
     };
@@ -63,24 +64,16 @@ export default function WorkerProfileView() {
         return days;
     };
 
-
     useEffect(() => {
         if (!jwtToken || !worker?.id) return;
 
         api
             .get(`/rating/${worker.id}`, config)
-            .then(res => setReviews(res.data))
+            .then(res => setReviews(res.data.ratings || []))
+
             .catch(err => console.error("Failed to load reviews", err));
     }, [jwtToken, worker]);
 
-
-    const averageRating =
-        reviews.length > 0
-            ? (
-                reviews.reduce((sum, r) => sum + r.rating, 0) /
-                reviews.length
-            ).toFixed(1)
-            : "0.0";
 
     if (loading) {
         return (
@@ -97,6 +90,36 @@ export default function WorkerProfileView() {
     }
 
     if (!worker) return null;
+
+    const totalReviews = reviews.length;
+
+    const averageRating =
+        totalReviews > 0
+            ? (
+                reviews.reduce((sum, r) => sum + r.rating, 0) /
+                totalReviews
+            )
+            : 0;
+
+
+    const renderAverageStars = (avg) => {
+        const roundedAvg = Math.round(avg); // ⭐ KEY FIX
+
+        return [...Array(5)].map((_, i) => {
+            const starValue = i + 1;
+
+            return (
+                <FaStar
+                    key={i}
+                    className={
+                        starValue <= roundedAvg
+                            ? "text-yellow-500"
+                            : "text-gray-300"
+                    }
+                />
+            );
+        });
+    };
 
     return (
         <>
@@ -124,11 +147,13 @@ export default function WorkerProfileView() {
                             </div>
 
                             <div className="flex items-center gap-1">
-                                {[...Array(5)].map((_, i) => (
-                                    <FaStar key={i} className="text-yellow-500" />
-                                ))}
-                                <span className="ml-2 font-semibold">5.0 (75 reviews)</span>
+                                {renderAverageStars(averageRating)}
+
+                                <span className="ml-2 font-semibold text-slate-600">
+                                    {averageRating.toFixed(1)} ({totalReviews} reviews)
+                                </span>
                             </div>
+
                         </div>
 
                         <button
@@ -190,8 +215,8 @@ export default function WorkerProfileView() {
                             </InfoCard>
 
                             <InfoCard title="Client Reviews">
-                                {reviews.ratings && reviews.ratings.length > 0 ? (
-                                    reviews.ratings.map((review) => (
+                                {reviews.length > 0 ? (
+                                    reviews.map((review) => (
                                         <div key={review.id} className="border-b pb-4 mb-4">
                                             <div className="flex items-center gap-3">
                                                 {review.user?.imageUrl ? (
@@ -221,7 +246,6 @@ export default function WorkerProfileView() {
                                     <p className="mt-2 text-gray-500">No reviews yet.</p>
                                 )}
                             </InfoCard>
-
 
                         </main>
                     </div>
