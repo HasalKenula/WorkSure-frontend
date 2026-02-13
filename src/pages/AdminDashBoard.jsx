@@ -15,6 +15,7 @@ import api from '../api/axios'
 import TransferDetailsModal from "../components/TransferDetailsModal";
 import { FaMoneyCheckAlt } from "react-icons/fa";
 import AdminNavbar from "../components/AdminNavBar";
+import WorkerSlipsModal from "../components/WorkerSlipsModal";
 
 
 export default function AdminDashBoard() {
@@ -494,6 +495,17 @@ export default function AdminDashBoard() {
                                                                 <div className="flex items-center gap-3">
                                                                     <FaMoneyCheckAlt className="text-gray-600" />
                                                                     <span>Transfer Details</span>
+                                                                </div>
+                                                            }
+                                                            buttonClass="w-full flex items-center px-4 py-2 hover:bg-gray-100"
+                                                        />
+
+                                                        <WorkerSlipsModal
+                                                            workerId={user.id}
+                                                            triggerButtonText={
+                                                                <div className="flex items-center gap-3">
+                                                                    <FaMoneyCheckAlt className="text-gray-600" />
+                                                                    <span>Payment Slips</span>
                                                                 </div>
                                                             }
                                                             buttonClass="w-full flex items-center px-4 py-2 hover:bg-gray-100"
