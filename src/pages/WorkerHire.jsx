@@ -9,6 +9,9 @@ import MM from "../assets/man.jpg";
 import { motion } from "framer-motion";
 import api from '../api/axios'
 import { FaStar } from "react-icons/fa6";
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
+
 
 export default function WorkerHire() {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -57,33 +60,81 @@ export default function WorkerHire() {
     if (isAuthenticated && workerId) getWorker();
   }, [isAuthenticated, workerId]);
 
-  // Create hire request
   async function createHire() {
-    if (!user?.id) return alert("User not loaded yet");
+    if (!user?.id) {
+      return Swal.fire({
+        icon: 'warning',
+        title: 'User not loaded',
+        text: 'Please wait while user data is loading.',
+      });
+    }
 
-    try {
-      await api.post(
-        "/hire",
-        {
-          workerId,
-          userId: user.id,
-          bookingDate: format(selectedDate, "yyyy-MM-dd"),
-          bookingTime: selectedTime,
-          description,
-          isBooked,
-          isPending,
-          isOngoing,
-          isComplete,
-        },
-        config
-      );
-      getHires();
-      alert("Job Request Sent Successfully!");
-    } catch (error) {
-      console.log("Error sending hire request:", error);
-      alert("Failed to send hire request.");
+    // Show confirmation dialog first
+    const result = await Swal.fire({
+      title: 'Are you sure?',
+      text: "Do you want to send this job request?",
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, send it!',
+      cancelButtonText: 'No, cancel',
+      reverseButtons: true,
+      confirmButtonColor: "#f59e0b",
+    });
+
+    // Only submit if user confirms
+    if (result.isConfirmed) {
+      try {
+        await api.post(
+          "/hire",
+          {
+            workerId,
+            userId: user.id,
+            bookingDate: format(selectedDate, "yyyy-MM-dd"),
+            bookingTime: selectedTime,
+            description,
+            isBooked,
+            isPending,
+            isOngoing,
+            isComplete,
+          },
+          config
+        );
+
+        // Refresh hires
+        getHires();
+
+        setSelectedDate(new Date());
+        setSelectedTime("");
+        setDescription("");
+
+        // Success alert
+        Swal.fire({
+          icon: 'success',
+          title: 'Sent!',
+          text: 'Job request sent successfully.',
+          timer: 2000,
+          showConfirmButton: false
+        });
+      } catch (error) {
+        console.log("Error sending hire request:", error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Failed to send hire request. Please try again!',
+        });
+      }
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      // Cancelled alert
+      Swal.fire({
+        icon: 'info',
+        title: 'Cancelled',
+        text: 'Your job request was not sent.',
+        timer: 1500,
+        showConfirmButton: false
+      });
     }
   }
+
 
   // Fetch all hires for this worker
   async function getHires() {
@@ -147,7 +198,7 @@ export default function WorkerHire() {
 
 
   const renderAverageStars = (avg) => {
-    const roundedAvg = Math.round(avg); // ⭐ KEY FIX
+    const roundedAvg = Math.round(avg);
 
     return [...Array(5)].map((_, i) => {
       const starValue = i + 1;
@@ -181,10 +232,6 @@ export default function WorkerHire() {
         <motion.div
           className="relative flex flex-col md:flex-row items-center gap-6 p-6 bg-gradient-to-r from-indigo-50 via-purple-50 to-pink-50 rounded-3xl shadow-xl hover:shadow-2xl transition-shadow duration-300 border border-transparent hover:border-indigo-300"
           whileHover={{ scale: 1.03 }}>
-          {/* Ribbon Badge */}
-          <div className="absolute top-0 left-0 bg-yellow-400 text-white px-3 py-1 rounded-tr-3xl rounded-bl-3xl font-semibold text-sm shadow-md z-10">
-            Premium
-          </div>
 
           {/* Profile Picture with ring animation */}
 
@@ -279,7 +326,7 @@ export default function WorkerHire() {
             </div>
             <div>
               <label className="font-medium text-gray-700">Time</label>
-              <input type="time" onChange={(e) => setSelectedTime(e.target.value)} className="w-full mt-1 p-3 border border-gray-300 rounded-xl focus:outline-none" />
+              <input type="time" value={selectedTime} onChange={(e) => setSelectedTime(e.target.value)} className="w-full mt-1 p-3 border border-gray-300 rounded-xl focus:outline-none" />
             </div>
           </div>
           <div className="mt-4">
