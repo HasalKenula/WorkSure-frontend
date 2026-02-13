@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import { format } from "date-fns";
@@ -6,9 +6,9 @@ import Navbar from "../components/NavBar";
 import { useAuth } from "../context/AuthContext";
 import { useParams } from "react-router-dom";
 import MM from "../assets/man.jpg";
-import StarRating from "../components/StarRating";
 import { motion } from "framer-motion";
 import api from '../api/axios'
+import { FaStar } from "react-icons/fa6";
 
 export default function WorkerHire() {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -27,6 +27,8 @@ export default function WorkerHire() {
   const [hires, setHires] = useState([]);
   const [hiresByDate, setHiresByDate] = useState({});
   const [myHires, setMyHires] = useState([]);
+  const [reviews, setReviews] = useState([]);
+
 
   const config = {
     headers: { Authorization: `Bearer ${jwtToken}` },
@@ -122,6 +124,49 @@ export default function WorkerHire() {
   // Booked dates for calendar
   const bookedDates = Array.from(new Set(hires.filter((h) => h.isBooked).map((h) => format(new Date(h.bookingDate), "yyyy-MM-dd"))));
 
+
+  useEffect(() => {
+    if (!jwtToken || !worker?.id) return;
+
+    api
+      .get(`/rating/${worker.id}`, config)
+      .then(res => setReviews(res.data.ratings || []))
+
+      .catch(err => console.error("Failed to load reviews", err));
+  }, [jwtToken, worker]);
+
+  const totalReviews = reviews.length;
+
+  const averageRating =
+    totalReviews > 0
+      ? (
+        reviews.reduce((sum, r) => sum + r.rating, 0) /
+        totalReviews
+      )
+      : 0;
+
+
+  const renderAverageStars = (avg) => {
+    const roundedAvg = Math.round(avg); // ⭐ KEY FIX
+
+    return [...Array(5)].map((_, i) => {
+      const starValue = i + 1;
+
+      return (
+        <FaStar
+          key={i}
+          className={
+            starValue <= roundedAvg
+              ? "text-yellow-500"
+              : "text-gray-300"
+          }
+        />
+      );
+    });
+  };
+
+
+
   return (
     <div className="bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen">
       <Navbar />
@@ -155,15 +200,19 @@ export default function WorkerHire() {
 
             {/* Star Rating + Reviews */}
             <div className="flex items-center mt-2 gap-2 text-yellow-500">
-              {worker && <StarRating itemId={worker.id} />}
+              {worker && (
+                <>
+                  {/* Render stars */}
+                  {renderAverageStars(averageRating)}
+
+                  {/* Show average number and review count */}
+                  <span className="ml-2 text-sm text-gray-600">
+                    {averageRating.toFixed(1)} ({totalReviews} reviews)
+                  </span>
+                </>
+              )}
             </div>
 
-            {/* Extra Info */}
-            <div className="mt-3 flex flex-wrap gap-3">
-              <span className="px-3 py-1 bg-indigo-100 text-indigo-800 text-xs font-semibold rounded-full shadow-sm"> 5 Years Experience</span>
-              <span className="px-3 py-1 bg-purple-100 text-purple-800 text-xs font-semibold rounded-full shadow-sm">Available Today</span>
-              <span className="px-3 py-1 bg-pink-100 text-pink-800 text-xs font-semibold rounded-full shadow-sm">Verified</span>
-            </div>
           </div>
         </motion.div>
 
