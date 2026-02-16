@@ -1,10 +1,9 @@
-import Navbar from "../components/NavBar";
 import CountUp from "react-countup";
 import { useEffect, useState, useRef } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useParams } from "react-router-dom";
 import toast from "react-hot-toast";
-import axios from "axios";
+import api from '../api/axios'
 import MM from "../assets/man.jpg";
 import {
   FaCheckCircle,
@@ -21,6 +20,7 @@ import html2canvas from "html2canvas";
 import WorkerPieCharts from "../components/WorkerProgressChart";
 import { FaUser, FaTools, FaEnvelope, FaPhone, FaIdCard } from "react-icons/fa";
 import { MdLocationOn } from "react-icons/md";
+import AdminNavbar from "../components/AdminNavBar";
 
 export default function WorkerProgress() {
   const { workerId } = useParams();
@@ -37,8 +37,8 @@ export default function WorkerProgress() {
   useEffect(() => {
     if (!isAuthenticated) return;
 
-    axios
-      .get(`http://localhost:8081/worker/id/${workerId}`, config)
+    api
+      .get(`/worker/id/${workerId}`, config)
       .then(res => setWorkers(res.data))
       .catch(() => toast.error("Failed to load worker"));
   }, [isAuthenticated]);
@@ -46,8 +46,8 @@ export default function WorkerProgress() {
   useEffect(() => {
     if (!workers?.id) return;
 
-    axios
-      .get(`http://localhost:8081/hire/${workers.id}`, config)
+    api
+      .get(`/hire/${workers.id}`, config)
       .then(res => setHire(res.data))
       .catch(console.error);
   }, [workers?.id]);
@@ -96,7 +96,7 @@ export default function WorkerProgress() {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <Navbar />
+      <AdminNavbar />
 
 
       <style>{`
@@ -150,8 +150,8 @@ export default function WorkerProgress() {
               {/* Worker Details */}
               <div className="flex justify-around items-center flex-col" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "1.5rem" }}>
                 {[
-                  { label: "Full Name", value: workers.fullName, icon: <FaUser  style={{ color: "#4b5563", marginRight: "0.5rem" }} /> },
-                  { label: "Address", value: workers.address, icon: <MdLocationOn size={28}  style={{ color: "#4b5563", marginRight: "0.5rem" }} /> },
+                  { label: "Full Name", value: workers.fullName, icon: <FaUser style={{ color: "#4b5563", marginRight: "0.5rem" }} /> },
+                  { label: "Address", value: workers.address, icon: <MdLocationOn size={28} style={{ color: "#4b5563", marginRight: "0.5rem" }} /> },
                   { label: "Working Areas", value: workers.preferredServiceLocation, icon: <FaTools style={{ color: "#4b5563", marginRight: "0.5rem" }} /> },
                 ].map((item, i) => (
                   <div key={i} style={{ background: "#ffffff", borderRadius: "16px", padding: "20px", border: "1px solid #d1d5db", textAlign: "center", display: "flex", alignItems: "center", justifyContent: "center", gap: "0.5rem" }}>

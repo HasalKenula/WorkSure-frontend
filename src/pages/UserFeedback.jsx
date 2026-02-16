@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { FaStar, FaRegStar, FaUserCircle } from "react-icons/fa";
-import axios from "axios";
 import Navbar from "../components/NavBar";
 import Footer from "../components/Footer";
 import { useAuth } from "../context/AuthContext";
+import api from '../api/axios'
+import Swal from 'sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 
 export default function UserFeedback() {
   const { workerId } = useParams();
@@ -29,8 +31,8 @@ export default function UserFeedback() {
   useEffect(() => {
     if (!jwtToken) return;
 
-    axios
-      .get("http://localhost:8081/user", authHeaders)
+    api
+      .get("/user", authHeaders)
       .then((res) => setUser(res.data))
       .catch((err) => console.error("Failed to load user:", err));
   }, [jwtToken]);
@@ -38,8 +40,8 @@ export default function UserFeedback() {
   useEffect(() => {
     if (!jwtToken || !workerId) return;
 
-    axios
-      .get(`http://localhost:8081/worker/id/${workerId}`, authHeaders)
+    api
+      .get(`/worker/id/${workerId}`, authHeaders)
       .then((res) => setWorker(res.data))
       .catch((err) => console.error("Failed to load worker:", err))
       .finally(() => setLoading(false));
@@ -48,42 +50,81 @@ export default function UserFeedback() {
   useEffect(() => {
     if (!jwtToken || !user?.id) return;
 
-    axios
-      .get(`http://localhost:8081/rating/user/${user.id}`, authHeaders)
+    api
+      .get(`/rating/user/${user.id}`, authHeaders)
       .then((res) => setReviews(res.data))
       .catch((err) => console.error("Failed to load reviews:", err));
   }, [jwtToken, user]);
 
   const submitFeedback = async () => {
+    // Validate input
     if (!rating || !feedback.trim()) {
-      alert("Please provide rating and feedback");
-      return;
+      return Swal.fire({
+        icon: "warning",
+        title: "Missing Data",
+        text: "Please provide a rating and feedback",
+        confirmButtonColor: "#f59e0b",
+      });
     }
 
     if (!user?.id) {
-      alert("User not loaded yet");
-      return;
+      return Swal.fire({
+        icon: "error",
+        title: "User not loaded",
+        text: "Please try again later",
+        confirmButtonColor: "#f59e0b",
+      });
     }
 
-    try {
-      await axios.post(
-        "http://localhost:8081/rating",
-        {
-          workerId,
-          userId: user.id,
-          rating,
-          feedback,
-        },
-        authHeaders
-      );
+    // Confirm before submitting
+    const result = await Swal.fire({
+      title: "Submit Feedback?",
+      text: "Are you sure you want to submit this feedback?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonColor: "#f59e0b",
+      cancelButtonColor: "#6b7280",
+      confirmButtonText: "Yes, submit",
+      cancelButtonText: "No, cancel",
+    });
 
-      alert("Feedback submitted successfully!");
-      navigate(-1);
-    } catch (err) {
-      console.error("Submit error:", err.response || err);
-      alert("Failed to submit feedback");
+    if (result.isConfirmed) {
+      try {
+        await api.post(
+          "/rating",
+          {
+            workerId,
+            userId: user.id,
+            rating,
+            feedback,
+          },
+          authHeaders
+        );
+
+        Swal.fire({
+          icon: "success",
+          title: "Feedback Submitted",
+          text: "Thank you for your feedback!",
+          confirmButtonColor: "#f59e0b",
+        });
+
+        // Reset form
+        setRating(0);
+        setFeedback("");
+
+        navigate(-1); // go back
+      } catch (err) {
+        console.error("Submit error:", err.response || err);
+        Swal.fire({
+          icon: "error",
+          title: "Submission Failed",
+          text: "Unable to submit feedback. Please try again.",
+          confirmButtonColor: "#f59e0b",
+        });
+      }
     }
   };
+
 
   if (loading) {
     return (
@@ -107,7 +148,7 @@ export default function UserFeedback() {
 
       <div className="mt-24 min-h-screen bg-gray-100 py-10">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-center text-3xl font-bold text-orange-500 mb-10">
+          <h2 className="text-center text-3xl font-bold text-yellow-500 mb-10">
             Rate & Review
           </h2>
 
@@ -176,7 +217,7 @@ export default function UserFeedback() {
                 </button>
                 <button
                   onClick={submitFeedback}
-                  className="px-6 py-2 rounded-lg bg-orange-500 text-white font-semibold hover:bg-orange-600 transition"
+                  className="px-6 py-2 rounded-lg bg-yellow-500 text-white font-semibold hover:bg-white border hover:border-yellow-500 hover:text-yellow-500 transition"
                 >
                   Submit Feedback
                 </button>

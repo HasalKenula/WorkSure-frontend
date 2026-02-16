@@ -5,8 +5,8 @@ import MM from "../assets/man.jpg";
 import { IoLocationSharp } from "react-icons/io5";
 import { FaStar, FaUserCircle } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import api from '../api/axios'
 
 export default function WorkerProfileCard() {
   const { jwtToken, isAuthenticated } = useAuth();
@@ -24,8 +24,8 @@ export default function WorkerProfileCard() {
 
   async function getWorker() {
     try {
-      const response = await axios.get(
-        `http://localhost:8081/worker/id/${workerId}`,
+      const response = await api.get(
+        `/worker/id/${workerId}`,
         config
       );
       setWorker(response.data);
@@ -50,8 +50,8 @@ export default function WorkerProfileCard() {
   useEffect(() => {
     if (!jwtToken || !workerId) return;
 
-    axios
-      .get(`http://localhost:8081/rating/${workerId}`, authHeaders)
+    api
+      .get(`/rating/${workerId}`, authHeaders)
       .then((res) => setReviews(res.data))
       .catch((err) => console.error("Failed to load reviews:", err));
   }, [jwtToken]);
@@ -94,6 +94,31 @@ export default function WorkerProfileCard() {
       </div>
     );
   }
+
+  const ratingsArray = reviews?.ratings || [];
+
+  const totalReviews = ratingsArray.length;
+
+  const averageRating =
+    totalReviews > 0
+      ? ratingsArray.reduce((sum, r) => sum + Number(r.rating || 0), 0) / totalReviews
+      : 0;
+
+
+  const renderAverageStars = (avg) => {
+    const roundedAvg = Math.round(avg); // full stars
+
+    return [...Array(5)].map((_, i) => (
+      <FaStar
+        key={i}
+        className={
+          i + 1 <= roundedAvg
+            ? "text-yellow-500"
+            : "text-gray-300"
+        }
+      />
+    ));
+  };
 
   return (
 
@@ -138,11 +163,12 @@ export default function WorkerProfileCard() {
 
                 {/* RATINGS */}
                 <div className="flex items-center mt-3">
-                  {[...Array(5)].map((_, i) => (
-                    <FaStar key={i} className="text-yellow-500" />
-                  ))}
-                  <span className="ml-2 text-gray-500">(75 Reviews)</span>
+                  {renderAverageStars(averageRating)}
+                  <span className="ml-2 text-gray-500">
+                    {averageRating.toFixed(1)} ({totalReviews} Reviews)
+                  </span>
                 </div>
+
 
                 {/* HIRE BUTTON */}
                 <button
@@ -151,6 +177,14 @@ export default function WorkerProfileCard() {
                          font-semibold hover:bg-accent transition"
                 >
                   Hire Now
+                </button>
+
+                <button
+                  onClick={() => navigate(`/slip/${worker.id}`)}
+                  className="mt-6 px-6 py-2 bg-primary text-white rounded-lg 
+                         font-semibold hover:bg-accent transition"
+                >
+                  Upload slip
                 </button>
 
 
@@ -226,32 +260,6 @@ export default function WorkerProfileCard() {
               </div>
 
               {/* USER RATINGS */}
-              {/* <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
-            <h3 className="text-xl font-bold border-b pb-2 border-primary">
-              User Ratings
-            </h3>
-
-            {userRate.map((review, index) => (
-              <div key={review.id} className="mt-4 border-b pb-4 last:border-none">
-                <div className="flex items-center gap-3">
-                  <FaUserCircle className="text-3xl text-gray-600" />
-                  <div>
-                    <p className="font-semibold">{review.username}</p>
-                    <p className="text-sm text-gray-500">{user.date}</p>
-                  </div>
-                </div>
-
-                <div className="flex mt-1">
-                  {[...Array(user.rating)].map((_, i) => (
-                    <FaStar key={i} className="text-yellow-500" />
-                  ))}
-                </div>
-
-                <p className="mt-2 text-gray-700">{user.message}</p>
-              </div>
-            ))}
-          </div> */}
-              {/* USER RATINGS */}
               <div className="bg-white shadow-lg rounded-xl p-6 border border-gray-200">
                 <h3 className="text-xl font-bold border-b pb-2 border-primary">
                   User Ratings
@@ -292,7 +300,6 @@ export default function WorkerProfileCard() {
                 )}
               </div>
 
-
               {/* FEEDBACK BUTTON */}
               <div className="flex justify-end">
                 <button
@@ -310,7 +317,5 @@ export default function WorkerProfileCard() {
 
       <Footer />
     </>
-
-
   );
 }

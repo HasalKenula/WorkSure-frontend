@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/NavBar";
 import Footer from "../components/Footer";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +9,7 @@ import { CiLocationOn } from "react-icons/ci";
 import { FaStar } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useSearchParams } from "react-router-dom";
-
+import api from '../api/axios'
 
 /* ================= SKELETON CARD ================= */
 const SkeletonCard = () => (
@@ -45,8 +44,7 @@ export default function WorkersPage() {
   async function loadWorkerDetails() {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:8081/worker", config);
-      //const res = await axios.get("http://localhost:8081/worker");
+      const res = await api.get("/worker", config);
       setWorkers(res.data);
     } catch {
       toast.error("Failed to load workers");
@@ -55,25 +53,16 @@ export default function WorkersPage() {
     }
   }
 
-  // useEffect(() => {
-  //   if (isAuthenticated) loadWorkerDetails();
-  // }, [isAuthenticated]);
-
-
-  // useEffect(() => {
-  //    loadWorkerDetails();
-  //  }, []);
-
   useEffect(() => {
-  if (!isAuthenticated) return;
+    if (!isAuthenticated) return;
 
-  if (skillFromURL) {
-    setSelectedSkill(skillFromURL);
-    handleSkillLocFilter("", skillFromURL);
-  } else {
-    loadWorkerDetails();
-  }
-}, [isAuthenticated, skillFromURL]);
+    if (skillFromURL) {
+      setSelectedSkill(skillFromURL);
+      handleSkillLocFilter("", skillFromURL);
+    } else {
+      loadWorkerDetails();
+    }
+  }, [isAuthenticated, skillFromURL]);
 
 
   /* ================= SEARCH BY NAME ================= */
@@ -81,8 +70,8 @@ export default function WorkersPage() {
     if (!searchText.trim()) return loadWorkerDetails();
     try {
       setLoading(true);
-      const res = await axios.get(
-        `http://localhost:8081/worker/searchbyname?keyword=${searchText}`,
+      const res = await api.get(
+        `/worker/searchbyname?keyword=${searchText}`,
         config
       );
       setWorkers(res.data);
@@ -98,8 +87,8 @@ export default function WorkersPage() {
     if (!loc && !skill) return loadWorkerDetails();
     try {
       setLoading(true);
-      const res = await axios.get(
-        "http://localhost:8081/worker/searchbylocandskill",
+      const res = await api.get(
+        "/worker/searchbylocandskill",
         {
           params: { location: loc || null, jobRole: skill || null },
           headers: { Authorization: `Bearer ${jwtToken}` },
@@ -159,7 +148,7 @@ export default function WorkersPage() {
           }}
         >
           <option value="">Location</option>
-        
+
           <option>Colombo</option>
           <option>Gampaha</option>
           <option>Negombo</option>
@@ -169,7 +158,7 @@ export default function WorkersPage() {
           <option>Matara</option>
           <option>Hambantota</option>
           <option>Kalutara</option>
-          <option>Panadura</option> 
+          <option>Panadura</option>
           <option>Moratuwa</option>
           <option>Nugegoda</option>
           <option>Maharagama</option>
@@ -258,11 +247,10 @@ export default function WorkersPage() {
                 className="relative bg-white rounded-2xl shadow-lg p-6 text-center border hover:shadow-2xl"
               >
                 <span
-                  className={`absolute top-4 right-4 text-xs px-3 py-1 rounded-full font-bold ${
-                    worker.status === "Free"
+                  className={`absolute top-4 right-4 text-xs px-3 py-1 rounded-full font-bold ${worker.status === "Free"
                       ? "bg-green-100 text-green-600"
                       : "bg-red-100 text-red-600"
-                  }`}
+                    }`}
                 >
                   {worker.status}
                 </span>

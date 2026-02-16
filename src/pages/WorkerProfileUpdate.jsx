@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
-import axios from "axios";
 import Navbar from "../components/NavBar";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import uploadFile from "../utils/meadiaUpload";
+import api from '../api/axios'
 
 export default function WorkerProfileUpdate() {
     const { jwtToken, isAuthenticated } = useAuth();
@@ -42,8 +42,8 @@ export default function WorkerProfileUpdate() {
     useEffect(() => {
         if (!jwtToken) return;
 
-        axios
-            .get("http://localhost:8081/user", config)
+        api
+            .get("/user", config)
             .then((res) => {
                 setUserId(res.data.id);
             })
@@ -59,8 +59,8 @@ export default function WorkerProfileUpdate() {
             if (!userId) return;
 
             try {
-                const response = await axios.get(
-                    `http://localhost:8081/worker/${userId}`,
+                const response = await api.get(
+                    `/worker/${userId}`,
                     config
                 );
                 setWorker(response.data);
@@ -171,7 +171,7 @@ export default function WorkerProfileUpdate() {
         }
 
         try {
-            await axios.put(`http://localhost:8081/worker/${worker.id}`, {
+            await api.put(`/worker/${worker.id}`, {
                 fullName: fullname,
                 email,
                 phoneNumber: contact,

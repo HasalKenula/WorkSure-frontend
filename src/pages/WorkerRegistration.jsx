@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Navbar from "../components/NavBar";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
 import toast from "react-hot-toast";
 import uploadFile from "../utils/meadiaUpload";
 import { useNavigate } from "react-router-dom";
 import { FiUpload } from "react-icons/fi";
+import api from '../api/axios'
 
 export default function WorkerRegistration() {
     const navigate = useNavigate();
@@ -37,7 +37,7 @@ export default function WorkerRegistration() {
         setCertifications((prev) => prev.filter((_, i) => i !== index));
     };
 
-    //
+
     const [experiences, setExperiences] = React.useState([
         { title: "", company: "", years: "" },
     ]);
@@ -58,7 +58,7 @@ export default function WorkerRegistration() {
         setExperiences((prev) => prev.filter((_, i) => i !== index));
     };
 
-    //
+
     const [uploadedFiles, setUploadedFiles] = React.useState([]);
 
     const fileInputRef = React.useRef(null);
@@ -66,17 +66,6 @@ export default function WorkerRegistration() {
     const handleBrowseClick = () => {
         fileInputRef.current.click(); // Open the hidden input
     };
-
-    // const handleFileChange = (e) => {
-    //     const files = Array.from(e.target.files);
-    //     setUploadedFiles((prev) => [...prev, ...files]);
-    // };
-
-    // const handleDrop = (e) => {
-    //     e.preventDefault();
-    //     const files = Array.from(e.dataTransfer.files);
-    //     setUploadedFiles((prev) => [...prev, ...files]);
-    // };
 
     const handleDragOver = (e) => {
         e.preventDefault();
@@ -86,9 +75,6 @@ export default function WorkerRegistration() {
         setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
     };
 
-    //
-    // const [startTime, setStartTime] = React.useState(null);
-    // const [endTime, setEndTime] = React.useState(null);
 
     const [days, setDays] = useState([]);
 
@@ -170,8 +156,8 @@ export default function WorkerRegistration() {
     useEffect(() => {
         if (!jwtToken) return;
 
-        axios
-            .get("http://localhost:8081/user", {
+        api
+            .get("/user", {
                 headers: { Authorization: `Bearer ${jwtToken}` },
             })
             .then((res) => {
@@ -242,7 +228,7 @@ export default function WorkerRegistration() {
 
 
         try {
-            const response = await axios.post("http://localhost:8081/worker", {
+            const response = await api.post("/worker", {
                 fullName: fullname,
                 email,
                 phoneNumber: contact,
@@ -313,7 +299,7 @@ export default function WorkerRegistration() {
                             <input type="text" className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={fullname} onChange={handleFullname} placeholder="Full Name" />
                             <input type="text" className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={email} onChange={handleEmail} placeholder="Email Address" />
                             <input type="text" className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={contact} onChange={handleContact} placeholder="Phone No" />
-                            {/* <input className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" placeholder="Profession/Trade" /> */}
+
                             <select value={job} onChange={handleJob} className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary">
                                 <option value="">-- Choose a service --</option>
                                 {options.map((option, idx) => (
@@ -322,7 +308,7 @@ export default function WorkerRegistration() {
                                     </option>
                                 ))}
                             </select>
-                            <input type="text" className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={NIC} onChange={handleNIC} placeholder="NIC No" maxLength={12}/>
+                            <input type="text" className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={NIC} onChange={handleNIC} placeholder="NIC No" maxLength={12} />
                             <input type="text" className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={address} onChange={handleAddress} placeholder="Address" />
                         </div>
                     </section>
@@ -409,29 +395,7 @@ export default function WorkerRegistration() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                             <input type="time" className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={startTime} onChange={handleStartTime} placeholder="Preferred Start Time" />
                             <input type="time" className="border border-gray-300 p-1 rounded text-sm focus:outline-1 focus:outline-primary" value={endTime} onChange={handleEndTime} placeholder="Preferred End Time" />
-                            {/* <div className="flex flex-col">
-                            <label className="text-sm mb-1">Preferred Start Time</label>
-                            <ReactTimePicker
-                                onChange={setStartTime}
-                                value={startTime}
-                                clearIcon={null}
-                                clockIcon={null}
-                                className=" rounded p-2"
-                                disableClock={true}
-                            />
-                        </div> */}
 
-                            {/* <div className="flex flex-col">
-                            <label className="text-sm mb-1">Preferred End Time</label>
-                            <ReactTimePicker
-                                onChange={setEndTime}
-                                value={endTime}
-                                clearIcon={null}
-                                clockIcon={null}
-                                className=" rounded p-2"
-                                disableClock={true}
-                            />
-                        </div> */}
                             <input
                                 type="text"
                                 className="border border-gray-300 p-1 rounded col-span-1 md:col-span-2 text-sm focus:outline-1 focus:outline-primary"
@@ -441,48 +405,6 @@ export default function WorkerRegistration() {
                             />
                         </div>
                     </section>
-
-                    {/* Documents Upload */}
-                    {/* <section className=" p-5 rounded shadow-sm">
-                        <h3 className="text-lg font-semibold mb-4">Documentation</h3>
-                        <div className="border border-dashed border-gray-300 rounded p-6 text-center text-sm "
-                            onDrop={handleDrop}
-                            onDragOver={handleDragOver}>
-                            <p>Please upload your NIC copy, Gramaniladari Certificate, Police Report and Other necessary certifications and documents</p>
-                            <p>Drag & drop your documents here, or click to upload.</p>
-                            <button type="button" onClick={handleBrowseClick} className="mt-3 px-4 py-2 bg-gray-300 text-white rounded text-sm hover:bg-gray-400">
-                                Browse Files
-                            </button>
-                            <input type="file" ref={fileInputRef} className="hidden" onChange={handleFileChange} /> */}
-
-                    {/* uploaded files display */}
-                    {/* {uploadedFiles.length > 0 && (
-                                <div className="mt-4 text-left space-y-2">
-                                    {uploadedFiles.map((file, index) => (
-                                        <div key={index} className="flex justify-between items-center bg-gray-100 p-2 rounded-md">
-                                            <span className="text-sm text-gray-500 truncate">{file.name}</span>
-                                            <button onClick={(e) => {
-                                                e.stopPropagation();
-                                                removeFile(index);
-                                            }}
-                                                className="text-red-500 text-sm hover:underline"
-                                            >
-                                                Remove
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                        </div> */}
-
-                    {/* File Count */}
-                    {/* <p className="text-sm text-gray-600 mt-2">
-                            {uploadedFiles.length === 0
-                                ? "No files uploaded yet."
-                                : `${uploadedFiles.length} file(s) uploaded`}
-                        </p>
-                    </section> */}
-
 
                     {/* Documents Upload */}
                     <section className=" p-5 rounded shadow-sm">
@@ -543,9 +465,8 @@ export default function WorkerRegistration() {
 
 
                     {/* Register Button */}
-                    <button type="button" onClick={handleSubmit} 
-                    //className="w-full bg-primary text-white rounded py-1 text-md font-semibold hover:outline-2 hover:outline-offset-1 hover:outline-primary"
-                    className="w-full py-1 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-semibold rounded hover:shadow-lg hover:scale-103 transition-all duration-300 flex items-center gap-2 justify-center whitespace-nowrap text-md">
+                    <button type="button" onClick={handleSubmit}
+                        className="w-full py-1 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-semibold rounded hover:shadow-lg hover:scale-103 transition-all duration-300 flex items-center gap-2 justify-center whitespace-nowrap text-md">
                         Register Account
                     </button>
                     {/* Manual Navigation Button */}
@@ -554,7 +475,7 @@ export default function WorkerRegistration() {
                         onClick={() => navigate("/planUpgradePage")}
                         className="w-full mt-0 bg-gray-700 text-white rounded py-1 text-md font-semibold hover:bg-gray-800"
                     >
-                        Go to Payment 
+                        Go to Payment
                     </button>
                 </div>
             </div>

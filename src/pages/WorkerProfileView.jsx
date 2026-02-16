@@ -4,8 +4,8 @@ import { IoLocationSharp } from "react-icons/io5";
 import { FaStar, FaUserCircle, FaBriefcase, FaCertificate } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import api from '../api/axios'
 
 export default function WorkerProfileView() {
     const { jwtToken, isAuthenticated } = useAuth();
@@ -15,6 +15,7 @@ export default function WorkerProfileView() {
     const [worker, setWorker] = useState(null);
     const [loading, setLoading] = useState(true);
     const [reviews, setReviews] = useState([]);
+
     const config = {
         headers: { Authorization: `Bearer ${jwtToken}` }
     };
@@ -22,8 +23,8 @@ export default function WorkerProfileView() {
     /* ---------------- FETCH USER ---------------- */
     useEffect(() => {
         if (!jwtToken) return;
-        axios
-            .get("http://localhost:8081/user", config)
+        api
+            .get("/user", config)
             .then(res => setUserId(res.data.id))
             .catch(() => setLoading(false));
     }, [jwtToken]);
@@ -35,8 +36,8 @@ export default function WorkerProfileView() {
         const fetchWorker = async () => {
             setLoading(true);
             try {
-                const res = await axios.get(
-                    `http://localhost:8081/worker/${userId}`,
+                const res = await api.get(
+                    `/worker/${userId}`,
                     config
                 );
                 setWorker(res.data);
@@ -63,24 +64,16 @@ export default function WorkerProfileView() {
         return days;
     };
 
-
     useEffect(() => {
         if (!jwtToken || !worker?.id) return;
 
-        axios
-            .get(`http://localhost:8081/rating/${worker.id}`, config)
-            .then(res => setReviews(res.data))
+        api
+            .get(`/rating/${worker.id}`, config)
+            .then(res => setReviews(res.data.ratings || []))
+
             .catch(err => console.error("Failed to load reviews", err));
     }, [jwtToken, worker]);
 
-
-    const averageRating =
-        reviews.length > 0
-            ? (
-                reviews.reduce((sum, r) => sum + r.rating, 0) /
-                reviews.length
-            ).toFixed(1)
-            : "0.0";
 
     if (loading) {
         return (
@@ -97,6 +90,36 @@ export default function WorkerProfileView() {
     }
 
     if (!worker) return null;
+
+    const totalReviews = reviews.length;
+
+    const averageRating =
+        totalReviews > 0
+            ? (
+                reviews.reduce((sum, r) => sum + r.rating, 0) /
+                totalReviews
+            )
+            : 0;
+
+
+    const renderAverageStars = (avg) => {
+        const roundedAvg = Math.round(avg); // ⭐ KEY FIX
+
+        return [...Array(5)].map((_, i) => {
+            const starValue = i + 1;
+
+            return (
+                <FaStar
+                    key={i}
+                    className={
+                        starValue <= roundedAvg
+                            ? "text-yellow-500"
+                            : "text-gray-300"
+                    }
+                />
+            );
+        });
+    };
 
     return (
         <>
@@ -124,16 +147,17 @@ export default function WorkerProfileView() {
                             </div>
 
                             <div className="flex items-center gap-1">
-                                {[...Array(5)].map((_, i) => (
-                                    <FaStar key={i} className="text-yellow-500" />
-                                ))}
-                                <span className="ml-2 font-semibold">5.0 (75 reviews)</span>
+                                {renderAverageStars(averageRating)}
+
+                                <span className="ml-2 font-semibold text-slate-600">
+                                    {averageRating.toFixed(1)} ({totalReviews} reviews)
+                                </span>
                             </div>
+
                         </div>
 
                         <button
                             onClick={() => navigate("/workerDashboard")}
-                            //className="h-fit px-6 py-3 bg-primary text-white rounded-lg hover:bg-accent transition"
                             className="h-fit px-6 py-3 bg-gradient-to-r from-amber-500 to-yellow-500 text-white font-medium rounded-lg hover:shadow-lg hover:scale-102 transition-all duration-300 flex items-center gap-2 justify-center whitespace-nowrap"
                         >
                             Dashboard
@@ -191,8 +215,8 @@ export default function WorkerProfileView() {
                             </InfoCard>
 
                             <InfoCard title="Client Reviews">
-                                {reviews.ratings && reviews.ratings.length > 0 ? (
-                                    reviews.ratings.map((review) => (
+                                {reviews.length > 0 ? (
+                                    reviews.map((review) => (
                                         <div key={review.id} className="border-b pb-4 mb-4">
                                             <div className="flex items-center gap-3">
                                                 {review.user?.imageUrl ? (
@@ -222,7 +246,6 @@ export default function WorkerProfileView() {
                                     <p className="mt-2 text-gray-500">No reviews yet.</p>
                                 )}
                             </InfoCard>
-
 
                         </main>
                     </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import axios from "axios";
+import api from '../api/axios'
 import toast from "react-hot-toast";
 import { useAuth } from "../context/AuthContext";
 import {
@@ -74,12 +74,12 @@ export default function WorkerBankDetailsPage() {
   const [isEditing, setIsEditing] = useState(false);
   const [userId, setUserId] = useState(null);
   const [currentWorker, setCurrentWorker] = useState(null);
-  
+
   // Use refs to track if data is being fetched
   const isFetchingUser = useRef(false);
   const isFetchingWorker = useRef(false);
   const isFetchingBankDetails = useRef(false);
-  
+
   // Memoize config to prevent unnecessary re-renders
   const config = useCallback(() => ({
     headers: {
@@ -130,11 +130,11 @@ export default function WorkerBankDetailsPage() {
   // Get user ID - Only fetch once
   useEffect(() => {
     if (!jwtToken || isFetchingUser.current) return;
-    
+
     isFetchingUser.current = true;
-    
-    axios
-      .get("http://localhost:8081/user", {
+
+    api
+      .get("/user", {
         headers: { Authorization: `Bearer ${jwtToken}` },
       })
       .then((res) => {
@@ -157,17 +157,17 @@ export default function WorkerBankDetailsPage() {
   // Fetch current worker details - Only when userId is available
   const getWorker = useCallback(async () => {
     if (!userId || !jwtToken || isFetchingWorker.current) return;
-    
+
     isFetchingWorker.current = true;
-    
+
     try {
-      const response = await axios.get(
-        `http://localhost:8081/worker/${userId}`,
+      const response = await api.get(
+        `/worker/${userId}`,
         config()
       );
       const workerData = response.data;
       setCurrentWorker(workerData);
-      
+
       // Set workerId in form data
       setFormData(prev => ({
         ...prev,
@@ -194,20 +194,20 @@ export default function WorkerBankDetailsPage() {
   // Fetch all bank details - Main function
   const fetchBankDetails = useCallback(async () => {
     if (!jwtToken || !userId || isFetchingBankDetails.current) return;
-    
+
     isFetchingBankDetails.current = true;
     setListLoading(true);
-    
+
     try {
       console.log("Fetching bank details for user ID:", userId);
-      
-      const response = await axios.get(
-        `http://localhost:8081/bank/${userId}`,
+
+      const response = await api.get(
+        `/bank/${userId}`,
         config()
       );
       const bankDetails = Array.isArray(response.data) ? response.data : [];
       console.log("Bank details response:", bankDetails);
-      
+
       // Transform data for display
       const transformedData = bankDetails.map(item => ({
         id: item.id,
@@ -227,17 +227,16 @@ export default function WorkerBankDetailsPage() {
         workerId: item.worker?.id || (currentWorker?.id || ""),
         rawData: item // Keep original data
       }));
-      
+
       setBankDetailsList(transformedData);
       setFilteredBankDetails(transformedData);
-      
+
       if (transformedData.length === 0) {
         toast.success("No bank details found for this user", { duration: 3000 });
       }
     } catch (error) {
       console.error("Error fetching bank details:", error);
       const errorMsg = error.response?.data?.message || error.response?.data || error.message;
-     // toast.error(`Failed to load bank details: ${errorMsg}`);
       setBankDetailsList([]);
       setFilteredBankDetails([]);
     } finally {
@@ -315,16 +314,16 @@ export default function WorkerBankDetailsPage() {
 
       if (isEditing && editingRecord) {
         // Update existing bank details
-        await axios.put(
-          `http://localhost:8081/bank/${editingRecord.id}`,
+        await api.put(
+          `/bank/${editingRecord.id}`,
           payload,
           config()
         );
         toast.success("Bank details updated successfully!");
       } else {
         // Add new bank details
-        await axios.post(
-          "http://localhost:8081/bank",
+        await api.post(
+          "/bank",
           payload,
           config()
         );
@@ -374,8 +373,8 @@ export default function WorkerBankDetailsPage() {
 
     setLoading(true);
     try {
-      await axios.delete(
-        `http://localhost:8081/bank/${recordId}`,
+      await api.delete(
+        `/bank/${recordId}`,
         config()
       );
       toast.success("Bank details deleted successfully!");
@@ -923,7 +922,7 @@ export default function WorkerBankDetailsPage() {
           </ul>
         </div>
       </div>
-      
+
       {/* Debug Button */}
       {process.env.NODE_ENV === 'development' && (
         <button

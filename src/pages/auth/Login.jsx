@@ -1,8 +1,8 @@
-import axios from "axios";
 import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import api from '../../api/axios'
 
 function Login() {
 
@@ -28,13 +28,20 @@ function Login() {
         }
 
         try {
-            const response = await axios.post("http://localhost:8081/auth/login", data);
-            login(response.data);
-            toast.success("Loging successful!");
-            navigate("/");
+            const response = await api.post("/auth/login", data);
+
+            const token = response.data.token;
+            const returnedUsername = response.data.username;
+
+            login(token, returnedUsername);
+
+            if (returnedUsername === "admin") {
+                navigate("/adminDashboard");
+            } else {
+                navigate("/");
+            }
         } catch (error) {
-            setError("There was an error logging in");
-            toast.error("here was an error logging in!");
+            setError("There was an error during login");
         }
     }
 
@@ -51,28 +58,28 @@ function Login() {
                         <input type="text" onChange={function (event) {
                             setUsername(event.target.value);
                             setError("");
-                        }} 
-                        //className="block w-full p-2 border border-gray-200 rounded-lg" 
-                        className ="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
-                        placeholder="Enter your username" 
-                    />
+                        }}
+
+                            className="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
+                            placeholder="Enter your username"
+                        />
                     </div>
                     <div className="mb-4">
                         <label className="block mb-1">Password</label>
                         <input type="password" placeholder="Enter your password" onChange={function (event) {
                             setPassword(event.target.value);
                             setError("");
-                        }} 
-                        //className="block w-full p-2 border border-gray-200 rounded-lg" placeholder="Enter your password" 
-                        className ="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
+                        }}
+
+                            className="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
                         />
                     </div>
 
                     {error && <div className="text-sm text-red-500">{error}</div>}
 
                     <div className="mt-8">
-                        <button type="submit" 
-                            //className="bg-primary text-white px-4 py-2 rounded-lg w-full hover:bg-white hover:text-primary border border-primary"
+                        <button type="submit"
+
                             className="px-4 py-2 rounded-lg w-full font-semibold bg-gradient-to-r from-amber-500 to-yellow-500 hover:shadow-lg hover:scale-105 transition-all duration-300 text-white">
                             Login
                         </button>

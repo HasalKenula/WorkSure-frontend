@@ -1,5 +1,4 @@
 import { RiDeleteBin6Line, RiPassPendingLine } from "react-icons/ri";
-import Navbar from "../components/NavBar";
 import PlatformAnalyticsChart from "../components/PlatformAnalyticsChart";
 import Man from "../assets/man.jpg"
 import { useEffect, useState } from "react";
@@ -15,6 +14,8 @@ import { FiTrendingUp, FiDownload, FiEye, FiCreditCard } from "react-icons/fi";
 import api from '../api/axios'
 import TransferDetailsModal from "../components/TransferDetailsModal";
 import { FaMoneyCheckAlt } from "react-icons/fa";
+import AdminNavbar from "../components/AdminNavBar";
+import WorkerSlipsModal from "../components/WorkerSlipsModal";
 
 
 export default function AdminDashBoard() {
@@ -254,16 +255,14 @@ export default function AdminDashBoard() {
         }
     }, [jobRoles]);
 
-
-
     return (
         <div>
-            <Navbar />
-            <div className="w-full flex flex-col pt-24 my-auto  ">
+            <AdminNavbar />
+            <div className="w-full lg:h-[900px] h-[1800px] flex flex-col pt-24 my-auto  ">
                 <div className="px-6 my-8">
                     <h1 className="text-3xl md:text-4xl font-bold text-amber-900 mb-3 ">Admin DashBoard</h1>
                 </div>
-                <div className=" w-full mx-auto flex flex-col lg:flex-row text-slate-400  items-center justify-center gap-6 p-6 lg:pt-0">
+                <div className=" w-full mx-auto lg:mb-0 mb-40 flex flex-col lg:flex-row text-slate-400  items-center justify-center gap-6 p-6 lg:pt-0">
 
                     <div className="bg-white  w-full lg:w-[25%] flex-1 flex flex-col items-center shadow-xl gap-6 border border-slate-200 py-8 px-8  justify-between">
                         <div className="flex items-center justify-center ">
@@ -501,6 +500,17 @@ export default function AdminDashBoard() {
                                                             buttonClass="w-full flex items-center px-4 py-2 hover:bg-gray-100"
                                                         />
 
+                                                        <WorkerSlipsModal
+                                                            workerId={user.id}
+                                                            triggerButtonText={
+                                                                <div className="flex items-center gap-3">
+                                                                    <FaMoneyCheckAlt className="text-gray-600" />
+                                                                    <span>Payment Slips</span>
+                                                                </div>
+                                                            }
+                                                            buttonClass="w-full flex items-center px-4 py-2 hover:bg-gray-100"
+                                                        />
+
                                                     </div>
                                                 )}
                                             </td>
@@ -514,27 +524,89 @@ export default function AdminDashBoard() {
                         {/* Mobile Cards */}
                         <div className="md:hidden flex flex-col gap-4">
                             {workers.map((user) => (
-                                <div className="border border-gray-300 bg-white rounded-lg p-4 shadow-sm">
-                                    <p><span className="font-semibold">Id:</span> {user.Id}</p>
-                                    <p><span className="font-semibold">Client:</span> {user.Client}</p>
-                                    <p><span className="font-semibold">Date:</span> {user.Date}</p>
-                                    <p><span className="font-semibold">Time:</span> {user.Time}</p>
+                                <div
+                                    key={user.id}
+                                    className="border border-gray-300 bg-white rounded-lg p-4 shadow-sm"
+                                >
+                                    {/* Worker Info */}
+                                    <p><span className="font-semibold">Id:</span> {user.id}</p>
+                                    <p><span className="font-semibold">Worker Name:</span> {user.fullName}</p>
+                                    <p><span className="font-semibold">Payment:</span> {payments[user.user?.id] ? "Paid" : "Not yet"}</p>
+                                    <p><span className="font-semibold">Contact Number:</span> {user.phoneNumber}</p>
+                                    <p>
+                                        <span className="font-semibold">Status:</span>{" "}
+                                        {user.isBlocked ? (
+                                            <span className="bg-red-100 text-red-700 px-2 py-1 rounded-full font-semibold">Blocked</span>
+                                        ) : (
+                                            <span className="bg-green-100 text-green-700 px-2 py-1 rounded-full font-semibold">Active</span>
+                                        )}
+                                    </p>
 
-                                    <div className="flex gap-3 mt-4">
-                                        <button className="w-full px-3 py-2 bg-primary text-white rounded-lg border hover:bg-white hover:text-primary">
-                                            Approve
+                                    {/* Action Buttons */}
+                                    <div className="flex flex-col gap-2 mt-4">
+                                        <button
+                                            onClick={() => handleToggleBlock(user)}
+                                            className={`w-full px-3 py-2 rounded-lg font-semibold ${user.isBlocked
+                                                ? "bg-green-100 text-green-700 hover:bg-green-50"
+                                                : "bg-red-100 text-red-700 hover:bg-red-50"
+                                                }`}
+                                        >
+                                            {user.isBlocked ? "Approve Worker" : "Block Worker"}
                                         </button>
-                                        <button className="w-full px-3 py-2 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white">
-                                            Reject
+
+                                        <button
+                                            onClick={() => navigate(`/WorkerProgress/${user.id}`)}
+                                            className="w-full px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 flex items-center justify-center gap-2"
+                                        >
+                                            <FiTrendingUp className="text-gray-600" /> Progress
                                         </button>
-                                        <button className="w-full px-3 py-2 bg-white text-primary rounded-lg hover:bg-primary border border-primary hover:text-white">
-                                            Review Details
+
+                                        <button
+                                            onClick={() => handleDownloadPDF(user.pdfUrl, user.fullName)}
+                                            className="w-full px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 flex items-center justify-center gap-2"
+                                        >
+                                            <FiDownload className="text-gray-600" /> Download PDF
                                         </button>
+
+                                        <button
+                                            onClick={() => navigate(`/workerRegistrationDetails/${user.id}`)}
+                                            className="w-full px-3 py-2 rounded-lg border border-gray-300 hover:bg-gray-100 flex items-center justify-center gap-2"
+                                        >
+                                            <FiEye className="text-gray-600" /> Review Details
+                                        </button>
+
+                                        {/* Modals */}
+                                        <PaymentDetailsModal
+                                            userId={user.user?.id}
+                                            triggerButtonText={
+                                                <div className="flex items-center justify-center gap-2 w-full px-3 py-2 rounded-lg border border-gray-300 hover:bg-transparent hover:text-primary cursor-pointer">
+                                                    <FiCreditCard className="text-gray-600" /> Payment Details
+                                                </div>
+                                            }
+                                        />
+
+                                        <TransferDetailsModal
+                                            workerId={user.id}
+                                            triggerButtonText={
+                                                <div className="flex items-center justify-center gap-2 w-full px-3 py-2 rounded-lg border border-gray-300 hover:bg-transparent hover:text-primary cursor-pointer">
+                                                    <FaMoneyCheckAlt className="text-gray-600" /> Transfer Details
+                                                </div>
+                                            }
+                                        />
+
+                                        <WorkerSlipsModal
+                                            workerId={user.id}
+                                            triggerButtonText={
+                                                <div className="flex items-center justify-center gap-2 w-full px-3 py-2 rounded-lg border border-gray-300 hover:bg-transparent hover:text-primary cursor-pointer">
+                                                    <FaMoneyCheckAlt className="text-gray-600" /> Payment Slips
+                                                </div>
+                                            }
+                                        />
+
                                     </div>
                                 </div>
                             ))}
                         </div>
-
                     </div>
 
                 </div>

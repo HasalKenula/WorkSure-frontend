@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import ChatMessages from "./ChatMessages";
 import ChatInput from "./ChatInput";
 import chatbotIcon from "../assets/chatbot-icon.jpg";
+import api from "../api/axios";
 
 export default function ChatWindow({ onClose }) {
   const [messages, setMessages] = useState([
     {
       sender: "bot",
-      text: "Hi! I’m WorkSure Agent. How can I help you today?",
+      text: "Hi! I'm WorkSure Agent. How can I help you today?",
     },
   ]);
 
@@ -16,7 +16,7 @@ export default function ChatWindow({ onClose }) {
 
   
   useEffect(() => {
-    axios.post("http://localhost:8081/api/chat/reset").catch(() => {
+    api.post("/api/chat/reset").catch(() => {
     });
   }, []);
 
@@ -28,8 +28,8 @@ export default function ChatWindow({ onClose }) {
     setIsTyping(true);
 
     try {
-      const response = await axios.post(
-        "http://localhost:8081/api/chat",
+      const response = await api.post(
+        "/api/chat",
         { message: text },
         { headers: { "Content-Type": "application/json" } }
       );
