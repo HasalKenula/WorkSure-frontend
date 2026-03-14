@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import AboutUs from './pages/AboutUsPage'
 import ContactPage from './pages/ContactPage'
@@ -31,21 +31,35 @@ import AdminOnlyRoute from './components/AdminOnlyRoute'
 import PaymentSIPUpload from './pages/PaymentSIPUpload'
 import WorkerSlipsPage from './pages/WorkerSlipsPage'
 
+function ChatbotController() {
+  const location = useLocation()
+
+  const allowedRoutes = [
+    "/",
+    "/workerDetails"
+  ]
+
+  return allowedRoutes.includes(location.pathname) ? <ChatbotWidget /> : null
+}
+
 function App() {
 
   return (
     <AuthProvider>
       <BrowserRouter>
+
         <Toaster position="top-right" />
+
         <Routes>
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/register" element={<Register />} />
-          <Route path='/*' element={<HomePage />} />
+
+          <Route path='/' element={<HomePage />} />
           <Route path='/about' element={<AboutUs />} />
           <Route path='/contact' element={<ContactPage />} />
 
-
           <Route element={<ProtectedRoute />}>
+
             <Route path='/payment' element={<Payment />} />
             <Route path='/feedback/:workerId' element={<UserFeedback />} />
             <Route path='/userProfile' element={<UserProfile />} />
@@ -74,7 +88,10 @@ function App() {
           </Route>
 
         </Routes>
-        <ChatbotWidget />
+
+        {/* Chatbot only on selected pages */}
+        <ChatbotController />
+
       </BrowserRouter>
     </AuthProvider>
   )
