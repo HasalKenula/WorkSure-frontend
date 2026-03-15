@@ -2,7 +2,8 @@ import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
-import api from '../../api/axios'
+import api from '../../api/axios';
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 function Login() {
 
@@ -13,6 +14,7 @@ function Login() {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
 
     async function submit(event) {
         event.preventDefault(); //disable default form submission
@@ -66,13 +68,27 @@ function Login() {
                     </div>
                     <div className="mb-4">
                         <label className="block mb-1">Password</label>
-                        <input type="password" placeholder="Enter your password" onChange={function (event) {
-                            setPassword(event.target.value);
-                            setError("");
-                        }}
-
-                            className="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
-                        />
+                        <div className="relative">
+                            <input type={showPassword ? "text" : "password"} placeholder="Enter your password" onChange={function (event) {
+                                setPassword(event.target.value);
+                                setError("");
+                            }}
+                                className="w-full p-2  border border-gray-300  rounded-lg focus:border-amber-500 focus:ring-2 focus:ring-amber-300 focus:outline-none transition-all"
+                            />
+                            <span
+                                className="absolute right-3 top-2.5 cursor-pointer text-gray-500"
+                                onClick={() => setShowPassword(!showPassword)}
+                            >
+                                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                            </span>
+                        </div>
+                        
+                        <p
+                            className="text-sm text-amber-600 cursor-pointer mt-1"
+                            onClick={() => navigate("/forgot-password")}
+                        >
+                            Forgot password?
+                        </p>
                     </div>
 
                     {error && <div className="text-sm text-red-500">{error}</div>}
