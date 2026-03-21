@@ -91,7 +91,7 @@ function App() {
 
         </Routes>
 
-        {/* ✅ Chatbot only on Home + FindWorkers */}
+        {/*  Chatbot only on Home + FindWorkers */}
         <ChatbotController />
 
       </BrowserRouter>
