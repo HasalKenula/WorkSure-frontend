@@ -7,9 +7,9 @@ import api from "../api/axios";
 export default function ChatWindow({ onClose }) {
   const [messages, setMessages] = useState([
     {
-      sender: "bot",
-      text: "Hi! I'm WorkSure Agent. How can I help you today?",
-    },
+  sender: "bot",
+  text: "Welcome to WorkSure! 👋\nSelect a service below or type what help you need."
+  },
   ]);
 
   const [isTyping, setIsTyping] = useState(false);
@@ -61,7 +61,7 @@ export default function ChatWindow({ onClose }) {
     <div
       className="
         fixed bottom-24 right-6
-        w-[380px] h-[520px]
+        w-[380px] h-[600px]
         bg-white dark:bg-gray-900
         rounded-2xl shadow-2xl
         flex flex-col overflow-hidden

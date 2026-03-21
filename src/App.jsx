@@ -1,5 +1,5 @@
 import './App.css'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useLocation } from 'react-router-dom'
 import HomePage from './pages/HomePage'
 import AboutUs from './pages/AboutUsPage'
 import ContactPage from './pages/ContactPage'
@@ -33,20 +33,34 @@ import WorkerSlipsPage from './pages/WorkerSlipsPage'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
 
-function App() {
+function ChatbotController() {
+  const location = useLocation()
 
+  if (
+    location.pathname === "/" ||
+    location.pathname.startsWith("/workerDetails")
+  ) {
+    return <ChatbotWidget />
+  }
+
+  return null
+}
+
+function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
+
         <Toaster position="top-right" />
+
         <Routes>
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/register" element={<Register />} />
           <Route path='/*' element={<HomePage />} />
           <Route path='/about' element={<AboutUs />} />
           <Route path='/contact' element={<ContactPage />} />
-          <Route path='/forgot-password' element={<ForgotPassword/>}/>
-          <Route path='/reset-password' element={<ResetPassword/>}/>
+          <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/reset-password' element={<ResetPassword />} />
 
           <Route element={<ProtectedRoute />}>
             <Route path='/payment' element={<Payment />} />
@@ -69,7 +83,6 @@ function App() {
             <Route path="/workerTransfers/:workerId" element={<TransferDetailsPage />} />
             <Route path='/slip/:workerId' element={<PaymentSIPUpload />} />
             <Route path='/workerSlip/:workerId' element={<WorkerSlipsPage />} />
-            
           </Route>
 
           <Route element={<AdminOnlyRoute />}>
@@ -77,7 +90,10 @@ function App() {
           </Route>
 
         </Routes>
-        <ChatbotWidget />
+
+        {/*  Chatbot only on Home + FindWorkers */}
+        <ChatbotController />
+
       </BrowserRouter>
     </AuthProvider>
   )
