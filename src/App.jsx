@@ -30,6 +30,8 @@ import TransferDetailsPage from './pages/TransferDetailsPage'
 import AdminOnlyRoute from './components/AdminOnlyRoute'
 import PaymentSIPUpload from './pages/PaymentSIPUpload'
 import WorkerSlipsPage from './pages/WorkerSlipsPage'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 
 function App() {
 
@@ -43,7 +45,8 @@ function App() {
           <Route path='/*' element={<HomePage />} />
           <Route path='/about' element={<AboutUs />} />
           <Route path='/contact' element={<ContactPage />} />
-
+          <Route path='/forgot-password' element={<ForgotPassword/>}/>
+          <Route path='/reset-password' element={<ResetPassword/>}/>
 
           <Route element={<ProtectedRoute />}>
             <Route path='/payment' element={<Payment />} />
@@ -66,7 +69,7 @@ function App() {
             <Route path="/workerTransfers/:workerId" element={<TransferDetailsPage />} />
             <Route path='/slip/:workerId' element={<PaymentSIPUpload />} />
             <Route path='/workerSlip/:workerId' element={<WorkerSlipsPage />} />
-
+            
           </Route>
 
           <Route element={<AdminOnlyRoute />}>

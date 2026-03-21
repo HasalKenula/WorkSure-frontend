@@ -53,6 +53,15 @@ export default function WorkersPage() {
     }
   }
 
+  async function handleSort(order){
+    try{
+      const res = await api.get(`/worker/sort-by-rating?order=${order}`, config);
+      setWorkers(res.data);
+    }catch{
+      toast.error("Sorting failed");
+    }
+  }
+
   useEffect(() => {
     if (!isAuthenticated) return;
 
@@ -83,33 +92,50 @@ export default function WorkersPage() {
   }
 
   /* ================= FILTER LOCATION + SKILL ================= */
-  async function handleSkillLocFilter(loc, skill) {
-    if (!loc && !skill) return loadWorkerDetails();
-    try {
-      setLoading(true);
-      const res = await api.get(
-        "/worker/searchbylocandskill",
-        {
-          params: { location: loc || null, jobRole: skill || null },
-          headers: { Authorization: `Bearer ${jwtToken}` },
-        }
-      );
-      setWorkers(res.data);
-    } catch {
-      toast.error("Filter error");
-    } finally {
-      setLoading(false);
-    }
+  // async function handleSkillLocFilter(loc, skill) {
+  //   if (!loc && !skill) return loadWorkerDetails();
+  //   try {
+  //     setLoading(true);
+  //     const res = await api.get(
+  //       "/worker/searchbylocandskill",
+  //       {
+  //         params: { location: loc || null, jobRole: skill || null },
+  //         headers: { Authorization: `Bearer ${jwtToken}` },
+  //       }
+  //     );
+  //     setWorkers(res.data);
+  //   } catch {
+  //     toast.error("Filter error");
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // }
+
+  //all fiters together
+  async function handleFilters(loc, skill, sort) {
+  try {
+    setLoading(true);
+
+    const res = await api.get("/worker/searchbylocandskill", {
+      params: {
+        location: loc || null,
+        jobRole: skill || null,
+        sort: sort || null
+      },
+      headers: { Authorization: `Bearer ${jwtToken}` }
+    });
+
+    setWorkers(res.data);
+
+  } catch {
+    toast.error("Filter error");
+  } finally {
+    setLoading(false);
   }
+}
 
   /* ================= SORT BY RATING ================= */
-  const visibleWorkers = workers
-    .filter((w) => !w.isBlocked)
-    .sort((a, b) => {
-      if (sortOrder === "high") return b.rating - a.rating;
-      if (sortOrder === "low") return a.rating - b.rating;
-      return 0;
-    });
+  const visibleWorkers = workers.filter((w) => !w.isBlocked);
 
   return (
     <div className="bg-gradient-to-b from-slate-50 to-white min-h-screen">
@@ -143,8 +169,10 @@ export default function WorkersPage() {
           className="px-8 py-3 rounded-full border"
           value={selectedLocation}
           onChange={(e) => {
-            setSelectedLocation(e.target.value);
-            handleSkillLocFilter(e.target.value, selectedSkill);
+            const loc = e.target.value;
+            setSelectedLocation(loc);
+            //handleSkillLocFilter(e.target.value, selectedSkill);
+            handleFilters(loc, selectedSkill, sortOrder);
           }}
         >
           <option value="">Location</option>
@@ -185,8 +213,10 @@ export default function WorkersPage() {
           className="px-5 py-3 rounded-full border"
           value={selectedSkill}
           onChange={(e) => {
-            setSelectedSkill(e.target.value);
-            handleSkillLocFilter(selectedLocation, e.target.value);
+            const skill = e.target.value;
+            setSelectedSkill(skill);
+            //handleSkillLocFilter(selectedLocation, e.target.value);
+            handleFilters(selectedLocation, skill, sortOrder);
           }}
         >
           <option value="">Job Role</option>
@@ -200,7 +230,12 @@ export default function WorkersPage() {
         <select
           className="px-5 py-3 rounded-full border"
           value={sortOrder}
-          onChange={(e) => setSortOrder(e.target.value)}
+          onChange={(e) => {
+            const order = e.target.value;
+            setSortOrder(order); 
+            //handleSort(e.target.value);
+            handleFilters(selectedLocation, selectedSkill, order);
+        }}
         >
           <option value="">Sort by Rating</option>
           <option value="high">Highest First</option>
