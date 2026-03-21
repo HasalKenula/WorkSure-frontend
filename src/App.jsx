@@ -30,9 +30,23 @@ import TransferDetailsPage from './pages/TransferDetailsPage'
 import AdminOnlyRoute from './components/AdminOnlyRoute'
 import PaymentSIPUpload from './pages/PaymentSIPUpload'
 import WorkerSlipsPage from './pages/WorkerSlipsPage'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
+
+function ChatbotController() {
+  const location = useLocation()
+
+  if (
+    location.pathname === "/" ||
+    location.pathname.startsWith("/workerDetails")
+  ) {
+    return <ChatbotWidget />
+  }
+
+  return null
+}
 
 function App() {
-
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -42,15 +56,13 @@ function App() {
         <Routes>
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/register" element={<Register />} />
-
-          <Route path='/' element={<HomePage />} />
+          <Route path='/*' element={<HomePage />} />
           <Route path='/about' element={<AboutUs />} />
           <Route path='/contact' element={<ContactPage />} />
-          <Route path='/forgot-password' element={<ForgotPassword/>}/>
-          <Route path='/reset-password' element={<ResetPassword/>}/>
+          <Route path='/forgot-password' element={<ForgotPassword />} />
+          <Route path='/reset-password' element={<ResetPassword />} />
 
           <Route element={<ProtectedRoute />}>
-
             <Route path='/payment' element={<Payment />} />
             <Route path='/feedback/:workerId' element={<UserFeedback />} />
             <Route path='/userProfile' element={<UserProfile />} />
@@ -71,7 +83,6 @@ function App() {
             <Route path="/workerTransfers/:workerId" element={<TransferDetailsPage />} />
             <Route path='/slip/:workerId' element={<PaymentSIPUpload />} />
             <Route path='/workerSlip/:workerId' element={<WorkerSlipsPage />} />
-            
           </Route>
 
           <Route element={<AdminOnlyRoute />}>
@@ -80,7 +91,7 @@ function App() {
 
         </Routes>
 
-        {/* Chatbot only on selected pages */}
+        {/* ✅ Chatbot only on Home + FindWorkers */}
         <ChatbotController />
 
       </BrowserRouter>
