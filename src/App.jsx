@@ -31,17 +31,6 @@ import AdminOnlyRoute from './components/AdminOnlyRoute'
 import PaymentSIPUpload from './pages/PaymentSIPUpload'
 import WorkerSlipsPage from './pages/WorkerSlipsPage'
 
-function ChatbotController() {
-  const location = useLocation()
-
-  const allowedRoutes = [
-    "/",
-    "/workerDetails"
-  ]
-
-  return allowedRoutes.includes(location.pathname) ? <ChatbotWidget /> : null
-}
-
 function App() {
 
   return (
@@ -57,6 +46,8 @@ function App() {
           <Route path='/' element={<HomePage />} />
           <Route path='/about' element={<AboutUs />} />
           <Route path='/contact' element={<ContactPage />} />
+          <Route path='/forgot-password' element={<ForgotPassword/>}/>
+          <Route path='/reset-password' element={<ResetPassword/>}/>
 
           <Route element={<ProtectedRoute />}>
 
@@ -80,7 +71,7 @@ function App() {
             <Route path="/workerTransfers/:workerId" element={<TransferDetailsPage />} />
             <Route path='/slip/:workerId' element={<PaymentSIPUpload />} />
             <Route path='/workerSlip/:workerId' element={<WorkerSlipsPage />} />
-
+            
           </Route>
 
           <Route element={<AdminOnlyRoute />}>
