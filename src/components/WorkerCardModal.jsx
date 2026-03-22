@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import api from '../api/axios'
 Modal.setAppElement('#root');
 
-export default function WorkerCardModal({ triggerButtonText = "Find Worker", buttonClass = "" }) {
+export default function WorkerCardModal({ triggerButtonText = "Worker Registration", buttonClass = "" }) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const navigate = useNavigate();
 
