@@ -253,7 +253,7 @@ function PaymentSIPUpload() {
                                 Amount Paid <span className="text-red-500">*</span>
                             </label>
                             <div className="relative">
-                                <span className="absolute left-3 top-2.5 text-gray-500">₹</span>
+                                <span className="absolute left-3 top-2.5 text-gray-500">Rs.</span>
                                 <input
                                     type="number"
                                     className="w-full p-2.5 pl-8 border border-gray-300 rounded-xl focus:border-amber-500 focus:ring-2 focus:ring-amber-200 focus:outline-none transition-all"
