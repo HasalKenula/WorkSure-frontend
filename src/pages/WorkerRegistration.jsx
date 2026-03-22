@@ -213,6 +213,22 @@ export default function WorkerRegistration() {
             return;
         }
 
+        // EMAIL VALIDATION
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!emailRegex.test(email)){
+            setError("Invalid email format");
+            toast.error("Please enter a valid email!");
+            return;
+        }
+        
+        // --- CONTACT NUMBER VALIDATION (10 digits only) ---
+        const contactRegex = /^[0-9]{10}$/;
+        if (!contactRegex.test(contact)) {
+            setError("Contact number must be exactly 10 digits");
+            toast.error("Enter a valid 10-digit phone number!");
+            return;
+        }
+        
 
         // UPLOAD IMAGE TO SUPABASE
         let pdfUrl = "";

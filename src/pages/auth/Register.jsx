@@ -25,13 +25,39 @@ function Register() {
     async function submit(event) {
         event.preventDefault();
 
-        // --- VALIDATIONS ---
+        setError("");
+
+        // --- REQUIRED FIELDS ---
         if (!name || !username || !email || !contact || !address || !password || !confirmPassword) {
             setError("All fields are required");
             toast.error("All fields are required!");
             return;
         }
 
+        // EMAIL VALIDATION
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if(!emailRegex.test(email)){
+            setError("Invalid email format");
+            toast.error("Please enter a valid email!");
+            return;
+        }
+
+        // --- CONTACT NUMBER VALIDATION (10 digits only) ---
+        const contactRegex = /^[0-9]{10}$/;
+        if (!contactRegex.test(contact)) {
+            setError("Contact number must be exactly 10 digits");
+            toast.error("Enter a valid 10-digit phone number!");
+            return;
+        }
+
+        // --- PASSWORD LENGTH ---
+        if (password.length < 6) {
+            setError("Password must be at least 6 characters");
+            toast.error("Password must be at least 6 characters!");
+            return;
+        }
+
+        // --- PASSWORD MATCH ---
         if (password !== confirmPassword) {
             setError("Passwords do not match");
             toast.error("Passwords do not match!");
