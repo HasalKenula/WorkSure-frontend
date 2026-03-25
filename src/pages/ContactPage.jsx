@@ -73,6 +73,13 @@ export default function ContactPage() {
         userId: userId
       }, config);
       toast.success("Message sent successfully!");
+
+      //clear input fields
+      setName("");
+      setcontactNumber("");
+      setsubject("");
+      setmessage("");
+
     } catch (error) {
       toast.error("Failed to send message. Try again!");
       console.log(error);
@@ -173,7 +180,7 @@ export default function ContactPage() {
             </form>
 
             <div className="flex justify-center mt-6">
-              <button type="button" onClick={createContact} className="text-lg font-semibold text-black rounded-xl bg-primary shadow-md hover:bg-gray-300 hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/2 py-3 border border-gray-400">
+              <button type="button" onClick={createContact} className="bg-gradient-to-r from-amber-500 to-yellow-500 text-white text-lg font-semibold  rounded-xl bg-primary shadow-md  hover:scale-105 hover:shadow-xl transition-all duration-300 w-1/2 py-3 border ">
                 Send Message
               </button>
             </div>
