@@ -208,7 +208,7 @@ export default function MoneyTransferPage() {
             }, config);
 
             // save backend response
-            setTransaction(res.data); // assuming backend returns { transactionId, createdAt, ... }
+            setTransaction(res.data);
 
             toast.success("Payment transferred successfully!");
             setShowConfirmation(true);
@@ -716,14 +716,12 @@ export default function MoneyTransferPage() {
                                     <div className="grid grid-cols-2 gap-4 text-left">
                                         <div>
                                             <p className="text-amber-600 text-sm">Transaction ID</p>
-                                            {/* <p className="font-bold text-amber-900">TX{Date.now()}</p> */}
                                             {transaction?.transactionId || "TX0000"}
                                         </div>
                                         <div>
                                             <p className="text-amber-600 text-sm">Date & Time</p>
                                             <p className="font-bold text-amber-900">
                                                 {new Date().toLocaleString()}
-                                                {/* {transaction ? new Date(transaction.createdAt).toLocaleString() : new Date().toLocaleString()} */}
                                             </p>
                                         </div>
                                         <div>

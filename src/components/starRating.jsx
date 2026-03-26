@@ -51,8 +51,8 @@ function StarRating({ itemId }) {
 
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-      {/* ⭐ GET VALUE */}
-      
+      {/*  GET VALUE */}
+
       <div style={{ display: "flex", gap: "5px" }}>
         {[...Array(5)].map((_, index) => {
           const value = index + 1;
@@ -66,7 +66,7 @@ function StarRating({ itemId }) {
         })}
       </div>
       <div>
-          <h4>({ratingCount})</h4>
+        <h4>({ratingCount})</h4>
       </div>
 
     </div>

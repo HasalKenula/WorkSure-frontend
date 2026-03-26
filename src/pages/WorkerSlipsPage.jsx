@@ -5,7 +5,6 @@ import { useAuth } from "../context/AuthContext";
 import {
     FaMoneyCheckAlt,
     FaUserTie,
-    FaCreditCard,
     FaUser,
     FaCheckCircle,
     FaTimesCircle,
@@ -154,7 +153,7 @@ function WorkerSlipsPage() {
                             <p className="text-xl font-bold text-gray-800">{formatCurrency(totalAmount)}</p>
                         </div>
                     </div>
-                    
+
                     <div className="bg-white border rounded-xl p-4 shadow-sm flex items-center gap-3">
                         <div className="p-2 bg-blue-100 rounded-lg">
                             <FaFileImage className="text-blue-600" size={20} />
@@ -204,18 +203,18 @@ function WorkerSlipsPage() {
                                     </linearGradient>
                                 </defs>
                                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                                <XAxis 
-                                    dataKey="date" 
+                                <XAxis
+                                    dataKey="date"
                                     tick={{ fontSize: 12 }}
                                     tickLine={false}
                                 />
-                                <YAxis 
+                                <YAxis
                                     tick={{ fontSize: 12 }}
                                     tickLine={false}
                                     axisLine={false}
                                     tickFormatter={(value) => `LKR ${value}`}
                                 />
-                                <Tooltip 
+                                <Tooltip
                                     formatter={(value) => [`LKR ${value.toFixed(2)}`, 'Amount']}
                                     contentStyle={{
                                         backgroundColor: 'white',
@@ -224,12 +223,12 @@ function WorkerSlipsPage() {
                                         padding: '8px 12px'
                                     }}
                                 />
-                                <Area 
-                                    type="monotone" 
-                                    dataKey="amount" 
-                                    stroke="#F59E0B" 
+                                <Area
+                                    type="monotone"
+                                    dataKey="amount"
+                                    stroke="#F59E0B"
                                     strokeWidth={2}
-                                    fill="url(#amountGradient)" 
+                                    fill="url(#amountGradient)"
                                 />
                             </AreaChart>
                         </ResponsiveContainer>
@@ -241,11 +240,11 @@ function WorkerSlipsPage() {
             {!loading && slips.length > 0 && (
                 <div className="space-y-4">
                     <h2 className="text-xl font-semibold text-gray-800 mb-4">All Payment Slips</h2>
-                    
+
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                         {slips.map((slip) => (
-                            <div 
-                                key={slip._id || slip.id} 
+                            <div
+                                key={slip._id || slip.id}
                                 className="bg-white border rounded-xl p-5 shadow-sm hover:shadow-md transition-shadow"
                             >
                                 {/* Header */}
@@ -316,7 +315,7 @@ function WorkerSlipsPage() {
                                 {/* Action Buttons */}
                                 <div className="flex gap-2 border-t pt-4">
                                     <button
-                                        onClick={function() { 
+                                        onClick={function () {
                                             window.open(slip.sipImageUrl, '_blank');
                                         }}
                                         className="flex-1 px-3 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg text-gray-700 text-sm font-medium transition-colors flex items-center justify-center gap-2"
@@ -325,7 +324,7 @@ function WorkerSlipsPage() {
                                         View
                                     </button>
                                     <button
-                                        onClick={function() {
+                                        onClick={function () {
                                             const fileName = `payment-slip-${slip.bankName}-${formatDate(slip.paymentDate)}.jpg`;
                                             downloadImage(slip.sipImageUrl, fileName);
                                         }}
@@ -343,20 +342,20 @@ function WorkerSlipsPage() {
 
             {/* Image Preview Modal */}
             {selectedImage && (
-                <div 
+                <div
                     className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
-                    onClick={function() { setSelectedImage(null); }}
+                    onClick={function () { setSelectedImage(null); }}
                 >
                     <div className="relative max-w-4xl max-h-[90vh]">
                         <button
-                            onClick={function() { setSelectedImage(null); }}
+                            onClick={function () { setSelectedImage(null); }}
                             className="absolute -top-10 right-0 text-white hover:text-gray-300"
                         >
                             <FaTimesCircle size={24} />
                         </button>
-                        <img 
-                            src={selectedImage} 
-                            alt="Payment slip preview" 
+                        <img
+                            src={selectedImage}
+                            alt="Payment slip preview"
                             className="max-w-full max-h-[90vh] object-contain rounded-lg"
                         />
                     </div>
