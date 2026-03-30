@@ -20,7 +20,7 @@ import {
   FaLandmark,
 } from "react-icons/fa";
 
-// Remove the inline style tag and create a CSS-in-JS solution
+
 const styles = `
 @keyframes fadeIn {
   from {
@@ -922,17 +922,6 @@ export default function WorkerBankDetailsPage() {
           </ul>
         </div>
       </div>
-
-      {/* Debug Button */}
-      {/* {process.env.NODE_ENV === 'development' && (
-        <button
-          onClick={debugState}
-          className="fixed bottom-4 right-4 bg-gray-800 text-white p-2 rounded-lg text-xs z-50"
-          title="Debug State"
-        >
-          Debug
-        </button>
-      )} */}
     </div>
   );
 }

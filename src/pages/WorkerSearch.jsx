@@ -6,7 +6,6 @@ import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import MM from "../assets/man.jpg";
 import { CiLocationOn } from "react-icons/ci";
-import { FaStar } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { useSearchParams } from "react-router-dom";
 import api from '../api/axios'
@@ -53,11 +52,11 @@ export default function WorkersPage() {
     }
   }
 
-  async function handleSort(order){
-    try{
+  async function handleSort(order) {
+    try {
       const res = await api.get(`/worker/sort-by-rating?order=${order}`, config);
       setWorkers(res.data);
-    }catch{
+    } catch {
       toast.error("Sorting failed");
     }
   }
@@ -91,48 +90,28 @@ export default function WorkersPage() {
     }
   }
 
-  /* ================= FILTER LOCATION + SKILL ================= */
-  // async function handleSkillLocFilter(loc, skill) {
-  //   if (!loc && !skill) return loadWorkerDetails();
-  //   try {
-  //     setLoading(true);
-  //     const res = await api.get(
-  //       "/worker/searchbylocandskill",
-  //       {
-  //         params: { location: loc || null, jobRole: skill || null },
-  //         headers: { Authorization: `Bearer ${jwtToken}` },
-  //       }
-  //     );
-  //     setWorkers(res.data);
-  //   } catch {
-  //     toast.error("Filter error");
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }
-
   //all fiters together
   async function handleFilters(loc, skill, sort) {
-  try {
-    setLoading(true);
+    try {
+      setLoading(true);
 
-    const res = await api.get("/worker/searchbylocandskill", {
-      params: {
-        location: loc || null,
-        jobRole: skill || null,
-        sort: sort || null
-      },
-      headers: { Authorization: `Bearer ${jwtToken}` }
-    });
+      const res = await api.get("/worker/searchbylocandskill", {
+        params: {
+          location: loc || null,
+          jobRole: skill || null,
+          sort: sort || null
+        },
+        headers: { Authorization: `Bearer ${jwtToken}` }
+      });
 
-    setWorkers(res.data);
+      setWorkers(res.data);
 
-  } catch {
-    toast.error("Filter error");
-  } finally {
-    setLoading(false);
+    } catch {
+      toast.error("Filter error");
+    } finally {
+      setLoading(false);
+    }
   }
-}
 
   /* ================= SORT BY RATING ================= */
   const visibleWorkers = workers.filter((w) => !w.isBlocked);
@@ -171,7 +150,6 @@ export default function WorkersPage() {
           onChange={(e) => {
             const loc = e.target.value;
             setSelectedLocation(loc);
-            //handleSkillLocFilter(e.target.value, selectedSkill);
             handleFilters(loc, selectedSkill, sortOrder);
           }}
         >
@@ -215,7 +193,6 @@ export default function WorkersPage() {
           onChange={(e) => {
             const skill = e.target.value;
             setSelectedSkill(skill);
-            //handleSkillLocFilter(selectedLocation, e.target.value);
             handleFilters(selectedLocation, skill, sortOrder);
           }}
         >
@@ -232,10 +209,9 @@ export default function WorkersPage() {
           value={sortOrder}
           onChange={(e) => {
             const order = e.target.value;
-            setSortOrder(order); 
-            //handleSort(e.target.value);
+            setSortOrder(order);
             handleFilters(selectedLocation, selectedSkill, order);
-        }}
+          }}
         >
           <option value="">Sort by Rating</option>
           <option value="high">Highest First</option>
@@ -283,8 +259,8 @@ export default function WorkersPage() {
               >
                 <span
                   className={`absolute top-4 right-4 text-xs px-3 py-1 rounded-full font-bold ${worker.status === "Free"
-                      ? "bg-green-100 text-green-600"
-                      : "bg-red-100 text-red-600"
+                    ? "bg-green-100 text-green-600"
+                    : "bg-red-100 text-red-600"
                     }`}
                 >
                   {worker.status}
@@ -303,8 +279,6 @@ export default function WorkersPage() {
 
                 <div className="flex justify-center gap-1 mt-2 text-yellow-500">
                   <div className="App">
-                    {/*<StarRating itemId={1} />*/}
-                    {/*<StarRating itemId={worker.id} />*/}
                   </div>
                 </div>
 

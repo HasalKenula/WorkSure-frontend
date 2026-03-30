@@ -69,23 +69,6 @@ export default function WorkerProfileCard() {
     return days;
   };
 
-  const userRate = [
-    {
-      id: 1,
-      name: "John Doe",
-      date: "2023/10/26",
-      rating: 5,
-      message:
-        "Excellent work on the project, delivered ahead of schedule and with great attention to detail. Highly recommended!",
-    },
-    {
-      id: 2,
-      name: "Jane Smith",
-      date: "2023/11/02",
-      rating: 4,
-      message: "Good work, punctual and professional.",
-    },
-  ];
 
   if (!worker) {
     return (

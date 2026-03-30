@@ -1,6 +1,5 @@
 import React from 'react'
 import Navbar from '../components/NavBar'
-import { FaUserCircle } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate, useParams } from 'react-router-dom';
@@ -40,7 +39,7 @@ export default function WorkerView() {
     }
   }, [isAuthenticated])
 
-   return (
+  return (
     <>
       <Navbar />
 
@@ -54,7 +53,7 @@ export default function WorkerView() {
 
           {/* Profile Card */}
           <div className="bg-white shadow-xl rounded-2xl p-6 flex flex-col md:flex-row items-center md:items-start space-y-6 md:space-y-0 md:space-x-8">
-            
+
             {/* Image */}
             <div className="flex-shrink-0 w-40 h-40 md:w-48 md:h-48 rounded-full overflow-hidden border-4 border-yellow-400 shadow-lg">
               <img src={user?.imageUrl || MM} alt="profile" className="w-full h-full object-cover" />
@@ -92,7 +91,7 @@ export default function WorkerView() {
                 >
                   Go Back
                 </button>
-                
+
               </div>
             </div>
           </div>

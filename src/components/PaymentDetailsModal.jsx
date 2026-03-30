@@ -5,29 +5,19 @@ import { useAuth } from "../context/AuthContext";
 import {
     FaCalendarAlt,
     FaCreditCard,
-    FaClock,
     FaCheckCircle,
     FaTimesCircle,
     FaUser,
     FaEnvelope,
     FaMapMarkerAlt,
-    FaExternalLinkAlt,
-    FaDownload,
     FaCalendarDay,
     FaCalendarCheck,
     FaHistory,
-    FaChevronDown
 } from "react-icons/fa";
 import {
     FiCalendar,
     FiCreditCard,
     FiClock,
-    FiCheckCircle,
-    FiXCircle,
-    FiUser,
-    FiMail,
-    FiMapPin,
-    FiExternalLink,
     FiDownload,
     FiChevronDown
 } from "react-icons/fi";
@@ -157,9 +147,9 @@ export default function PaymentDetailsModal({
                 onClick={openModal}
                 className={`${buttonClass} group`}
             >
-               
+
                 <span>{triggerButtonText}</span>
-              
+
             </button>
 
             {/* Modal */}
@@ -425,7 +415,6 @@ export default function PaymentDetailsModal({
                         <button
                             onClick={() => {
                                 toast.success("Receipt download started");
-                                // Add actual download logic here
                             }}
                             className="px-4 py-2 rounded-lg border border-gray-300 text-gray-700 font-medium hover:bg-gray-50 transition-all duration-300 flex items-center gap-2 hover:shadow-sm hover:border-gray-400 text-sm"
                         >

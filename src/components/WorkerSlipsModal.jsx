@@ -10,7 +10,6 @@ import {
     FaCheckCircle,
     FaTimesCircle,
     FaDownload,
-    FaCalendarAlt,
     FaUniversity,
     FaFileImage,
     FaFilePdf,
@@ -329,7 +328,7 @@ export default function WorkerSlipsModal({
 
             {/* Image Preview Modal */}
             {selectedImage && (
-                <div 
+                <div
                     className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4"
                     onClick={() => setSelectedImage(null)}
                 >
@@ -340,9 +339,9 @@ export default function WorkerSlipsModal({
                         >
                             <FaTimesCircle size={24} />
                         </button>
-                        <img 
-                            src={selectedImage} 
-                            alt="Payment slip preview" 
+                        <img
+                            src={selectedImage}
+                            alt="Payment slip preview"
                             className="max-w-full max-h-[90vh] object-contain rounded-lg"
                         />
                     </div>
