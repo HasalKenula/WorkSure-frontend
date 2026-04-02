@@ -34,19 +34,21 @@ export default function WorkerDashBoard() {
 
     useEffect(() => {
         if (!jwtToken) return;
-
+        setLoading(true);
         api
-            .get("/user", {
-                headers: { Authorization: `Bearer ${jwtToken}` },
-            })
+            .get("/user", config)
             .then((res) => {
 
                 setUserId(res.data.id);
 
 
             })
-            .catch(() => setLoading(false));
-
+            .catch((err) => {
+                console.error(err);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
 
     }, [jwtToken]);
 
@@ -97,7 +99,7 @@ export default function WorkerDashBoard() {
             try {
                 const res = await api.get(`/rating/${worker.id}`, config);
                 console.log("Reviews from API:", res.data);
-                setReviews(res.data.ratings); // assuming your API returns { ratings: [...] }
+                setReviews(res.data.ratings);
             } catch (error) {
                 console.error("Failed to fetch reviews:", error);
             }
@@ -106,14 +108,7 @@ export default function WorkerDashBoard() {
         fetchReviews();
     }, [worker?.id]);
 
-    const renderStars = (rating) => {
-        return [...Array(5)].map((_, i) => (
-            <IoStarSharp
-                key={i}
-                className={i < rating ? "text-yellow-500" : "text-slate-200"}
-            />
-        ));
-    };
+
 
     async function handleToggleBlock(hire) {
         try {
@@ -276,6 +271,17 @@ export default function WorkerDashBoard() {
             }
         });
     };
+
+
+    if (loading) {
+        return (
+            <div className="flex justify-center items-center h-screen">
+                <h1 className="text-2xl font-bold text-amber-500">
+                    Loading...
+                </h1>
+            </div>
+        );
+    }
 
 
     return (
